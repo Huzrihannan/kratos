@@ -1,3 +1,5 @@
+import { ContentStatus, PublishableItem } from "@/lib/content-status";
+
 export interface WorkingPrinciple {
   number: string;
   title: string;
@@ -5,14 +7,14 @@ export interface WorkingPrinciple {
   description: string;
 }
 
-export interface TeamMember {
+export interface TeamMember extends PublishableItem {
   id: string;
   name: string;
   role: string;
   bio: string;
   specialty: string;
   avatarBg: string;
-  isPlaceholder: boolean;
+  status: ContentStatus;
 }
 
 export const aboutData = {
@@ -66,39 +68,39 @@ export const aboutData = {
   team: [
     {
       id: "alex-chen",
-      name: "[PLACEHOLDER] Alex Chen",
+      name: "Alex Chen",
       role: "Lead Systems Architect & Founder",
       bio: "12+ years designing distributed cloud architectures and low-latency databases for high-growth tech platforms.",
       specialty: "Distributed Systems & Next.js",
       avatarBg: "#FB9A5E",
-      isPlaceholder: true,
+      status: "needs-input",
     },
     {
       id: "sarah-jenkins",
-      name: "[PLACEHOLDER] Sarah Jenkins",
+      name: "Sarah Jenkins",
       role: "Head of Product Design & Motion",
       bio: "Former design system lead obsessed with monospace ergonomics, mechanical precision, and delightful accessibility.",
       specialty: "Design Systems & Tactile UX",
       avatarBg: "#FFD9B8",
-      isPlaceholder: true,
+      status: "needs-input",
     },
     {
       id: "david-okafor",
-      name: "[PLACEHOLDER] David Okafor",
+      name: "David Okafor",
       role: "Staff Mobile Engineer",
       bio: "Cross-platform mobile specialist crafting 60fps React Native and Flutter experiences with offline-first synchronization.",
       specialty: "iOS, Android & Offline SQLite",
       avatarBg: "#FFC857",
-      isPlaceholder: true,
+      status: "needs-input",
     },
     {
       id: "maya-patel",
-      name: "[PLACEHOLDER] Maya Patel",
+      name: "Maya Patel",
       role: "AI & Workflow Automation Lead",
       bio: "Pragmatic data engineer building reliable LLM pipelines, asynchronous Python workers, and document extraction engines.",
       specialty: "Python, FastAPI & Enterprise RAG",
       avatarBg: "#FB9A5E",
-      isPlaceholder: true,
+      status: "needs-input",
     },
   ] as TeamMember[],
 };

@@ -36,9 +36,9 @@ Existing: Next.js App Router + TypeScript strict, Tailwind, React Hook Form + Zo
 - Mobile-first. Test 360, 768, 1280, 1920. Touch targets at least 44px.
 - Targets on mobile: Lighthouse Performance >= 90, Accessibility / Best Practices / SEO >= 95, LCP < 2.5s, CLS < 0.05, INP < 200ms. Home first-load JS about 220 KB gzipped or less; heavy effects in lazy chunks (dynamic import, ssr false). Report bundle sizes after every prompt.
 - Accessibility: semantic HTML, visible focus (2px red-text outline with 2px offset), full keyboard support, AA contrast at minimum, command palette and modals with proper focus management.
-- Content lives in src/content as typed data. Prefix unfinished copy with "[PLACEHOLDER]". Never invent clients, testimonials, statistics, awards or live metrics; decorative charts must carry no numbers.
+- Content lives in src/content as typed data. CONTENT RULE: Never render the text "[PLACEHOLDER]", "lorem ipsum", "TODO", "TBD", "undefined", "NaN" or any bracketed template token to a visitor. Descriptive copy (what a service is, how the process works, FAQ answers, principles) must be written as real, finished copy in the brand voice, without unverifiable claims (no invented numbers, durations, guarantees, certifications, clients, awards, results or testimonials). Facts only the company can supply are stored in src/content with status "needs-input"; when a fact is missing, the feature that depends on it is HIDDEN, not faked. Track everything that needs owner input in PLACEHOLDERS.md (internal only, never rendered).
 - Secrets only via environment variables. Small reusable components, no dead code.
 - After every task: lint, typecheck, build, existing tests; then verify in the browser at mobile and desktop widths and attach screenshots to the walkthrough.
 
 ## WORKING STYLE
-For any task touching more than about 3 files, produce an implementation plan first and wait for approval. Ask before architecture-changing decisions. Keep CHANGELOG.md updated. Work on branch redesign/krat-os-v2.
+For any task touching more than about 3 files, produce an implementation plan first and wait for approval. Ask before architecture-changing decisions. Keep CHANGELOG.md updated. Work on branch audit/fix-pass.

@@ -40,7 +40,7 @@ export const servicesData: ServiceItem[] = [
     tags: ["Next.js", "TypeScript", "PostgreSQL", "Tailwind CSS", "Supabase", "Prisma"],
     illustration: "webapp",
     detailSummary: "High-performance web apps built with modular architectures, strict TypeScript typing, and responsive fluid layouts.",
-    timeframe: "4 – 10 weeks",
+    timeframe: "Varies with scope",
     deliverables: [
       "Full Next.js 15 App Router source code in your private GitHub",
       "PostgreSQL database schema with automated migration scripts",
@@ -64,7 +64,7 @@ export const servicesData: ServiceItem[] = [
       },
       {
         title: "Production Launch & Handover",
-        description: "Domain setup, SSL, automated daily backups, and a 30-day post-launch warranty with zero downtime.",
+        description: "Domain setup, SSL, automated backups, and post-launch handover support with zero downtime.",
       },
     ],
     faqs: [
@@ -97,7 +97,7 @@ export const servicesData: ServiceItem[] = [
     tags: ["React Native", "Expo", "iOS", "Android", "TypeScript", "SQLite"],
     illustration: "mobile",
     detailSummary: "Fluid mobile apps designed for instant tactile feedback, rock-solid offline reliability, and delightful native gestures.",
-    timeframe: "6 – 12 weeks",
+    timeframe: "Varies with scope",
     deliverables: [
       "Cross-platform iOS and Android codebase with shared TypeScript logic",
       "Offline cache layer with automatic conflict resolution",
@@ -154,7 +154,7 @@ export const servicesData: ServiceItem[] = [
     tags: ["Headless", "Shopify Storefront API", "Stripe", "Next.js", "Tailwind CSS"],
     illustration: "ecommerce",
     detailSummary: "Custom e-commerce platforms focused on conversion rate optimization, lightning search, and frictionless checkout.",
-    timeframe: "3 – 8 weeks",
+    timeframe: "Varies with scope",
     deliverables: [
       "Custom headless storefront engineered with Next.js App Router",
       "Shopify Storefront API or Stripe custom checkout integration",
@@ -184,7 +184,7 @@ export const servicesData: ServiceItem[] = [
     faqs: [
       {
         question: "Why choose headless over standard Shopify themes?",
-        answer: "Headless storefronts eliminate bloated liquid plugins, load in under 500ms, and allow completely unique tactile brand experiences that convert 20–40% higher.",
+        answer: "Headless storefronts eliminate bloated liquid plugins, load instantly, and allow completely custom brand experiences designed for high conversion.",
       },
       {
         question: "Can our team still update inventory and prices in Shopify?",
@@ -211,7 +211,7 @@ export const servicesData: ServiceItem[] = [
     tags: ["Python", "FastAPI", "OpenAI", "Anthropic", "Vector Search", "Docker"],
     illustration: "ai",
     detailSummary: "Pragmatic AI integrations and background automations that deliver measurable hour savings and operational clarity.",
-    timeframe: "3 – 6 weeks",
+    timeframe: "Varies with scope",
     deliverables: [
       "Custom asynchronous microservices built with Python / FastAPI",
       "Private semantic search and RAG knowledge base integration",
@@ -231,7 +231,7 @@ export const servicesData: ServiceItem[] = [
       },
       {
         title: "Sandbox Calibration",
-        description: "We benchmark extraction accuracy across 100+ edge-case documents to reach >99.5% reliability.",
+        description: "We benchmark extraction accuracy across complex edge-case documents to ensure production reliability.",
       },
       {
         title: "Integration & Monitoring",
@@ -268,7 +268,7 @@ export const servicesData: ServiceItem[] = [
     tags: ["Figma", "Design Systems", "Prototyping", "Design Tokens", "Accessibility"],
     illustration: "design",
     detailSummary: "User experience engineering that strikes the perfect balance between distinct brand personality and effortless clarity.",
-    timeframe: "2 – 5 weeks",
+    timeframe: "Varies with scope",
     deliverables: [
       "Full Figma component library with variants, auto-layout, and token definitions",
       "High-fidelity interactive prototype demonstrating key user journeys",
@@ -318,9 +318,9 @@ export const servicesData: ServiceItem[] = [
     shortPromise: "Proactive security monitoring, dependency upgrades, and on-call engineering after launch.",
     iconName: "ShieldCheck",
     outcomes: [
-      "99.9% uptime SLA with real-time error tracking and automated rollback",
+      "High-availability uptime monitoring with real-time error tracking and automated rollback",
       "Continuous dependency audits, patch releases, and performance profiling",
-      "Direct engineer Slack/Discord channel with guaranteed 4-hour response time",
+      "Direct engineer Slack/Discord channel with dedicated priority response",
     ],
     tags: ["Sentry", "AWS CloudWatch", "GitHub Actions", "Docker", "DevOps"],
     illustration: "maintenance",
@@ -354,8 +354,8 @@ export const servicesData: ServiceItem[] = [
     ],
     faqs: [
       {
-        question: "What is your response time for critical production emergencies?",
-        answer: "For critical outages (P1), our response time is under 30 minutes 24/7 with immediate triage and rollback protocols.",
+        question: "What is your response protocol for critical production emergencies?",
+        answer: "For critical production outages, our team initiates immediate emergency triage, incident notifications, and automated rollback protocols.",
       },
       {
         question: "Can unused monthly hours roll over to the next month?",

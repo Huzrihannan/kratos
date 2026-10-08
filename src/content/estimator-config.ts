@@ -2,8 +2,8 @@ export interface ProjectTypeOption {
   id: string;
   label: string;
   description: string;
-  basePriceMin: number; // [PLACEHOLDER]
-  basePriceMax: number; // [PLACEHOLDER]
+  basePriceMin: number;
+  basePriceMax: number;
   baseWeeksMin: number;
   baseWeeksMax: number;
   iconName: string;
@@ -13,7 +13,7 @@ export interface NeedOption {
   id: string;
   label: string;
   description: string;
-  multiplier: number; // [PLACEHOLDER]
+  multiplier: number;
   iconName: string;
 }
 
@@ -21,7 +21,7 @@ export interface TimelineOption {
   id: string;
   label: string;
   description: string;
-  multiplier: number; // [PLACEHOLDER]
+  multiplier: number;
   rushWeeksMultiplier: number;
 }
 
@@ -34,6 +34,8 @@ export interface BudgetBandOption {
 }
 
 export interface EstimatorConfig {
+  approved: boolean;
+  showEstimate: boolean;
   projectTypes: ProjectTypeOption[];
   needsByProjectType: Record<string, NeedOption[]>;
   defaultNeeds: NeedOption[];
@@ -42,13 +44,17 @@ export interface EstimatorConfig {
 }
 
 export const estimatorConfig: EstimatorConfig = {
+  // Price bands must be approved by the owner before showEstimate can be enabled
+  approved: false,
+  showEstimate: false,
+
   projectTypes: [
     {
       id: "website",
       label: "Marketing Website",
       description: "High-converting brand site or landing pages",
-      basePriceMin: 4500, // [PLACEHOLDER]
-      basePriceMax: 8500, // [PLACEHOLDER]
+      basePriceMin: 4500,
+      basePriceMax: 8500,
       baseWeeksMin: 2,
       baseWeeksMax: 4,
       iconName: "Globe",
@@ -57,8 +63,8 @@ export const estimatorConfig: EstimatorConfig = {
       id: "webapp",
       label: "Web App / SaaS",
       description: "Custom platform, dashboard, or portal with user auth",
-      basePriceMin: 12000, // [PLACEHOLDER]
-      basePriceMax: 24000, // [PLACEHOLDER]
+      basePriceMin: 12000,
+      basePriceMax: 24000,
       baseWeeksMin: 6,
       baseWeeksMax: 10,
       iconName: "Layers",
@@ -67,8 +73,8 @@ export const estimatorConfig: EstimatorConfig = {
       id: "mobile",
       label: "Mobile App",
       description: "Native or cross-platform iOS & Android application",
-      basePriceMin: 15000, // [PLACEHOLDER]
-      basePriceMax: 30000, // [PLACEHOLDER]
+      basePriceMin: 15000,
+      basePriceMax: 30000,
       baseWeeksMin: 8,
       baseWeeksMax: 14,
       iconName: "Smartphone",
@@ -77,8 +83,8 @@ export const estimatorConfig: EstimatorConfig = {
       id: "ecommerce",
       label: "E-Commerce",
       description: "Storefront, payments, inventory, and custom checkout",
-      basePriceMin: 8000, // [PLACEHOLDER]
-      basePriceMax: 18000, // [PLACEHOLDER]
+      basePriceMin: 8000,
+      basePriceMax: 18000,
       baseWeeksMin: 4,
       baseWeeksMax: 8,
       iconName: "ShoppingBag",
@@ -87,8 +93,8 @@ export const estimatorConfig: EstimatorConfig = {
       id: "ai_automation",
       label: "AI / Smart Automation",
       description: "Internal tooling, AI workflows, API integrations",
-      basePriceMin: 7500, // [PLACEHOLDER]
-      basePriceMax: 16000, // [PLACEHOLDER]
+      basePriceMin: 7500,
+      basePriceMax: 16000,
       baseWeeksMin: 3,
       baseWeeksMax: 6,
       iconName: "Cpu",
@@ -97,8 +103,8 @@ export const estimatorConfig: EstimatorConfig = {
       id: "custom",
       label: "Something Else",
       description: "Specialized architectures, migrations, or custom builds",
-      basePriceMin: 9000, // [PLACEHOLDER]
-      basePriceMax: 20000, // [PLACEHOLDER]
+      basePriceMin: 9000,
+      basePriceMax: 20000,
       baseWeeksMin: 4,
       baseWeeksMax: 8,
       iconName: "Sparkles",
@@ -110,42 +116,42 @@ export const estimatorConfig: EstimatorConfig = {
       id: "design",
       label: "UI/UX Design",
       description: "Wireframes, high-fidelity prototypes, brand styling",
-      multiplier: 1.15, // [PLACEHOLDER]
+      multiplier: 1.15,
       iconName: "Palette",
     },
     {
       id: "dev",
       label: "Full-Stack Development",
       description: "Frontend, backend APIs, database architecture",
-      multiplier: 1.25, // [PLACEHOLDER]
+      multiplier: 1.25,
       iconName: "Code2",
     },
     {
       id: "integrations",
       label: "Integrations & APIs",
       description: "Stripe, CRM, third-party services, webhooks",
-      multiplier: 1.1, // [PLACEHOLDER]
+      multiplier: 1.1,
       iconName: "Workflow",
     },
     {
       id: "devops",
       label: "Hosting & DevOps",
       description: "CI/CD pipelines, DNS, security, serverless setup",
-      multiplier: 1.08, // [PLACEHOLDER]
+      multiplier: 1.08,
       iconName: "Cloud",
     },
     {
       id: "maintenance",
       label: "Maintenance & Support",
       description: "Ongoing updates, monitoring, performance tuning",
-      multiplier: 1.12, // [PLACEHOLDER]
+      multiplier: 1.12,
       iconName: "ShieldCheck",
     },
     {
       id: "consulting",
       label: "Not sure yet",
       description: "Need technical guidance to define the scope",
-      multiplier: 1.0, // [PLACEHOLDER]
+      multiplier: 1.0,
       iconName: "HelpCircle",
     },
   ],
@@ -202,28 +208,28 @@ export const estimatorConfig: EstimatorConfig = {
       id: "asap",
       label: "ASAP",
       description: "Fast-track sprint (< 1 month)",
-      multiplier: 1.2, // [PLACEHOLDER]
+      multiplier: 1.2,
       rushWeeksMultiplier: 0.65,
     },
     {
       id: "1_3_months",
       label: "1–3 Months",
       description: "Standard production pace",
-      multiplier: 1.0, // [PLACEHOLDER]
+      multiplier: 1.0,
       rushWeeksMultiplier: 1.0,
     },
     {
       id: "3_6_months",
       label: "3–6 Months",
       description: "Flexible, phased milestone launch",
-      multiplier: 0.95, // [PLACEHOLDER]
+      multiplier: 0.95,
       rushWeeksMultiplier: 1.4,
     },
     {
       id: "exploring",
       label: "Just Exploring",
       description: "Gathering estimates for upcoming quarter",
-      multiplier: 1.0, // [PLACEHOLDER]
+      multiplier: 1.0,
       rushWeeksMultiplier: 1.0,
     },
   ],

@@ -53,7 +53,15 @@ export interface SiteConfig {
   };
 }
 
-const rawWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+1234567890";
+function getCurrentAvailabilityMonth(): string {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return monthNames[new Date().getMonth()];
+}
+
+const rawWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 const cleanWhatsapp = rawWhatsapp.replace(/[^0-9]/g, "");
 
 export const siteConfig: SiteConfig = {
@@ -65,7 +73,7 @@ export const siteConfig: SiteConfig = {
 
   availability: {
     status: "available",
-    chipText: "Taking on new projects for Q4",
+    chipText: `Taking on new projects for ${getCurrentAvailabilityMonth()}`,
     details: "Currently scheduling technical discovery sessions and system architecture audits.",
   },
 
@@ -73,10 +81,12 @@ export const siteConfig: SiteConfig = {
     email: process.env.LEAD_NOTIFY_EMAIL || "hello@krat-os.dev",
     phone: rawWhatsapp,
     whatsappNumber: rawWhatsapp,
-    whatsappUrl: `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-      "Hi Krat.OS! I would like to chat about a project."
-    )}`,
-    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min",
+    whatsappUrl: cleanWhatsapp
+      ? `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
+          "Hi Krat.OS! I would like to chat about a project."
+        )}`
+      : "",
+    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "",
     location: "Global Remote (HQ: San Francisco, CA)",
   },
 
@@ -91,10 +101,10 @@ export const siteConfig: SiteConfig = {
     {
       title: "Services",
       links: [
-        { label: "Web Applications", href: "/services#web" },
-        { label: "Mobile Apps (iOS & Android)", href: "/services#mobile" },
-        { label: "Automation & Workflows", href: "/services#automations" },
-        { label: "System Modernization", href: "/services#modernization" },
+        { label: "Web Applications", href: "/services#web-apps" },
+        { label: "Mobile Apps (iOS & Android)", href: "/services#mobile-apps" },
+        { label: "AI & Automation", href: "/services#ai-automation" },
+        { label: "System Maintenance", href: "/services#maintenance-support" },
       ],
     },
     {
@@ -110,8 +120,12 @@ export const siteConfig: SiteConfig = {
       title: "Reach Out",
       links: [
         { label: "Start a Conversation", href: "/contact" },
-        { label: "Book a 15-min Call", href: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min", external: true },
-        { label: "Chat on WhatsApp", href: `https://wa.me/${cleanWhatsapp}`, external: true },
+        ...(process.env.NEXT_PUBLIC_BOOKING_URL
+          ? [{ label: "Book a 15-min Call", href: process.env.NEXT_PUBLIC_BOOKING_URL, external: true }]
+          : []),
+        ...(cleanWhatsapp
+          ? [{ label: "Chat on WhatsApp", href: `https://wa.me/${cleanWhatsapp}`, external: true }]
+          : []),
         { label: "hello@krat-os.dev", href: "mailto:hello@krat-os.dev" },
       ],
     },
