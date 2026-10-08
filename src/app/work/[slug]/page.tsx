@@ -16,8 +16,14 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
-  return caseStudiesData.filter(isPublishable).map((study) => ({
+  const publishable = caseStudiesData.filter(isPublishable);
+  if (publishable.length === 0) {
+    return [{ slug: "_empty" }];
+  }
+  return publishable.map((study) => ({
     slug: study.slug,
   }));
 }

@@ -1,0 +1,25 @@
+{
+  "404": [],
+  "home": [
+    {
+      "type": "warning",
+      "text": "",
+      "timestamp": 1791459733216
+    }
+  ],
+  "services": [],
+  "services-web-apps": [],
+  "services-mobile-apps": [],
+  "services-ecommerce": [],
+  "services-ai-automation": [],
+  "services-ui-ux-design": [],
+  "services-maintenance-support": [],
+  "work": [],
+  "about": [],
+  "contact": [],
+  "start": [],
+  "privacy": [],
+  "terms": [],
+  "design-system": [],
+  "deliberately-wrong": []
+}

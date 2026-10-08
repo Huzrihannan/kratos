@@ -2,6 +2,36 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R12: Audit Remediation — Content Purge, Hide-When-Missing Architecture, Hero WebGL Overhaul, and Guardrails] - 2026-10-08
+
+### Added
+- **Content Status Architecture (`src/lib/content-status.ts`):**
+  - Typed `ContentStatus = "published" | "needs-input" | "draft"` and `isPublishable<T>(item: T): boolean` helper.
+  - Dynamic derivation of UI sections: Trust strip, Proof stats/testimonials, and Work portfolio only render when verified records exist.
+  - Work section calmly displays an honest empty state ("Architecture Retrospectives in Progress") with CTA to the Estimator while case studies are pending owner input.
+  - Sitemaps and dynamic route generation in `src/app/work/[slug]/page.tsx` dynamically filter by publishable records, preventing unverified or broken routes.
+- **Automated Content Guardrail (`scripts/check-content.mjs`):**
+  - Headless Chromium CDP crawler inspecting all 17 rendered production routes against forbidden patterns (`[PLACEHOLDER]`, `lorem ipsum`, `TODO`, `TBD`, `undefined`, `NaN`, `[Month]`), dead `#` or empty `href=""` links, and browser console errors.
+  - Wired into `package.json` as `"check:content"` and `"check"` suite.
+- **Internal Owner Tracking Manifest (`PLACEHOLDERS.md`):**
+  - Complete inventory of unconfirmed facts, files, affected features, and exact owner requirements for case studies, team members, pricing approvals, and direct contact channels.
+- **Audit Documentation & Evidence Sets (`AUDIT_REPORT.md`, `audit/before/`, `audit/after/`):**
+  - Complete before and after test matrices with 250+ screenshots across 4 viewports (360, 768, 1280, 1920), 2 themes, and 3 motion levels.
+  - All 15 audit findings (F-01 through F-15) marked 100% resolved.
+
+### Changed & Fixed
+- **Hero Background Resilience (`src/components/fx/ShaderField.tsx` & `src/components/sections/Hero.tsx`):**
+  - Redesigned as a two-layer architecture: Layer 1 server-rendered blueprint grid SVG with soft red radial glow (`#FD142B`), always present and reliable standalone.
+  - Layer 2 WebGL shader with `alpha: true`, smooth theme synchronization uniform (`uTheme` 0.0 dark / 1.0 light), `ResizeObserver`, first-frame render sanity check (`gl.getError() === gl.NO_ERROR`) before 700ms opacity fade-in, and gradient text scrim for guaranteed WCAG AA contrast (≥ 7:1).
+  - Monkey-patched `gl.getShaderInfoLog` preventing false-positive OGL warning logs when Chromium returns `null` on successful compilation.
+- **Content Purge & Brand Voice Alignment:**
+  - Dynamic month calculation for availability chip (`Taking on new projects for ${monthName}`) with daily revalidation.
+  - Purged all literal `[PLACEHOLDER]` tokens from footer HUD clock (`COLOMBO`), process pipeline labels, principles, contributor cards, and work filters.
+  - Standardized service timeframes to `"Varies with scope"` and removed unverified duration/SLA claims.
+  - Plain-language draft legal pages (`/privacy` and `/terms`) reflecting actual tech stack without on-page legal preview banners.
+  - Fixed broken footer link `/services/cloud-infra` → `/services/maintenance-support`.
+  - Conditioned all WhatsApp and calendar booking CTAs across `FinalCta.tsx`, `ContactForm.tsx`, `ContactDock.tsx`, `CommandPalette.tsx`, and `Faq.tsx` to eliminate empty `href=""` links.
+
 ## [R11: Final QA, Multi-Device Release Verification, and Brand Sign-Off] - 2026-10-08
 
 ### Added

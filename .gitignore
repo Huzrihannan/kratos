@@ -43,3 +43,4 @@ lh-*.json
 # scripts temporary fonts and raw audit
 scripts/fonts/
 audit-raw.json
+audit/**/*.png
