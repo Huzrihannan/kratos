@@ -2,7 +2,35 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
-## [R6: Home Sections B — Stack, Principles, FAQ, Final CTA] - 2026-10-08
+## [R7: The Estimator Rebuilt as Configurator] - 2026-10-08
+
+### Added
+- **Interactive Two-Column Configurator (`src/components/estimator/EstimatorWizard.tsx`):**
+  - Left column: Mechanical question header with `<Decode>` title scrambling, number-badged option cards, and step navigation.
+  - Right column: Interactive OS Window (`ConfigJsonWindow.tsx`) with syntax-highlighted `krat.config.json` that writes itself live as the user configures their project, paired with a build progress bar (17% to 100%).
+  - Keyboard-driven navigation: keys `1`–`6` to select/toggle options, `Enter` to advance/compile, `ArrowLeft` to navigate backward, `Esc` to close modal; strictly suppressed when text inputs or textareas are focused.
+  - Mobile ergonomics: single-column flow with a collapsible bottom drawer displaying the live `krat.config.json` state.
+- **KeyOption Card Component (`src/components/estimator/KeyOption.tsx`):**
+  - Number badge `[1]`, `[2]`, etc. with mechanical styling, accessible radio/checkbox underlying semantics, signal red indicator checkmark, and subtle hover borders.
+- **Live Spec Window (`src/components/estimator/ConfigJsonWindow.tsx`):**
+  - Titled OS window (`krat.config.json [LIVE_SPEC]`) with line-numbered, syntax-highlighted JSON reflecting project type, scope, timeline, budget, and contact info, marked `aria-live="polite"`.
+- **Canvas Particle Burst (`src/components/estimator/BurstCanvas.tsx`):**
+  - Lightweight 600ms particle burst of sharp signal red (`#FD142B`) and cream (`#EFE3CF`) micro-squares celebrating build completion (gracefully disabled in `lite` and `off` motion modes).
+- **Mechanical Progress HUD (`src/components/estimator/EstimatorProgress.tsx`):**
+  - Monospace index header (`/01 CONFIG // STEP 0X/06`), signal red progress bar, and keyboard shortcut chips (`[←]` / `[ESC]`).
+- **Terminal Result Screen (`src/components/estimator/ResultScreen.tsx`):**
+  - Rebuilt with terminal chrome (`krat.result.terminal [BUILD_COMPLETE]`) and green status pill (`BUILD SPEC LOCKED // 100% COMPILED`).
+  - Rolling investment range (`$10,000` — `$25,000`) and timeline powered by `<Odometer>` with mechanical counter typography.
+  - Preserved signature copy: `"A ballpark, not a quote. Let's make it real."`.
+  - Triple conversion CTAs: `"Book a 15-minute call"`, `"Chat on WhatsApp"`, and `"Back to site"` / restart action.
+- **Modal & Page Wrappers (`EstimatorModal.tsx` & `src/app/start/page.tsx`):**
+  - Fullscreen `#212121` modal container with hairline border and backdrop lock. Dedicated standalone `/start` page aligned with Krat.OS display typography and maximum width containers.
+
+### Preserved
+- Lead engine integrity strictly maintained: `/api/lead` contract, `estimator-config.ts` formula weights and base prices, Supabase schema, Resend templates, Turnstile verification, honeypot spam protection, and all analytics events (`estimator_open`, `estimator_step_1..6`, `lead_submitted`, `estimator_complete`, `booking_click`, `whatsapp_click`).
+- Production bundle size for `/start`: **171 kB** (49 kB under the 220 kB budget). Route `/`: **193 kB** (27 kB under budget).
+
+
 
 ### Added
 - **Section /05 — Stack (`src/components/sections/StackMarquee.tsx` & `stack/StackTag.tsx`):**

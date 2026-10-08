@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLayoutModal } from "@/lib/modal-context";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
 import { EstimatorWizard } from "@/components/estimator/EstimatorWizard";
 
 export function EstimatorModal() {
   const { isEstimatorOpen, closeEstimator } = useLayoutModal();
-  const prefersReducedMotion = useReducedMotion();
+  const { isOff } = useMotionLevel();
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Lock body scroll and handle Escape key to close modal
@@ -39,8 +40,8 @@ export function EstimatorModal() {
           ref={modalRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Interactive Project Estimator"
-          className="fixed inset-0 z-50 overflow-y-auto bg-cream/95 backdrop-blur-xl flex flex-col items-center justify-start sm:justify-center p-3 sm:p-6"
+          aria-label="Interactive Project Estimator Configurator"
+          className="fixed inset-0 z-50 overflow-y-auto bg-bg/95 backdrop-blur-md flex flex-col items-center justify-start sm:justify-center p-2 sm:p-4 md:p-6"
         >
           {/* Backdrop click handler */}
           <div
@@ -50,23 +51,14 @@ export function EstimatorModal() {
           />
 
           <motion.div
-            initial={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, scale: 0.94, y: 24 }
-            }
+            initial={isOff ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={
-              prefersReducedMotion
-                ? { opacity: 0 }
-                : { opacity: 0, scale: 0.94, y: 24 }
-            }
+            exit={isOff ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: 12 }}
             transition={{
-              type: "spring" as const,
-              stiffness: 380,
-              damping: 26,
+              duration: 0.2,
+              ease: [0.16, 1, 0.3, 1],
             }}
-            className="w-full my-auto"
+            className="w-full my-auto max-w-6xl bg-bg border border-line rounded-[2px] shadow-2xl overflow-hidden"
           >
             <EstimatorWizard onClose={closeEstimator} isModal={true} />
           </motion.div>

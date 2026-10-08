@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Globe,
   Layers,
@@ -16,6 +15,9 @@ import {
   ShieldCheck,
   FileText,
   AlertCircle,
+  FileCode2,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import {
   estimatorConfig,
@@ -24,12 +26,15 @@ import {
 } from "@/content/estimator-config";
 import { EstimatorProgress } from "@/components/estimator/EstimatorProgress";
 import { ResultScreen } from "@/components/estimator/ResultScreen";
-import { BubbleOption } from "@/components/ui/BubbleOption";
+import { ConfigJsonWindow } from "@/components/estimator/ConfigJsonWindow";
+import { KeyOption } from "@/components/estimator/KeyOption";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { Decode } from "@/components/fx/Decode";
 import { trackEvent } from "@/lib/analytics";
 import { getAttribution } from "@/lib/utm";
+import { cn } from "@/lib/utils";
 
 interface EstimatorState {
   projectType: string;
@@ -65,13 +70,13 @@ interface EstimatorWizardProps {
 }
 
 export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardProps) {
-  const prefersReducedMotion = useReducedMotion();
   const [currentStep, setCurrentStep] = useState(1);
   const [state, setState] = useState<EstimatorState>(INITIAL_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [result, setResult] = useState<BallparkCalculation | null>(null);
   const [honeypot, setHoneypot] = useState("");
+  const [isMobileJsonOpen, setIsMobileJsonOpen] = useState(false);
 
   // Restore state from sessionStorage on mount
   useEffect(() => {
@@ -97,40 +102,49 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
   }, [state]);
 
   const stepTitles = [
-    "Project Type",
-    "Scope & Needs",
-    "Timeline",
-    "Budget",
-    "Details",
-    "Contact",
+    "Project Architecture",
+    "Scope & Capabilities",
+    "Delivery Pacing",
+    "Target Investment",
+    "Technical Notes",
+    "Owner Specification",
+  ];
+
+  const stepHeadlines = [
+    "What are we building?",
+    "What scope do you need?",
+    "How soon do you need it?",
+    "What is your target budget?",
+    "Tell us a bit about it",
+    "Where do we send your estimate?",
   ];
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case "Globe":
-        return <Globe className="w-5 h-5 text-orange" />;
+        return <Globe className="w-4 h-4" />;
       case "Layers":
-        return <Layers className="w-5 h-5 text-orange" />;
+        return <Layers className="w-4 h-4" />;
       case "Smartphone":
-        return <Smartphone className="w-5 h-5 text-orange" />;
+        return <Smartphone className="w-4 h-4" />;
       case "ShoppingBag":
-        return <ShoppingBag className="w-5 h-5 text-orange" />;
+        return <ShoppingBag className="w-4 h-4" />;
       case "Cpu":
-        return <Cpu className="w-5 h-5 text-orange" />;
+        return <Cpu className="w-4 h-4" />;
       case "Palette":
-        return <Palette className="w-5 h-5 text-orange" />;
+        return <Palette className="w-4 h-4" />;
       case "Code2":
-        return <Code2 className="w-5 h-5 text-orange" />;
+        return <Code2 className="w-4 h-4" />;
       case "Workflow":
-        return <Workflow className="w-5 h-5 text-orange" />;
+        return <Workflow className="w-4 h-4" />;
       case "Cloud":
-        return <Cloud className="w-5 h-5 text-orange" />;
+        return <Cloud className="w-4 h-4" />;
       case "ShieldCheck":
-        return <ShieldCheck className="w-5 h-5 text-orange" />;
+        return <ShieldCheck className="w-4 h-4" />;
       case "FileText":
-        return <FileText className="w-5 h-5 text-orange" />;
+        return <FileText className="w-4 h-4" />;
       default:
-        return <Sparkles className="w-5 h-5 text-orange" />;
+        return <Sparkles className="w-4 h-4" />;
     }
   };
 
@@ -138,21 +152,29 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
     estimatorConfig.needsByProjectType[state.projectType] ||
     estimatorConfig.defaultNeeds;
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setErrorMsg(null);
     if (currentStep < 6) {
       const nextStep = currentStep + 1;
       setCurrentStep(nextStep);
-      trackEvent(`estimator_step_${nextStep}` as "estimator_step_1" | "estimator_step_2" | "estimator_step_3" | "estimator_step_4" | "estimator_step_5" | "estimator_step_6");
+      trackEvent(
+        `estimator_step_${nextStep}` as
+          | "estimator_step_1"
+          | "estimator_step_2"
+          | "estimator_step_3"
+          | "estimator_step_4"
+          | "estimator_step_5"
+          | "estimator_step_6"
+      );
     }
-  };
+  }, [currentStep]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     setErrorMsg(null);
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
     }
-  };
+  }, [currentStep]);
 
   const handleRestart = () => {
     try {
@@ -170,7 +192,7 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
     setState((prev) => ({
       ...prev,
       projectType: id,
-      needs: ["dev"], // reset needs to sensible default
+      needs: ["dev"],
     }));
   };
 
@@ -185,74 +207,158 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg(null);
+  const handleSubmit = useCallback(
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+      setErrorMsg(null);
 
-    // Basic frontend checks
-    if (!state.name.trim() || state.name.trim().length < 2) {
-      setErrorMsg("Please enter your name (at least 2 letters).");
-      return;
-    }
-    if (!state.email.trim() || !state.email.includes("@")) {
-      setErrorMsg("Please enter a valid work email address.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const calculation = calculateBallpark(
-      state.projectType,
-      state.needs,
-      state.timeline
-    );
-
-    const attribution = getAttribution();
-
-    try {
-      const payload = {
-        source: "estimator",
-        name: state.name.trim(),
-        email: state.email.trim(),
-        phone: state.phone.trim() || undefined,
-        projectType: state.projectType,
-        needs: state.needs,
-        timeline: state.timeline,
-        budget: state.budget,
-        message: state.message.trim() || undefined,
-        link: state.link.trim() || undefined,
-        consent: true,
-        estimateMin: calculation.estimateMin,
-        estimateMax: calculation.estimateMax,
-        website: honeypot || undefined,
-        utmSource: attribution.utmSource,
-        utmMedium: attribution.utmMedium,
-        utmCampaign: attribution.utmCampaign,
-        pageUrl: attribution.pageUrl,
-        referrer: attribution.referrer,
-      };
-
-      const res = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Unable to submit your estimate. Please try again.");
+      if (!state.name.trim() || state.name.trim().length < 2) {
+        setErrorMsg("Please enter your name (at least 2 letters).");
+        return;
+      }
+      if (!state.email.trim() || !state.email.includes("@")) {
+        setErrorMsg("Please enter a valid work email address.");
+        return;
       }
 
-      trackEvent("lead_submitted", { source: "estimator", email: state.email });
-      setResult(calculation);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to submit. Please check your connection or contact us on WhatsApp.";
-      setErrorMsg(msg);
-    } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(true);
+
+      const calculation = calculateBallpark(
+        state.projectType,
+        state.needs,
+        state.timeline
+      );
+
+      const attribution = getAttribution();
+
+      try {
+        const payload = {
+          source: "estimator",
+          name: state.name.trim(),
+          email: state.email.trim(),
+          phone: state.phone.trim() || undefined,
+          projectType: state.projectType,
+          needs: state.needs,
+          timeline: state.timeline,
+          budget: state.budget,
+          message: state.message.trim() || undefined,
+          link: state.link.trim() || undefined,
+          consent: true,
+          estimateMin: calculation.estimateMin,
+          estimateMax: calculation.estimateMax,
+          website: honeypot || undefined,
+          utmSource: attribution.utmSource,
+          utmMedium: attribution.utmMedium,
+          utmCampaign: attribution.utmCampaign,
+          pageUrl: attribution.pageUrl,
+          referrer: attribution.referrer,
+        };
+
+        const res = await fetch("/api/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Unable to submit your estimate. Please try again.");
+        }
+
+        trackEvent("lead_submitted", { source: "estimator", email: state.email });
+        setResult(calculation);
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : "Failed to submit. Please check your connection or contact us on WhatsApp.";
+        setErrorMsg(msg);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [state, honeypot]
+  );
+
+  // Keyboard Navigation Handler (1-6 keys, Enter, ArrowLeft, Escape)
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      const isInputActive = activeTag === "input" || activeTag === "textarea";
+
+      // Allow Esc to close even if in input
+      if (e.key === "Escape") {
+        if (onClose) {
+          e.preventDefault();
+          onClose();
+        }
+        return;
+      }
+
+      // If user is typing in an input field, do not trigger numeric shortcuts or arrow navigation
+      if (isInputActive) {
+        if (e.key === "Enter" && currentStep === 6) {
+          e.preventDefault();
+          handleSubmit();
+        }
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        if (currentStep > 1) {
+          e.preventDefault();
+          handleBack();
+        }
+        return;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (currentStep < 6) {
+          handleNext();
+        } else {
+          handleSubmit();
+        }
+        return;
+      }
+
+      // Number keys 1-6
+      const num = parseInt(e.key, 10);
+      if (!isNaN(num) && num >= 1) {
+        const optionIndex = num - 1;
+
+        if (currentStep === 1) {
+          const item = estimatorConfig.projectTypes[optionIndex];
+          if (item) {
+            e.preventDefault();
+            handleProjectTypeSelect(item.id);
+          }
+        } else if (currentStep === 2) {
+          const item = currentNeeds[optionIndex];
+          if (item) {
+            e.preventDefault();
+            handleNeedToggle(item.id);
+          }
+        } else if (currentStep === 3) {
+          const item = estimatorConfig.timelines[optionIndex];
+          if (item) {
+            e.preventDefault();
+            setState((prev) => ({ ...prev, timeline: item.id }));
+          }
+        } else if (currentStep === 4) {
+          const item = estimatorConfig.budgetBands[optionIndex];
+          if (item) {
+            e.preventDefault();
+            setState((prev) => ({ ...prev, budget: item.id }));
+          }
+        }
+      }
     }
-  };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentStep, currentNeeds, handleBack, handleNext, handleSubmit, onClose]);
 
   if (result) {
     const selectedProj = estimatorConfig.projectTypes.find((p) => p.id === state.projectType);
@@ -269,9 +375,10 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
 
   return (
     <div
-      className={`w-full max-w-2xl mx-auto flex flex-col justify-between ${
+      className={cn(
+        "w-full max-w-6xl mx-auto flex flex-col justify-between select-none",
         isModal ? "p-3 sm:p-6" : "p-4 sm:p-8"
-      }`}
+      )}
     >
       {/* Top Progress Track with Back & Close buttons */}
       <EstimatorProgress
@@ -280,45 +387,58 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
         onBack={handleBack}
         onClose={onClose}
         stepTitle={stepTitles[currentStep - 1]}
+        className="mb-6 sm:mb-8"
       />
 
       {/* Error Banner */}
       {errorMsg && (
         <div
           role="alert"
-          className="mb-6 p-4 rounded-2xl bg-orange/20 border border-orange-deep text-ink flex items-center gap-3 text-sm font-medium"
+          className="mb-6 p-3 sm:p-4 rounded-[2px] bg-red/10 border border-red text-red-text flex items-center gap-3 text-xs sm:text-sm font-mono font-medium"
         >
-          <AlertCircle className="w-5 h-5 text-orange-deep shrink-0" />
+          <AlertCircle className="w-4 h-4 text-red shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
-      {/* Animated Step View Container */}
-      <div className="relative min-h-[380px] flex flex-col justify-between">
-        <AnimatePresence mode="wait">
-          {/* STEP 1: What are we building? */}
-          {currentStep === 1 && (
-            <motion.div
-              key="step-1"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-6"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  What are we building?
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Pick the product that best matches your vision.
-                </p>
-              </div>
+      {/* Two-Column Configurator Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* LEFT COLUMN: Question & KeyOptions (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col justify-between min-h-[460px]">
+          <div>
+            {/* Step Question Header */}
+            <div className="mb-6">
+              <span className="font-mono text-xs text-red-text uppercase tracking-widest font-bold block mb-1">
+                STEP 0{currentStep}{" // "}{stepTitles[currentStep - 1]}
+              </span>
+              <h2 className="font-mono text-2xl sm:text-3xl font-extrabold text-fg tracking-tight leading-tight">
+                <Decode
+                  key={`headline-${currentStep}`}
+                  text={stepHeadlines[currentStep - 1]}
+                  speed={25}
+                />
+              </h2>
+              <p className="font-sans text-xs sm:text-sm text-fg-muted mt-2">
+                {currentStep === 1 && "Pick the software architecture that best matches your target application."}
+                {currentStep === 2 && "Select all capabilities that apply. Options adapt to your application type."}
+                {currentStep === 3 && "Delivery pacing directly affects sprint allocation and engineer availability."}
+                {currentStep === 4 && "Helps us recommend appropriate technical architecture and release phasing."}
+                {currentStep === 5 && "Optional notes or specification links to clarify your data models or workflows."}
+                {currentStep === 6 && "Get your instant ballpark range and full milestone breakdown via email."}
+              </p>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
-                {estimatorConfig.projectTypes.map((pt) => (
-                  <BubbleOption
+            {/* Step 1: Project Type */}
+            {currentStep === 1 && (
+              <div
+                role="radiogroup"
+                aria-label="Select Architecture Type"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              >
+                {estimatorConfig.projectTypes.map((pt, idx) => (
+                  <KeyOption
                     key={pt.id}
+                    keyIndex={idx + 1}
                     title={pt.label}
                     description={pt.description}
                     icon={getIcon(pt.iconName)}
@@ -327,66 +447,41 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
                   />
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* STEP 2: What do you need? */}
-          {currentStep === 2 && (
-            <motion.div
-              key="step-2"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-6"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  What scope do you need?
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Select all that apply. Options adapt to your project type.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
-                {currentNeeds.map((need) => (
-                  <BubbleOption
+            {/* Step 2: Needs / Capabilities */}
+            {currentStep === 2 && (
+              <div
+                role="group"
+                aria-label="Select Capabilities"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              >
+                {currentNeeds.map((need, idx) => (
+                  <KeyOption
                     key={need.id}
+                    keyIndex={idx + 1}
                     title={need.label}
                     description={need.description}
                     icon={getIcon(need.iconName)}
                     selected={state.needs.includes(need.id)}
+                    type="checkbox"
                     onClick={() => handleNeedToggle(need.id)}
                   />
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* STEP 3: How soon? */}
-          {currentStep === 3 && (
-            <motion.div
-              key="step-3"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-6"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  How soon do you need it?
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Timeline directly affects sprint pacing and availability.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {estimatorConfig.timelines.map((tl) => (
-                  <BubbleOption
+            {/* Step 3: Timeline */}
+            {currentStep === 3 && (
+              <div
+                role="radiogroup"
+                aria-label="Select Delivery Pacing"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              >
+                {estimatorConfig.timelines.map((tl, idx) => (
+                  <KeyOption
                     key={tl.id}
+                    keyIndex={idx + 1}
                     title={tl.label}
                     description={tl.description}
                     selected={state.timeline === tl.id}
@@ -394,97 +489,52 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
                   />
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* STEP 4: Budget range */}
-          {currentStep === 4 && (
-            <motion.div
-              key="step-4"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-6"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  What is your target budget?
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Helps us recommend the best tech stack and feature phasing.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {estimatorConfig.budgetBands.map((b) => (
-                  <BubbleOption
+            {/* Step 4: Budget Range */}
+            {currentStep === 4 && (
+              <div
+                role="radiogroup"
+                aria-label="Select Target Investment"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              >
+                {estimatorConfig.budgetBands.map((b, idx) => (
+                  <KeyOption
                     key={b.id}
+                    keyIndex={idx + 1}
                     title={b.label}
-                    description={b.isCustom ? "We'll suggest appropriate phases" : "Approximate budget pool"}
+                    description={b.isCustom ? "Phased scope rollout" : "Planned budget pool"}
                     selected={state.budget === b.id}
                     onClick={() => setState((prev) => ({ ...prev, budget: b.id }))}
                   />
                 ))}
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* STEP 5: Tell us about it */}
-          {currentStep === 5 && (
-            <motion.div
-              key="step-5"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-5"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  Tell us a bit about it
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Optional, but helps us understand what problem you are solving.
-                </p>
+            {/* Step 5: Details / Notes */}
+            {currentStep === 5 && (
+              <div className="space-y-4">
+                <Textarea
+                  label="System notes or problem description (optional)"
+                  placeholder="What core business process does this software automate?"
+                  value={state.message}
+                  onChange={(e) => setState((prev) => ({ ...prev, message: e.target.value }))}
+                  rows={4}
+                  className="font-mono text-xs"
+                />
+
+                <Input
+                  label="Figma or technical spec link (optional)"
+                  placeholder="https://figma.com/... or https://github.com/..."
+                  value={state.link}
+                  onChange={(e) => setState((prev) => ({ ...prev, link: e.target.value }))}
+                  className="font-mono text-xs"
+                />
               </div>
+            )}
 
-              <Textarea
-                label="Project notes (optional)"
-                placeholder="A sentence is plenty — what problem does this solve?"
-                value={state.message}
-                onChange={(e) => setState((prev) => ({ ...prev, message: e.target.value }))}
-                rows={4}
-              />
-
-              <Input
-                label="Reference link or Figma (optional)"
-                placeholder="https://..."
-                value={state.link}
-                onChange={(e) => setState((prev) => ({ ...prev, link: e.target.value }))}
-              />
-            </motion.div>
-          )}
-
-          {/* STEP 6: Where do we send your estimate? */}
-          {currentStep === 6 && (
-            <motion.div
-              key="step-6"
-              initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-              transition={{ type: "spring", stiffness: 380, damping: 28 }}
-              className="space-y-5"
-            >
-              <div className="text-left">
-                <h2 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-2">
-                  Where do we send your estimate?
-                </h2>
-                <p className="font-body text-ink-soft text-sm sm:text-base">
-                  Get your instant ballpark range and full breakdown by email.
-                </p>
-              </div>
-
+            {/* Step 6: Contact Info */}
+            {currentStep === 6 && (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Hidden Honeypot Trap */}
                 <input
@@ -528,44 +578,99 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
                     type="checkbox"
                     checked={state.consent}
                     onChange={(e) => setState((prev) => ({ ...prev, consent: e.target.checked }))}
-                    className="mt-1 w-4 h-4 rounded text-orange focus:ring-orange-deep accent-orange"
+                    className="mt-1 w-4 h-4 rounded-[2px] border-line-strong bg-surface text-red accent-red focus:ring-red-text"
                     required
                   />
-                  <span className="text-xs text-ink-soft leading-relaxed font-body">
+                  <span className="text-xs text-fg-muted leading-relaxed font-sans">
                     I agree to receive my ballpark estimate and project communication from Krat.OS Software Solutions. (No spam, ever).
                   </span>
                 </label>
-
-                <div className="pt-4">
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    size="lg"
-                    disabled={isSubmitting || !state.name || !state.email}
-                    isLoading={isSubmitting}
-                    className="w-full justify-center min-h-[52px] text-base"
-                    withArrow
-                  >
-                    {isSubmitting ? "Calculating your estimate..." : "Calculate My Ballpark Estimate"}
-                  </Button>
-                </div>
               </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </div>
 
-        {/* Step Navigation Button (Steps 1 to 5) */}
-        {currentStep < 6 && (
-          <div className="pt-8 flex justify-end">
-            <Button
-              variant="primary"
-              size="lg"
-              onClick={handleNext}
-              withArrow
-              className="min-w-[140px]"
-            >
-              Next Step
-            </Button>
+          {/* Navigation Controls Bar */}
+          <div className="pt-8 mt-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs">
+            {/* Keyboard Shortcuts Hint */}
+            <div className="text-fg-muted/70 text-[11px] hidden sm:flex items-center gap-3">
+              <span>[1-6] SELECT</span>
+              <span>•</span>
+              <span>[ENTER] CONTINUE</span>
+              <span>•</span>
+              <span>[←] BACK</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+              {currentStep > 1 && (
+                <Button
+                  variant="ghost"
+                  size="md"
+                  onClick={handleBack}
+                  className="font-mono text-xs uppercase border-line hover:border-line-strong"
+                >
+                  Back
+                </Button>
+              )}
+
+              {currentStep < 6 ? (
+                <Button
+                  variant="primary"
+                  size="md"
+                  onClick={handleNext}
+                  withArrow
+                  className="font-mono text-xs uppercase w-full sm:w-auto"
+                >
+                  Continue [Enter]
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="md"
+                  onClick={() => handleSubmit()}
+                  disabled={isSubmitting || !state.name || !state.email}
+                  isLoading={isSubmitting}
+                  withArrow
+                  className="font-mono text-xs uppercase w-full sm:w-auto"
+                >
+                  {isSubmitting ? "Compiling spec..." : "Compile Ballpark Spec [Enter]"}
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Live "krat.config.json" Output Window (5 cols on desktop) */}
+        <div className="hidden lg:block lg:col-span-5 h-full">
+          <ConfigJsonWindow currentStep={currentStep} totalSteps={6} state={state} />
+        </div>
+      </div>
+
+      {/* MOBILE: Collapsible krat.config.json Bottom Drawer */}
+      <div className="lg:hidden mt-6 pt-4 border-t border-line">
+        <button
+          type="button"
+          onClick={() => setIsMobileJsonOpen((prev) => !prev)}
+          className="w-full flex items-center justify-between p-3 bg-surface border border-line rounded-[2px] font-mono text-xs text-fg"
+        >
+          <div className="flex items-center gap-2">
+            <FileCode2 className="w-4 h-4 text-red-text" />
+            <span>krat.config.json ({state.projectType})</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-fg-muted text-[11px]">
+            <span>{isMobileJsonOpen ? "HIDE SPEC" : "VIEW SPEC"}</span>
+            {isMobileJsonOpen ? (
+              <ChevronUp className="w-3.5 h-3.5" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5" />
+            )}
+          </div>
+        </button>
+
+        {isMobileJsonOpen && (
+          <div className="mt-2">
+            <ConfigJsonWindow currentStep={currentStep} totalSteps={6} state={state} />
           </div>
         )}
       </div>
