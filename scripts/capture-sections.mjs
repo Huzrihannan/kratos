@@ -32,10 +32,10 @@ function sendCdp(ws, method, params = {}) {
 }
 
 async function run() {
-  const port = process.env.PORT || "3016";
+  const port = process.env.PORT || "3017";
   const chrome = spawn("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", [
     "--headless=new",
-    "--remote-debugging-port=9229",
+    "--remote-debugging-port=9230",
     "--hide-scrollbars",
     "--window-size=1280,900",
     `http://localhost:${port}/?noboot=true`,
@@ -43,7 +43,7 @@ async function run() {
 
   await new Promise((r) => setTimeout(r, 2500));
 
-  const list = await fetchJson("http://localhost:9229/json");
+  const list = await fetchJson("http://localhost:9230/json");
   const target = list.find((p) => p.type === "page");
   if (!target) {
     console.error("No target page found");
@@ -64,18 +64,22 @@ async function run() {
       mobile: width < 768,
     });
 
-    await sendCdp(ws, "Runtime.evaluate", {
+    const scrollRes = await sendCdp(ws, "Runtime.evaluate", {
       expression: `
         (() => {
-          const el = document.querySelector("${selector}");
+          const el = document.querySelector('${selector}');
           if (el) {
             window.scrollTo(0, el.offsetTop);
+            return { found: true, top: el.offsetTop };
           }
+          return { found: false };
         })()
       `,
+      returnByValue: true,
     });
+    console.log(`Scrolled to ${selector}:`, scrollRes.result?.value);
 
-    await new Promise((r) => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 700));
 
     const shot = await sendCdp(ws, "Page.captureScreenshot", { format: "png" });
     const buf = Buffer.from(shot.data, "base64");
@@ -83,21 +87,21 @@ async function run() {
     console.log(`Saved ${filename} (${buf.length} bytes)`);
   }
 
-  // 1. Desktop Sections
-  await captureTarget("#services", "sections-modules-desktop-1280.png", 1280, 900);
-  await captureTarget("#process", "sections-pipeline-desktop-1280.png", 1280, 900);
-  await captureTarget("#work", "sections-work-desktop-1280.png", 1280, 900);
-  await captureTarget("#proof", "sections-proof-light-desktop-1280.png", 1280, 900);
+  // 1. Desktop Sections B (1280 width)
+  await captureTarget("#stack", "sections-stack-desktop-1280.png", 1280, 900);
+  await captureTarget("#why", "sections-principles-desktop-1280.png", 1280, 900);
+  await captureTarget("#faq", "sections-faq-desktop-1280.png", 1280, 900);
+  await captureTarget('section[aria-label="Call to Action"]', "sections-finalcta-desktop-1280.png", 1280, 900);
 
-  // 2. Mobile Sections (360 width)
-  await captureTarget("#services", "sections-modules-mobile-360.png", 360, 840);
-  await captureTarget("#process", "sections-pipeline-mobile-360.png", 360, 840);
-  await captureTarget("#work", "sections-work-mobile-360.png", 360, 840);
-  await captureTarget("#proof", "sections-proof-mobile-360.png", 360, 840);
+  // 2. Mobile Sections B (360 width)
+  await captureTarget("#stack", "sections-stack-mobile-360.png", 360, 840);
+  await captureTarget("#why", "sections-principles-mobile-360.png", 360, 840);
+  await captureTarget("#faq", "sections-faq-mobile-360.png", 360, 840);
+  await captureTarget('section[aria-label="Call to Action"]', "sections-finalcta-mobile-360.png", 360, 840);
 
   ws.close();
   chrome.kill();
-  console.log("All screenshots captured successfully.");
+  console.log("All Sections B screenshots captured successfully.");
 }
 
 run().catch((err) => {

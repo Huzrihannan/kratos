@@ -1,79 +1,180 @@
 "use client";
 
-import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { Code2 } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { Section } from "@/components/ui/Section";
+import { Decode } from "@/components/fx/Decode";
 import { stackRowOne, stackRowTwo } from "@/content/stack";
-import { Marquee } from "@/components/ui/Marquee";
+import { StackTag } from "./stack/StackTag";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
+import { useInViewPlayback } from "@/lib/motion/useInViewPlayback";
+import { useLayoutModal } from "@/lib/modal-context";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 export function StackMarquee() {
-  const prefersReducedMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isPlaying = useInViewPlayback(containerRef);
+  const { isOff } = useMotionLevel();
+  const { openEstimator } = useLayoutModal();
+
+  const [velocityFactor, setVelocityFactor] = useState(1);
+  const lastScrollY = useRef(0);
+  const lastScrollTime = useRef(0);
+
+  // Velocity boost reacting to scroll speed
+  useEffect(() => {
+    if (isOff || typeof window === "undefined") return;
+
+    let timeoutId: NodeJS.Timeout;
+
+    function handleScroll() {
+      const now = performance.now();
+      const deltaY = Math.abs(window.scrollY - lastScrollY.current);
+      const deltaTime = Math.max(now - lastScrollTime.current, 16);
+
+      const velocity = deltaY / deltaTime; // px/ms
+      const factor = Math.min(1 + velocity * 1.8, 3.2);
+      setVelocityFactor(factor);
+
+      lastScrollY.current = window.scrollY;
+      lastScrollTime.current = now;
+
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setVelocityFactor(1);
+      }, 180);
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, [isOff]);
+
+  const baseSpeedRow1 = 36;
+  const baseSpeedRow2 = 40;
+  const durationRow1 = `${Math.max(baseSpeedRow1 / velocityFactor, 8)}s`;
+  const durationRow2 = `${Math.max(baseSpeedRow2 / velocityFactor, 9)}s`;
 
   return (
-    <section
-      aria-label="Technology Stack"
-      className="relative py-16 sm:py-24 overflow-hidden select-none"
+    <Section
+      id="stack"
+      eyebrow="/05 — STACK"
+      headline={
+        <span>
+          Tools we <Decode text="trust" speed={40} delay={200} />
+        </span>
+      }
+      description="Proven technical foundations with strict type safety, zero legacy bloat, and long-term production stability. Hover any tool to inspect its architecture layer."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+          CORE_STACK: 20_NODES
+        </span>
+      }
+      className="overflow-hidden"
     >
-      {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16 px-4">
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
-        >
-          <Code2 className="w-3.5 h-3.5 text-orange" />
-          <span>our foundation</span>
-        </motion.div>
+      <div ref={containerRef} className="space-y-6 pt-4 pb-12 select-none">
+        {/* ROW 1: Frontend & Mobile (Moving Left) */}
+        <div className="relative w-full overflow-hidden py-1">
+          <div
+            className={cn(
+              "flex w-max shrink-0 items-center gap-4 will-change-transform",
+              isPlaying && !isOff && "animate-marquee-left",
+              "hover:[animation-play-state:paused]"
+            )}
+            style={{
+              animationDuration: isOff ? "0s" : durationRow1,
+            }}
+          >
+            {stackRowOne.map((item) => (
+              <StackTag
+                key={`r1-1-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+            {stackRowOne.map((item) => (
+              <StackTag
+                key={`r1-2-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+            {stackRowOne.map((item) => (
+              <StackTag
+                key={`r1-3-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+          </div>
+        </div>
 
-        <motion.h2
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-          className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-[1.12]"
-        >
-          Modern tooling.&nbsp;
-          <br className="hidden sm:inline" />
-          <span className="text-orange-deep">Zero experimental fluff.</span>
-        </motion.h2>
+        {/* ROW 2: Backend, Cloud & Database (Moving Right) */}
+        <div className="relative w-full overflow-hidden py-1">
+          <div
+            className={cn(
+              "flex w-max shrink-0 items-center gap-4 will-change-transform",
+              isPlaying && !isOff && "animate-marquee-right",
+              "hover:[animation-play-state:paused]"
+            )}
+            style={{
+              animationDuration: isOff ? "0s" : durationRow2,
+            }}
+          >
+            {stackRowTwo.map((item) => (
+              <StackTag
+                key={`r2-1-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+            {stackRowTwo.map((item) => (
+              <StackTag
+                key={`r2-2-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+            {stackRowTwo.map((item) => (
+              <StackTag
+                key={`r2-3-${item.name}`}
+                name={item.name}
+                category={item.category}
+                tag={item.tag}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Estimator Bridge Banner */}
+        <div className="mt-10 p-4 sm:p-5 border border-line bg-surface/50 rounded-[2px] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-ok shrink-0 shadow-[0_0_6px_var(--ok)]" />
+            <span className="font-mono text-xs sm:text-sm text-fg-muted">
+              Have existing infrastructure or specific stack constraints?
+            </span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.preventDefault();
+              openEstimator();
+            }}
+            withArrow
+            className="w-full sm:w-auto text-xs font-mono border-line hover:border-line-strong hover:bg-surface"
+          >
+            Configure stack requirements
+          </Button>
+        </div>
       </div>
-
-      {/* Marquee Rows Container */}
-      <div className="space-y-4 max-w-7xl mx-auto px-2">
-        {/* Row 1: Frontend & Mobile (Moving Left) */}
-        <Marquee direction="left" speed={32} pauseOnHover>
-          {stackRowOne.map((item) => (
-            <div
-              key={item.name}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-peach/50 hover:bg-peach border border-orange/20 text-ink font-body text-sm sm:text-base font-semibold shadow-subtle hover:scale-105 transition-all duration-200 cursor-default"
-            >
-              <div className="w-2 h-2 rounded-full bg-orange shrink-0" />
-              <span>{item.name}</span>
-              <span className="text-[11px] font-mono text-ink-soft/70 font-normal">
-                {item.tag}
-              </span>
-            </div>
-          ))}
-        </Marquee>
-
-        {/* Row 2: Backend, Cloud & Database (Moving Right) */}
-        <Marquee direction="right" speed={36} pauseOnHover>
-          {stackRowTwo.map((item) => (
-            <div
-              key={item.name}
-              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-peach/50 hover:bg-peach border border-orange/20 text-ink font-body text-sm sm:text-base font-semibold shadow-subtle hover:scale-105 transition-all duration-200 cursor-default"
-            >
-              <div className="w-2 h-2 rounded-full bg-orange-deep shrink-0" />
-              <span>{item.name}</span>
-              <span className="text-[11px] font-mono text-ink-soft/70 font-normal">
-                {item.tag}
-              </span>
-            </div>
-          ))}
-        </Marquee>
-      </div>
-    </section>
+    </Section>
   );
 }

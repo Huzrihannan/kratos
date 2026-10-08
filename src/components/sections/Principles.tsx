@@ -1,153 +1,153 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { Section } from "@/components/ui/Section";
+import { Window } from "@/components/ui/Window";
+import { Button } from "@/components/ui/Button";
+import { Plus } from "lucide-react";
+import { useLayoutModal } from "@/lib/modal-context";
 import {
-  MessageSquare,
-  ShieldCheck,
-  HeartHandshake,
-  Sparkles,
-  CheckCircle,
-} from "lucide-react";
+  ChatStreamScene,
+  ScopeChecklistScene,
+  HeartbeatScene,
+} from "./principles-scenes";
 
 export function Principles() {
-  const prefersReducedMotion = useReducedMotion();
+  const { openEstimator } = useLayoutModal();
 
-  const differentiators = [
+  const principlesData = [
     {
       id: "direct-engineers",
+      windowTitle: "principle_01.comms",
+      badge: "[NO_MIDDLEMEN]",
       title: "[PLACEHOLDER] Talk directly to the engineers building your code",
-      shortSummary: "Zero account-manager telephone games. When you have a product question, you discuss architecture directly with senior engineers.",
+      shortSummary:
+        "Zero account-manager telephone games. When you have a product question, you discuss architecture directly with senior engineers.",
+      scene: <ChatStreamScene />,
       bullets: [
-        "Dedicated shared Slack or Discord room",
+        "Dedicated shared Slack or Discord channel",
         "Weekly working demo videos and sprint check-ins",
         "Async updates that respect your calendar",
       ],
-      icon: MessageSquare,
-      badge: "No Middlemen",
-      span: "lg:col-span-7",
+      colSpan: "lg:col-span-6",
     },
     {
       id: "fixed-scope",
+      windowTitle: "principle_02.scope",
+      badge: "[FIXED_MILESTONES]",
       title: "[PLACEHOLDER] Fixed milestones, zero surprise bills",
-      shortSummary: "We scope projects down to concrete milestones before starting. What we quote is what you invest—guaranteed.",
+      shortSummary:
+        "We scope projects down to concrete milestones before starting. What we quote is what you invest—guaranteed.",
+      scene: <ScopeChecklistScene />,
       bullets: [
         "Transparent milestone payment schedule",
-        "Free scope trade-offs during sprints",
-        "100% IP ownership from day one",
+        "Free scope trade-offs during active sprints",
+        "100% IP ownership and keys from day one",
       ],
-      icon: ShieldCheck,
-      badge: "Transparent Pricing",
-      span: "lg:col-span-5",
+      colSpan: "lg:col-span-6",
     },
     {
       id: "post-launch",
+      windowTitle: "principle_03.warranty",
+      badge: "[POST_LAUNCH_SLA]",
       title: "[PLACEHOLDER] We stay in your corner after launch",
-      shortSummary: "Shipping is just day one. We include 30 days of complimentary bug warranty and offer flexible monthly engineering retainers.",
+      shortSummary:
+        "Shipping is just day one. We include 30 days of complimentary bug warranty and offer flexible monthly engineering retainers.",
+      scene: <HeartbeatScene />,
       bullets: [
-        "30-day comprehensive bug warranty included",
-        "Proactive security & uptime monitoring",
-        "On-call engineers for critical hotfixes",
+        "30-day comprehensive bug warranty included with every build",
+        "Proactive telemetry, edge cache, and uptime monitoring",
+        "Direct on-call engineer access for critical production hotfixes",
       ],
-      icon: HeartHandshake,
-      badge: "Long-Term Partner",
-      span: "lg:col-span-12",
+      colSpan: "lg:col-span-12",
     },
   ];
 
   return (
-    <section
-      aria-label="Why Krat.OS"
-      className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full select-none"
+    <Section
+      id="why"
+      eyebrow="/06 — PRINCIPLES"
+      headline={
+        <span>
+          Why <span className="text-red-text">Krat.OS</span>
+        </span>
+      }
+      description="The traditional agency model is full of bloated overhead, junior outsourcing, and surprise billing. Here is how our engineering team operates differently."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+          PRINCIPLES: 03_ENFORCED
+        </span>
+      }
     >
-      {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-orange" />
-          <span>why krat.os</span>
-        </motion.div>
-
-        <motion.h2
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-          className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-[1.12]"
-        >
-          The agency model is broken.&nbsp;
-          <br className="hidden sm:inline" />
-          <span className="text-orange-deep">Here is how we fixed it.</span>
-        </motion.h2>
-
-        <motion.p
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.15 }}
-          className="font-body text-ink-soft text-base sm:text-lg md:text-xl mt-4 leading-relaxed max-w-2xl mx-auto"
-        >
-          High-trust partnerships built on clear communication, technical excellence,
-          and zero bureaucratic runarounds.
-        </motion.p>
-      </div>
-
-      {/* Bento Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-7">
-        {differentiators.map((diff, idx) => {
-          const Icon = diff.icon;
-
-          return (
-            <motion.div
-              key={diff.id}
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 24,
-                delay: prefersReducedMotion ? 0 : idx * 0.1,
-              }}
-              className={`${diff.span} p-8 sm:p-10 rounded-[36px] bg-peach/50 hover:bg-peach/75 border-2 border-orange/20 hover:border-orange transition-all duration-300 shadow-subtle flex flex-col justify-between`}
+      {/* Bento Grid of 3 OS Windows */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-4 pb-12">
+        {principlesData.map((item, idx) => (
+          <div key={item.id} className={item.colSpan}>
+            <Window
+              title={item.windowTitle}
+              statusText={item.badge}
+              cornerBrackets={true}
+              className="h-full flex flex-col justify-between border-line bg-surface/90 hover:border-line-strong transition-colors"
             >
-              <div>
-                <div className="flex items-center justify-between gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-full bg-cream border-2 border-orange/40 flex items-center justify-center text-ink shadow-sm">
-                    <Icon className="w-7 h-7 stroke-[2.2] text-orange-deep" />
-                  </div>
+              <div className="space-y-5">
+                {/* Micro-animation scene container */}
+                <div className="w-full">{item.scene}</div>
 
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-butter text-ink shadow-xs">
-                    {diff.badge}
-                  </span>
+                {/* Title & Summary */}
+                <div>
+                  <h3 className="font-mono text-base sm:text-lg md:text-xl font-bold text-fg mb-2 leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="font-sans text-xs sm:text-sm text-fg-muted leading-relaxed">
+                    {item.shortSummary}
+                  </p>
                 </div>
 
-                <h3 className="font-display font-bold text-2xl sm:text-3xl text-ink tracking-tight mb-3 leading-snug">
-                  {diff.title}
-                </h3>
-
-                <p className="font-body text-ink-soft text-base leading-relaxed mb-6">
-                  {diff.shortSummary}
-                </p>
+                {/* 3 Bullets with '+' icon */}
+                <div className="space-y-2 pt-3 border-t border-line/50">
+                  {item.bullets.map((bullet, bIdx) => (
+                    <div
+                      key={bIdx}
+                      className="flex items-start gap-2.5 text-xs font-mono text-fg-muted leading-snug"
+                    >
+                      <Plus className="h-3.5 w-3.5 text-red-text shrink-0 mt-0.5" />
+                      <span>{bullet}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="pt-6 border-t border-orange/20 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {diff.bullets.map((bullet, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-ink font-body">
-                    <CheckCircle className="w-4 h-4 text-orange-deep shrink-0 stroke-[2.5]" />
-                    <span className="leading-snug">{bullet}</span>
-                  </div>
-                ))}
+              {/* Status footer inside window */}
+              <div className="pt-4 mt-6 border-t border-line/50 flex items-center justify-between font-mono text-[11px] text-fg-muted">
+                <span>SYSTEM_POLICY_0{idx + 1}</span>
+                <span className="text-ok font-bold">[ACTIVE]</span>
               </div>
-            </motion.div>
-          );
-        })}
+            </Window>
+          </div>
+        ))}
       </div>
-    </section>
+
+      {/* Estimator Bridge Banner */}
+      <div className="p-4 sm:p-5 border border-line bg-surface/50 rounded-[2px] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <span className="w-2 h-2 rounded-full bg-ok shrink-0 shadow-[0_0_6px_var(--ok)]" />
+          <span className="font-mono text-xs sm:text-sm text-fg-muted">
+            Ready to plan your roadmap directly with senior engineers?
+          </span>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => {
+            e.preventDefault();
+            openEstimator();
+          }}
+          withArrow
+          className="w-full sm:w-auto text-xs font-mono border-line hover:border-line-strong hover:bg-surface"
+        >
+          Open project estimator
+        </Button>
+      </div>
+    </Section>
   );
 }

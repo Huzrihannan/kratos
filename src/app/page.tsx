@@ -13,31 +13,31 @@ const FinalCta = dynamic(() => import("@/components/sections/FinalCta").then((m)
 export default function Home() {
   return (
     <div className="w-full overflow-hidden">
-      {/* 1. Signature Hero Moment (5-second hook) */}
+      {/* 1. Signature Hero Moment (5-second OS hook) */}
       <Hero />
 
-      {/* 2. Services: What we build (6 large squishy cards) */}
+      {/* 2. Modules /01: What we build (6 interactive OS windows with SVG motion scenes) */}
       <Services />
 
-      {/* 3. Process: How we work (Scroll-linked connected pill track) */}
+      {/* 3. Pipeline /02: How we work (Scroll-driven CI/CD engineering track) */}
       <Process />
 
-      {/* 4. Work: Things we're proud of (Case studies with circular portal masks) */}
+      {/* 4. Selected Work /03: Things we're proud of (Case studies with metrics HUD) */}
       <Work />
 
-      {/* 5. Proof: Numbers that matter (Cocoa contrast band, count-up stats, speech-bubble testimonials) */}
+      {/* 5. Signal & Proof /04: Verified reliability (Cream rhythm break band) */}
       <Proof />
 
-      {/* 6. Technology Stack Marquee (Dual opposing ribbons) */}
+      {/* 6. Stack /05: Tools we trust (Dual velocity-reactive ribbons with hover decode) */}
       <StackMarquee />
 
-      {/* 7. Principles (3 differentiators in bento grid) */}
+      {/* 7. Principles /06: Why Krat.OS (Bento grid with micro-animations) */}
       <Principles />
 
-      {/* 8. Frequently Asked Questions (Accordion + Schema.org JSON-LD) */}
+      {/* 8. FAQ /07: Direct answers (Mechanical accordion + FAQPage JSON-LD) */}
       <Faq />
 
-      {/* 9. Final CTA (Giant cream-on-orange band with reactive cursor blobs) */}
+      {/* 9. Final CTA: Giant display headline with Caret & SpotlightGrid */}
       <FinalCta />
     </div>
   );

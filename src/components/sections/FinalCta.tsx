@@ -1,105 +1,103 @@
 "use client";
 
 import React, { useRef } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import { MessageCircle, Calendar } from "lucide-react";
+import { MessageSquare, Calendar } from "lucide-react";
 import { siteConfig } from "@/content/site";
 import { Button } from "@/components/ui/Button";
-import { Pill } from "@/components/ui/Pill";
+import { SpotlightGrid } from "@/components/fx/SpotlightGrid";
+import { Caret } from "@/components/fx/Caret";
+import { TypeLines, TerminalLine } from "@/components/fx/TypeLines";
 import { Magnetic } from "@/components/fx/Magnetic";
 import { useLayoutModal } from "@/lib/modal-context";
+import { useInViewPlayback } from "@/lib/motion/useInViewPlayback";
+
+const TERMINAL_LINES: TerminalLine[] = [
+  { prompt: ">", text: "awaiting input_", delay: 1800 },
+];
 
 export function FinalCta() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+  const isPlaying = useInViewPlayback(containerRef);
   const { openEstimator } = useLayoutModal();
-
-  // Gentle cursor reactive drift inside the CTA container
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothX = useSpring(mouseX, { stiffness: 200, damping: 25 });
-  const smoothY = useSpring(mouseY, { stiffness: 200, damping: 25 });
-
-  const blob1X = useTransform(smoothX, [-200, 200], [-25, 25]);
-  const blob1Y = useTransform(smoothY, [-200, 200], [-25, 25]);
-  const blob2X = useTransform(smoothX, [-200, 200], [20, -20]);
-  const blob2Y = useTransform(smoothY, [-200, 200], [20, -20]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
 
   return (
     <section
       aria-label="Call to Action"
-      className="relative py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full select-none"
+      className="relative w-full overflow-hidden bg-bg text-fg border-t border-line py-20 sm:py-28 md:py-36 px-4 sm:px-6 lg:px-8 select-none"
     >
-      <div
-        ref={containerRef}
-        onMouseMove={handleMouseMove}
-        className="relative overflow-hidden rounded-[44px] sm:rounded-[60px] bg-orange text-ink p-8 sm:p-14 md:p-20 shadow-blob border-4 border-orange-deep/20 text-center flex flex-col items-center justify-center"
-      >
-        {/* Floating cursor-reactive soft blobs inside orange card */}
-        <motion.div
-          className="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-peach/40 blur-2xl"
-          style={{
-            x: prefersReducedMotion ? 0 : blob1X,
-            y: prefersReducedMotion ? 0 : blob1Y,
-          }}
+      <SpotlightGrid className="w-full">
+        {/* Corner registration '+' marks */}
+        <span
+          className="absolute top-4 left-4 font-mono text-xs text-line-strong select-none pointer-events-none"
           aria-hidden="true"
-        />
-        <motion.div
-          className="pointer-events-none absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-butter/35 blur-3xl"
-          style={{
-            x: prefersReducedMotion ? 0 : blob2X,
-            y: prefersReducedMotion ? 0 : blob2Y,
-          }}
+        >
+          +
+        </span>
+        <span
+          className="absolute top-4 right-4 font-mono text-xs text-line-strong select-none pointer-events-none"
           aria-hidden="true"
-        />
+        >
+          +
+        </span>
+        <span
+          className="absolute bottom-4 left-4 font-mono text-xs text-line-strong select-none pointer-events-none"
+          aria-hidden="true"
+        >
+          +
+        </span>
+        <span
+          className="absolute bottom-4 right-4 font-mono text-xs text-line-strong select-none pointer-events-none"
+          aria-hidden="true"
+        >
+          +
+        </span>
 
-        <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
-          {/* Availability Pill */}
-          <div className="mb-6">
-            <Pill variant="availability" className="bg-cream/90 text-ink shadow-sm">
-              {siteConfig.availability.chipText}
-            </Pill>
+        <div
+          ref={containerRef}
+          className="relative max-w-4xl mx-auto flex flex-col items-center text-center z-10 px-4 sm:px-6 pb-6 sm:pb-8"
+        >
+          {/* Status Bar Micro-Chip */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface border border-line rounded-[2px] mb-8 font-mono text-xs text-fg-muted uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-ok animate-pulse shadow-[0_0_6px_var(--ok)]" />
+            <span>[SYSTEM_READY // INTAKE_OPEN]</span>
           </div>
 
-          {/* Headline */}
-          <h2 className="font-display font-bold text-3xl sm:text-5xl md:text-6xl text-ink tracking-tight leading-[1.08] mb-6 text-balance">
+          {/* Giant Display Headline with huge blinking red Caret */}
+          <h2 className="font-mono font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[-0.04em] text-fg leading-[1.08] mb-6 text-balance">
             Got an idea?&nbsp;
             <br className="hidden sm:inline" />
-            Let&apos;s make it real.
+            Let&apos;s build it.
+            <Caret width={14} height="1em" className="ml-2 sm:ml-3" />
           </h2>
 
-          <p className="font-body text-ink/85 text-base sm:text-lg md:text-xl leading-relaxed mb-10 max-w-xl text-balance">
+          {/* Subhead / Loop Typing Terminal Line */}
+          <div className="mb-8 h-8 flex items-center justify-center">
+            {isPlaying && (
+              <TypeLines
+                lines={TERMINAL_LINES}
+                loop={true}
+                className="text-xs sm:text-sm font-mono text-fg-muted"
+              />
+            )}
+          </div>
+
+          <p className="font-sans text-fg-muted text-sm sm:text-base md:text-lg leading-relaxed mb-10 max-w-xl text-balance">
             Skip the bloated proposals and endless sales calls. Get an instant ballpark estimate
-            or talk directly with an engineer today.
+            or speak directly with an engineering lead today.
           </p>
 
-          {/* Action Button Cluster */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full max-w-lg mb-8">
+          {/* 3 Action Triggers */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full max-w-md mb-8">
             <Magnetic strength={0.22}>
               <Button
-                variant="secondary"
+                variant="primary"
                 size="lg"
                 onClick={(e) => {
                   e.preventDefault();
                   openEstimator();
                 }}
                 withArrow
-                className="w-full sm:w-auto min-h-[54px] text-base sm:text-lg bg-ink text-cream hover:bg-cocoa shadow-card"
+                className="w-full sm:w-auto min-h-[52px] text-xs sm:text-sm font-mono uppercase tracking-wider"
               >
                 Estimate my project
               </Button>
@@ -112,25 +110,30 @@ export function FinalCta() {
               target="_blank"
               rel="noopener noreferrer"
               withArrow={false}
-              className="w-full sm:w-auto min-h-[54px] text-base border-ink/40 hover:border-ink hover:bg-cream/30 text-ink"
+              className="w-full sm:w-auto min-h-[52px] text-xs sm:text-sm font-mono uppercase tracking-wider border-line hover:border-line-strong hover:bg-surface text-fg"
             >
               <Calendar className="w-4 h-4 mr-2" />
               <span>Book a 15-min call</span>
             </Button>
           </div>
 
-          {/* Bottom WhatsApp Link */}
+          {/* Direct WhatsApp Channel Link */}
           <a
             href={siteConfig.contact.whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-bold text-ink hover:text-ink/75 transition-colors underline decoration-ink/40 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink rounded p-1"
+            className="inline-flex items-center justify-center flex-wrap gap-2 font-mono text-xs text-fg-muted hover:text-fg transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text max-w-sm text-center"
           >
-            <MessageCircle className="w-4 h-4" />
-            <span>Prefer WhatsApp? Chat directly with our founders</span>
+            <MessageSquare className="w-3.5 h-3.5 text-ok group-hover:scale-110 transition-transform shrink-0" />
+            <span className="underline decoration-line-strong underline-offset-4">
+              Prefer WhatsApp? Chat directly with our founders
+            </span>
+            <span className="text-red-text font-bold shrink-0" aria-hidden="true">
+              →
+            </span>
           </a>
         </div>
-      </div>
+      </SpotlightGrid>
     </section>
   );
 }

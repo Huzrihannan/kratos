@@ -2,6 +2,38 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R6: Home Sections B — Stack, Principles, FAQ, Final CTA] - 2026-10-08
+
+### Added
+- **Section /05 — Stack (`src/components/sections/StackMarquee.tsx` & `stack/StackTag.tsx`):**
+  - Rebuilt as `"Tools we trust"` featuring dual opposing continuous ribbons (Row 1 frontend/mobile, Row 2 backend/cloud/data).
+  - Velocity-reactive scrolling: ribbon speed accelerates dynamically with user scroll velocity and decays smoothly to idle.
+  - Interactive mono `StackTag` chips with hover `Decode` scrambling into architectural layers (`[FRONTEND]`, `[BACKEND]`, `[CLOUD]`, `[DATABASE]`, etc.) with signal red indicator dots.
+  - Estimator bridge banner connecting stack configuration directly to the Estimator modal.
+- **Section /06 — Principles (`src/components/sections/Principles.tsx` & `principles-scenes/`):**
+  - Rebuilt as `"Why Krat.OS"` with a bento grid of 3 OS Windows (`principle_01.comms`, `principle_02.scope`, `principle_03.warranty`).
+  - 3 bespoke inline micro-animations with off-screen pause via `useInViewPlayback`:
+    - `ChatStreamScene`: Technical client-engineer chat stream typing between Founder and Lead Engineer with real-time latency verification.
+    - `ScopeChecklistScene`: Contract milestone checklist cycling automated ticks with green LEDs (`[ok]`).
+    - `HeartbeatScene`: Server uptime telemetry waveform scanning across a blueprint grid with pulsating green LED.
+  - 3 outcome bullets per principle and Estimator bridge banner.
+- **Section /07 — FAQ (`src/components/sections/Faq.tsx`):**
+  - Rebuilt as `"Direct answers"` with mechanical accordion (`[FAQ_01]` through `[FAQ_07]`) covering pricing, timelines, IP ownership, post-launch support, and communication.
+  - Structured data: Schema.org `FAQPage` JSON-LD embedded for Google rich search results.
+  - Secondary bridge card with direct Estimator trigger and WhatsApp founder link.
+- **Section 8 — Final CTA (`src/components/sections/FinalCta.tsx`):**
+  - Full-bleed charcoal `#212121` section with cursor-following `SpotlightGrid` and corner `+` registration marks.
+  - Status chip: `[SYSTEM_READY // INTAKE_OPEN]` with green LED pulse.
+  - Giant JetBrains Mono 800 display headline (`"Got an idea? Let's build it."`) with an oversized blinking signal red `Caret`.
+  - Looping terminal prompt: `> awaiting input_`.
+  - 3 conversion actions: primary cream button (`"Estimate my project"` with `<Magnetic>`), ghost button (`"Book a 15-min call"`), and direct WhatsApp founder channel.
+  - Section rhythm verified for full home page: dark, dark, dark, dark, LIGHT (Proof), dark, dark, dark, dark.
+
+### Changed
+- `src/app/page.tsx`: Updated section comments to reflect the complete v2 operating system architecture.
+- Production First Load JS for `/` verified at **191 kB** (29 kB under the 220 kB budget).
+
+
 ## [R5: Home Sections A — Modules, Pipeline, Work, Proof] - 2026-10-08
 
 ### Added

@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { HelpCircle, MessageCircle } from "lucide-react";
-import { faqsData } from "@/content/faqs";
+import { Section } from "@/components/ui/Section";
+import { Decode } from "@/components/fx/Decode";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
+import { faqsData } from "@/content/faqs";
 import { siteConfig } from "@/content/site";
 import { useLayoutModal } from "@/lib/modal-context";
+import { MessageSquare } from "lucide-react";
 
 export function Faq() {
-  const prefersReducedMotion = useReducedMotion();
   const { openEstimator } = useLayoutModal();
 
   // Structured Data Schema.org FAQPage for Google SEO rich snippets
@@ -28,10 +28,20 @@ export function Faq() {
   };
 
   return (
-    <section
+    <Section
       id="faq"
-      aria-label="Frequently Asked Questions"
-      className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full select-none"
+      eyebrow="/07 — FAQ"
+      headline={
+        <span>
+          Direct <Decode text="answers" speed={40} delay={200} />
+        </span>
+      }
+      description="Seven upfront answers to the most common questions about pricing, timelines, intellectual property, and communication. Zero fine print."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+          FAQ_COUNT: 07_VERIFIED
+        </span>
+      }
     >
       {/* Schema.org FAQ JSON-LD */}
       <script
@@ -39,66 +49,23 @@ export function Faq() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
-        >
-          <HelpCircle className="w-3.5 h-3.5 text-orange" />
-          <span>common questions</span>
-        </motion.div>
-
-        <motion.h2
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-          className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-[1.12]"
-        >
-          Clear answers.&nbsp;
-          <br className="hidden sm:inline" />
-          <span className="text-ink underline decoration-orange decoration-wavy underline-offset-4">Zero fine print.</span>
-        </motion.h2>
-
-        <motion.p
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.15 }}
-          className="font-body text-ink-soft text-base sm:text-lg md:text-xl mt-4 leading-relaxed max-w-2xl mx-auto"
-        >
-          Everything you need to know about pricing, intellectual property, timelines,
-          and how we work together.
-        </motion.p>
-      </div>
-
-      {/* Accordion List */}
-      <div className="mb-14">
+      {/* Accordion Component */}
+      <div className="max-w-4xl mx-auto pt-2 pb-12">
         <Accordion items={faqsData} defaultOpenId="cost" />
       </div>
 
-      {/* Secondary Objection CTA Card */}
-      <motion.div
-        initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-30px" }}
-        transition={{ type: "spring", stiffness: 400, damping: 24 }}
-        className="p-8 sm:p-10 rounded-[36px] bg-peach/40 border-2 border-orange/20 text-center flex flex-col sm:flex-row items-center justify-between gap-6"
-      >
-        <div className="text-left">
-          <h3 className="font-display font-bold text-xl sm:text-2xl text-ink mb-1">
+      {/* Secondary Bridge Card */}
+      <div className="p-6 sm:p-8 border border-line bg-surface/60 rounded-[2px] max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="text-left space-y-1">
+          <h3 className="font-mono text-base sm:text-lg font-bold text-fg">
             Have a question not listed here?
           </h3>
-          <p className="font-body text-ink-soft text-sm sm:text-base">
-            Reach out directly or test your project requirements in our estimator.
+          <p className="font-sans text-xs sm:text-sm text-fg-muted">
+            Configure your technical scope in our interactive estimator or talk directly with our engineering founders.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-3 shrink-0 w-full md:w-auto">
           <Button
             variant="primary"
             size="md"
@@ -107,8 +74,9 @@ export function Faq() {
               openEstimator();
             }}
             withArrow
+            className="w-full sm:w-auto font-mono text-xs uppercase"
           >
-            Open estimator
+            Estimate my project
           </Button>
 
           <Button
@@ -118,13 +86,13 @@ export function Faq() {
             target="_blank"
             rel="noopener noreferrer"
             withArrow={false}
-            className="border-ink/20 hover:border-ink"
+            className="w-full sm:w-auto font-mono text-xs uppercase border-line hover:border-line-strong"
           >
-            <MessageCircle className="w-4 h-4 mr-2" />
+            <MessageSquare className="w-3.5 h-3.5 mr-2 text-ok" />
             <span>Chat on WhatsApp</span>
           </Button>
         </div>
-      </motion.div>
-    </section>
+      </div>
+    </Section>
   );
 }
