@@ -1,0 +1,39 @@
+/* Kratos Design Tokens */
+:root {
+  /* Brand Palette */
+  --color-cream: #FDEBD9;
+  --color-peach: #FFD9B8;
+  --color-orange: #FB9A5E;
+  --color-orange-deep: #F47B3A;
+  --color-ink: #2A1810;
+  --color-ink-soft: #6B4A3A;
+  --color-cocoa: #3B2218;
+  --color-butter: #FFC857;
+
+  /* Border Radii - Everything is pill / blob / circle. No sharp corners. */
+  --radius-sm: 16px;
+  --radius-md: 20px;
+  --radius-card: 28px;
+  --radius-bubble: 40px;
+  --radius-pill: 9999px;
+
+  /* Shadows - Soft and gentle, no heavy drop-shadows */
+  --shadow-subtle: 0 4px 20px -2px rgba(42, 24, 16, 0.05);
+  --shadow-card: 0 12px 32px -4px rgba(42, 24, 16, 0.07);
+  --shadow-glow: 0 16px 40px -8px rgba(251, 154, 94, 0.28);
+  --shadow-float: 0 24px 48px -12px rgba(42, 24, 16, 0.12);
+
+  /* Fluid Typography Scale (using clamp) */
+  --font-size-display-2xl: clamp(3.2rem, 8vw + 1rem, 7.5rem);
+  --font-size-display-xl: clamp(2.5rem, 6vw + 0.5rem, 5.5rem);
+  --font-size-display-lg: clamp(2rem, 4vw + 0.5rem, 4rem);
+  --font-size-headline-md: clamp(1.5rem, 2.5vw + 0.25rem, 2.5rem);
+  --font-size-headline-sm: clamp(1.25rem, 1.8vw + 0.2rem, 1.75rem);
+  --font-size-body-lg: clamp(1.125rem, 1vw + 0.2rem, 1.25rem);
+  --font-size-body-base: 1rem;
+  --font-size-body-sm: 0.875rem;
+  --font-size-tagline: 0.75rem;
+
+  /* Focus Ring */
+  --focus-ring: 0 0 0 3px var(--color-orange-deep);
+}
