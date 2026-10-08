@@ -1,242 +1,221 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  Github,
-  Linkedin,
-  Twitter,
-  ArrowUpRight,
-  Mail,
-  MessageCircle,
-  MapPin,
-} from "lucide-react";
-import { siteConfig } from "@/content/site";
-import { Button } from "@/components/ui/Button";
-import { Pill } from "@/components/ui/Pill";
-import { Squish } from "@/components/fx/Squish";
-import { Logo } from "@/components/ui/Logo";
-import { useLayoutModal } from "@/lib/modal-context";
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { ArrowUpRight, Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { siteConfig } from '@/content/site';
+import { Button } from '@/components/ui/Button';
+import { Logo } from '@/components/ui/Logo';
+import { Decode } from '@/components/fx/Decode';
+import { HUDClock } from '@/components/fx/HUD';
+import { useMotionLevel } from '@/lib/motion/MotionContext';
+import { useLayoutModal } from '@/lib/modal-context';
 
 export function Footer() {
   const { openEstimator } = useLayoutModal();
-  const prefersReducedMotion = useReducedMotion();
-  const brandLetters = ["K", "r", "a", "t", ".", "O", "S"];
+  const { level, setLevel } = useMotionLevel();
+  const [wordmarkHoverKey, setWordmarkHoverKey] = useState(0);
 
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
-      case "github":
-        return <Github className="w-4 h-4 stroke-[2.2]" />;
-      case "linkedin":
-        return <Linkedin className="w-4 h-4 stroke-[2.2]" />;
-      case "x":
-      case "twitter":
-        return <Twitter className="w-4 h-4 stroke-[2.2]" />;
+      case 'github':
+        return <Github className="w-3.5 h-3.5" />;
+      case 'linkedin':
+        return <Linkedin className="w-3.5 h-3.5" />;
+      case 'x':
+      case 'twitter':
+        return <Twitter className="w-3.5 h-3.5" />;
       default:
-        return <ArrowUpRight className="w-4 h-4 stroke-[2.2]" />;
+        return <ArrowUpRight className="w-3.5 h-3.5" />;
     }
   };
 
   return (
-    <footer className="relative bg-cocoa text-cream pt-16 sm:pt-20 md:pt-24 pb-6 sm:pb-8 px-6 sm:px-10 lg:px-16 rounded-t-[40px] sm:rounded-t-[56px] overflow-hidden">
-      {/* Background soft ambient blobs */}
-      <div
-        className="pointer-events-none absolute -top-40 -right-40 w-96 h-96 rounded-full bg-orange/10 blur-3xl"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute top-1/2 -left-40 w-96 h-96 rounded-full bg-peach/5 blur-3xl"
-        aria-hidden="true"
-      />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Top Grid: Brand Pitch & Navigation Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-cream/15">
-          {/* Brand Info & Pitch (5 cols on lg) */}
-          <div className="lg:col-span-5 space-y-6">
-            <Link
-              href="/"
-              className="inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text"
-              aria-label="Krat.OS home"
-            >
-              <Logo variant="dark" height={36} />
-            </Link>
-
-            <div>
-              <Pill
-                variant="availability"
-                className="bg-cocoa-light border-orange/20 text-cream"
-              >
-                {siteConfig.availability.chipText}
-              </Pill>
-            </div>
-
-            <p className="text-base sm:text-lg text-cream/80 max-w-md font-body leading-relaxed">
-              {siteConfig.shortPitch}
+    <footer
+      data-theme="dark"
+      className="relative w-full border-t border-line bg-bg text-fg select-none transition-colors duration-200"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-8 flex flex-col gap-16">
+        {/* Top Grid: Identity, Pitch, Links */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-line">
+          {/* Identity & Pitch (5 cols on lg) */}
+          <div className="lg:col-span-5 flex flex-col items-start gap-4">
+            <Logo variant="dark" />
+            <p className="font-sans text-sm text-fg-muted max-w-sm leading-relaxed mt-2">
+              {siteConfig.shortPitch ||
+                'High-performance software systems engineered with mathematical precision, strict TypeScript, and zero bloat.'}
             </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <Button
-                variant="primary"
-                size="md"
-                href={siteConfig.cta.estimator.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  openEstimator();
-                }}
-                withArrow
-              >
-                {siteConfig.cta.estimator.label}
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="md"
-                href={siteConfig.contact.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-cream border-cream/30 hover:bg-cream/10"
-              >
-                Book a call
+            <div className="pt-2">
+              <Button variant="primary" size="sm" onClick={openEstimator}>
+                Estimate my project
               </Button>
             </div>
           </div>
 
-          {/* Nav Columns (7 cols on lg) */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6">
-            {siteConfig.footerColumns.map((col) => (
-              <div key={col.title} className="space-y-4">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-butter font-body">
-                  {col.title}
-                </h3>
-                <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={link.label}>
-                      <Squish>
-                        <Link
-                          href={link.href}
-                          target={link.external ? "_blank" : undefined}
-                          rel={link.external ? "noopener noreferrer" : undefined}
-                          className="inline-flex items-center gap-1.5 text-sm text-cream/75 hover:text-orange transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange rounded-lg py-0.5"
-                        >
-                          <span>{link.label}</span>
-                          {link.external && (
-                            <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.2] opacity-70" />
-                          )}
-                        </Link>
-                      </Squish>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Middle Row: Contact & Socials & Legal */}
-        <div className="py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 text-sm text-cream/70 border-b border-cream/15">
-          <div className="flex flex-wrap items-center gap-6">
-            <a
-              href={`mailto:${siteConfig.contact.email}`}
-              className="inline-flex items-center gap-2 hover:text-orange transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange rounded"
-            >
-              <Mail className="w-4 h-4 stroke-[2.2] text-butter" />
-              <span>{siteConfig.contact.email}</span>
-            </a>
-            <a
-              href={siteConfig.contact.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 hover:text-orange transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange rounded"
-            >
-              <MessageCircle className="w-4 h-4 stroke-[2.2] text-butter" />
-              <span>WhatsApp: {siteConfig.contact.whatsappNumber}</span>
-            </a>
-            <div className="inline-flex items-center gap-2 text-cream/50">
-              <MapPin className="w-4 h-4 stroke-[2.2]" />
-              <span>{siteConfig.contact.location}</span>
-            </div>
-          </div>
-
-          {/* Social Icon Pills */}
-          <div className="flex items-center gap-2.5">
-            {siteConfig.socialLinks.map((item) => (
-              <Squish key={item.platform}>
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={item.label}
-                  className="w-10 h-10 rounded-full bg-cream/10 hover:bg-orange hover:text-ink text-cream flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange"
-                >
-                  {getSocialIcon(item.platform)}
-                </a>
-              </Squish>
-            ))}
-          </div>
-        </div>
-
-        {/* Sub-bar: Legal & Copyright */}
-        <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream/50">
-          <div>
-            © {new Date().getFullYear()} {siteConfig.name}. Strong underneath.
-            Friendly on top.
-          </div>
-
-          <div className="flex items-center gap-6">
-            {siteConfig.legalLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="hover:text-cream transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange rounded"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* GIANT Wordmark "krat.os" with Individual Bouncing Letters */}
-        <div
-          className="pt-6 sm:pt-10 overflow-hidden select-none"
-          aria-hidden="true"
-        >
-          <div
-            className="flex justify-between items-baseline font-display font-bold text-orange text-[20vw] leading-[0.72] tracking-tighter cursor-default"
-            aria-hidden="true"
-          >
-            {brandLetters.map((char, index) => (
-              <motion.span
-                key={`${char}-${index}`}
-                tabIndex={-1}
-                className="inline-block transition-colors duration-200 hover:text-orange-deep select-none"
-                whileHover={
-                  prefersReducedMotion
-                    ? {}
-                    : {
-                        y: -24,
-                        scale: 1.12,
-                        rotate: index % 2 === 0 ? -4 : 4,
-                        transition: {
-                          type: "spring" as const,
-                          stiffness: 450,
-                          damping: 12,
-                        },
-                      }
-                }
-                whileTap={prefersReducedMotion ? {} : { scale: 0.92, y: 0 }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </div>
-
-          {/* Sub-tagline widely spaced lowercase Outfit */}
-          <div className="text-center pt-3 pb-2">
-            <span className="font-body text-[11px] sm:text-xs md:text-sm font-semibold tracking-[0.35em] sm:tracking-[0.45em] lowercase text-cream/35">
-              {siteConfig.tagline}
+          {/* Nav Links Column (2 cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3 font-mono text-xs">
+            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+              /01 — NAVIGATION
             </span>
+            <ul className="space-y-2 text-fg-muted">
+              <li>
+                <Link href="/" className="hover:text-fg transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="hover:text-fg transition-colors">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link href="/work" className="hover:text-fg transition-colors">
+                  Case Studies
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-fg transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-fg transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Capabilities Column (3 cols) */}
+          <div className="lg:col-span-3 flex flex-col gap-3 font-mono text-xs">
+            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+              /02 — ARCHITECTURE
+            </span>
+            <ul className="space-y-2 text-fg-muted">
+              <li>
+                <Link href="/services/web-apps" className="hover:text-fg transition-colors">
+                  Full-Stack Web Platforms
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/mobile-apps" className="hover:text-fg transition-colors">
+                  Cross-Platform Mobile Apps
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/ai-automation" className="hover:text-fg transition-colors">
+                  Autonomous AI Workflows
+                </Link>
+              </li>
+              <li>
+                <Link href="/services/cloud-infra" className="hover:text-fg transition-colors">
+                  Resilient Cloud &amp; APIs
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Connect Column (2 cols) */}
+          <div className="lg:col-span-2 flex flex-col gap-3 font-mono text-xs">
+            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+              /03 — CONNECT
+            </span>
+            <ul className="space-y-2 text-fg-muted">
+              <li>
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="hover:text-fg transition-colors flex items-center gap-1.5"
+                >
+                  <Mail size={12} className="text-red" />
+                  <span>Email Team</span>
+                </a>
+              </li>
+              {siteConfig.socialLinks.map((s) => (
+                <li key={s.platform}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-fg transition-colors flex items-center gap-1.5"
+                  >
+                    {getSocialIcon(s.platform)}
+                    <span>{s.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Giant Monospace Display Wordmark (Hover triggers letter-by-letter Decode) */}
+        <div
+          className="relative w-full flex items-center justify-between border-b border-line pb-8 cursor-pointer group"
+          onMouseEnter={() => setWordmarkHoverKey((k) => k + 1)}
+        >
+          <div className="font-mono text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-extrabold uppercase tracking-tight text-fg flex items-baseline">
+            <Decode key={`krat-${wordmarkHoverKey}`} text="Krat" speed={30} />
+            <span className="inline-block h-3 w-3 sm:h-5 sm:w-5 md:h-6 md:w-6 rounded-full bg-red animate-pulse mx-1 sm:mx-2 self-center" />
+            <Decode key={`os-${wordmarkHoverKey}`} text="OS" speed={30} />
+          </div>
+          <span className="font-mono text-xs text-fg-muted uppercase tracking-widest hidden md:inline">
+            {'// SOFTWARE SOLUTIONS'}
+          </span>
+        </div>
+
+        {/* Legal & Copyright */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-[11px] text-fg-muted">
+          <div>
+            &copy; {new Date().getFullYear()} Krat.OS. All engineering rights reserved.
+          </div>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-fg transition-colors">
+              [ PRIVACY ]
+            </Link>
+            <Link href="/terms" className="hover:text-fg transition-colors">
+              [ TERMS ]
+            </Link>
+            <Link href="/design-system" className="hover:text-fg transition-colors">
+              [ SYSTEM LAB ]
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* OS Status Bar (Bottom Hairline) */}
+      <div className="border-t border-line bg-surface/90 py-2.5 px-4 font-mono text-[11px] text-fg-muted">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+          {/* Status LED & Health */}
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-ok animate-pulse" />
+            <span className="text-fg font-semibold uppercase tracking-wider">ALL SYSTEMS OPERATIONAL</span>
+            <span className="hidden sm:inline">{'// LATENCY < 20MS'}</span>
+          </div>
+
+          {/* Center: Live Colombo Clock (Placeholder time zone per brief) */}
+          <div className="flex items-center gap-4">
+            <HUDClock timeZone="Asia/Colombo" label="COLOMBO [PLACEHOLDER]" />
+            <span className="hidden md:inline">•</span>
+            <span className="hidden md:inline">KERNEL: V2.0</span>
+          </div>
+
+          {/* Right: Motion Toggle */}
+          <div className="flex items-center gap-2">
+            <span>MOTION:</span>
+            <div className="flex items-center border border-line bg-bg p-0.5">
+              {(['full', 'lite', 'off'] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => setLevel(m)}
+                  className={`px-2 py-0.5 uppercase tracking-wider text-[10px] transition-colors ${
+                    level === m ? 'bg-red text-white font-bold' : 'text-fg-muted hover:text-fg'
+                  }`}
+                  data-cursor="click"
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

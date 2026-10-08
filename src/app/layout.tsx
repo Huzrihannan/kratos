@@ -8,16 +8,17 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { MotionProvider } from "@/lib/motion/MotionContext";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { StickyCta } from "@/components/layout/StickyCta";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { siteConfig } from "@/content/site";
 
+import { Boot } from "@/components/fx/Boot";
+import { Crosshair } from "@/components/fx/Crosshair";
+import { SpotlightGrid } from "@/components/fx/SpotlightGrid";
+import { CommandPalette } from "@/components/layout/CommandPalette";
+import { ContactDock } from "@/components/layout/ContactDock";
+
 const EstimatorModal = dynamic(
   () => import("@/components/estimator/EstimatorModal").then((mod) => mod.EstimatorModal)
-);
-
-const CursorFollower = dynamic(
-  () => import("@/components/fx/CursorFollower").then((mod) => mod.CursorFollower)
 );
 
 const jetbrainsMono = JetBrains_Mono({
@@ -121,15 +122,23 @@ export default function RootLayout({
                 Skip to main content
               </a>
 
+              <Boot />
+              <Crosshair />
+              <CommandPalette />
+              <SpotlightGrid
+                gridSize={48}
+                spotlightRadius={320}
+                className="fixed inset-0 -z-10 pointer-events-none opacity-30"
+              />
+
               <SmoothScroll>
                 <PageTransition />
-                <CursorFollower />
                 <Nav />
-                <main id="main-content" className="flex-1 pt-20 sm:pt-24">
+                <main id="main-content" className="flex-1">
                   {children}
                 </main>
                 <Footer />
-                <StickyCta />
+                <ContactDock />
                 <EstimatorModal />
               </SmoothScroll>
             </LayoutProvider>

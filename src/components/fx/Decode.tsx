@@ -6,6 +6,7 @@ import { useMotionLevel } from "@/lib/motion/MotionContext";
 export interface DecodeProps {
   text: string;
   trigger?: boolean;
+  delay?: number;
   onComplete?: () => void;
   className?: string;
   speed?: number; // ms per scramble step
@@ -17,6 +18,7 @@ const GLYPHS = ["_", "/", "\\", "#", "0", "1", "X", "*", "+", "-", "<", ">"];
 export function Decode({
   text,
   trigger = true,
+  delay = 0,
   onComplete,
   className = "",
   speed = 36,
@@ -90,14 +92,22 @@ export function Decode({
       frameRef.current = requestAnimationFrame(animate);
     };
 
-    frameRef.current = requestAnimationFrame(animate);
+    let delayTimer: NodeJS.Timeout | null = null;
+    if (delay > 0) {
+      delayTimer = setTimeout(() => {
+        frameRef.current = requestAnimationFrame(animate);
+      }, delay);
+    } else {
+      frameRef.current = requestAnimationFrame(animate);
+    }
 
     return () => {
+      if (delayTimer) clearTimeout(delayTimer);
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
       }
     };
-  }, [text, trigger, inView, isOff, speed, onComplete]);
+  }, [text, trigger, inView, isOff, speed, delay, onComplete]);
 
   return (
     <Component

@@ -1,64 +1,88 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import React, { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useMotionLevel } from '@/lib/motion/MotionContext';
 
 export function PageTransition() {
   const pathname = usePathname();
-  const prefersReducedMotion = useReducedMotion();
+  const { isLite, isOff } = useMotionLevel();
   const initialLoadRef = useRef(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [stage, setStage] = useState<'idle' | 'covering' | 'uncovering'>('idle');
 
   useEffect(() => {
-    // Skip animation on initial page mount
+    // Skip on initial page mount
     if (initialLoadRef.current) {
       initialLoadRef.current = false;
       return;
     }
 
-    if (prefersReducedMotion) {
+    if (isLite || isOff) {
+      // Natural instant transition
+      const main = document.querySelector('main');
+      if (main) {
+        main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
       return;
     }
 
     setIsTransitioning(true);
-    const timer = setTimeout(() => {
+    setStage('covering');
+
+    // Phase 1: Covered at 280ms
+    const timerCover = setTimeout(() => {
+      setStage('uncovering');
+      // Scroll to top and shift focus to main
+      window.scrollTo(0, 0);
+      const main = document.querySelector('main');
+      if (main) {
+        main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+      }
+    }, 320);
+
+    // Phase 2: Fully uncovered by 700ms
+    const timerEnd = setTimeout(() => {
       setIsTransitioning(false);
-    }, 550);
+      setStage('idle');
+    }, 700);
 
-    return () => clearTimeout(timer);
-  }, [pathname, prefersReducedMotion]);
+    return () => {
+      clearTimeout(timerCover);
+      clearTimeout(timerEnd);
+    };
+  }, [pathname, isLite, isOff]);
 
-  if (prefersReducedMotion) {
+  if (isLite || isOff || !isTransitioning) {
     return null;
   }
 
+  const routeLabel = pathname === '/' ? '~/' : `~${pathname}`;
+
   return (
-    <AnimatePresence mode="wait">
-      {isTransitioning && (
-        <div
-          className="pointer-events-none fixed inset-0 z-[100] overflow-hidden"
-          aria-hidden="true"
-        >
-          {/* Pill-shaped orange mask sweep */}
-          <motion.div
-            initial={{ x: "105%", skewX: -6 }}
-            animate={{
-              x: ["105%", "0%", "-105%"],
-              skewX: [-6, 0, 6],
-            }}
-            transition={{
-              duration: 0.52,
-              times: [0, 0.48, 1],
-              ease: [0.65, 0, 0.35, 1],
-            }}
-            className="absolute inset-y-0 -left-[10vw] -right-[10vw] bg-orange rounded-[9999px] shadow-2xl"
-          >
-            {/* Inner bubbly gloss highlight */}
-            <div className="absolute inset-x-12 top-6 h-6 rounded-full bg-peach/40 blur-[2px]" />
-          </motion.div>
+    <div
+      className="pointer-events-none fixed inset-0 z-50 overflow-hidden select-none"
+      aria-hidden="true"
+    >
+      {/* Red Leading Edge Bar Sweep */}
+      <div
+        className="absolute inset-y-0 w-full bg-bg border-l-4 border-red transition-all duration-[340ms] ease-[cubic-bezier(0.76,0,0.24,1)] flex items-center justify-center"
+        style={{
+          transform:
+            stage === 'covering'
+              ? 'translateX(0%)'
+              : stage === 'uncovering'
+              ? 'translateX(100%)'
+              : 'translateX(-100%)',
+        }}
+      >
+        <div className="flex items-center gap-3 font-mono text-xl sm:text-2xl font-bold uppercase tracking-wider text-fg">
+          <span className="h-6 w-1 bg-red" />
+          <span className="text-red-text">{routeLabel}</span>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }

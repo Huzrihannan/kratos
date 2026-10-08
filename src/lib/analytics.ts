@@ -13,7 +13,9 @@ export type AnalyticsEvent =
   | "whatsapp_click"
   | "booking_click"
   | "contact_form_submit"
-  | "cta_click";
+  | "cta_click"
+  | "palette_open"
+  | "palette_action";
 
 export interface EventPayload {
   location?: string;

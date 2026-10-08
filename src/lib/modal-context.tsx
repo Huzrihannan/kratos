@@ -10,6 +10,10 @@ interface LayoutContextValue {
   setMobileNavOpen: (open: boolean) => void;
   openMobileNav: () => void;
   closeMobileNav: () => void;
+  isCommandPaletteOpen: boolean;
+  openCommandPalette: () => void;
+  closeCommandPalette: () => void;
+  toggleCommandPalette: () => void;
 }
 
 const LayoutContext = createContext<LayoutContextValue | null>(null);
@@ -17,11 +21,16 @@ const LayoutContext = createContext<LayoutContextValue | null>(null);
 export function LayoutProvider({ children }: { children: React.ReactNode }) {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
   const openEstimator = useCallback(() => setIsEstimatorOpen(true), []);
   const closeEstimator = useCallback(() => setIsEstimatorOpen(false), []);
   const openMobileNav = useCallback(() => setIsMobileNavOpen(true), []);
   const closeMobileNav = useCallback(() => setIsMobileNavOpen(false), []);
+
+  const openCommandPalette = useCallback(() => setIsCommandPaletteOpen(true), []);
+  const closeCommandPalette = useCallback(() => setIsCommandPaletteOpen(false), []);
+  const toggleCommandPalette = useCallback(() => setIsCommandPaletteOpen((prev) => !prev), []);
 
   const value = useMemo(
     () => ({
@@ -32,8 +41,23 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
       setMobileNavOpen: setIsMobileNavOpen,
       openMobileNav,
       closeMobileNav,
+      isCommandPaletteOpen,
+      openCommandPalette,
+      closeCommandPalette,
+      toggleCommandPalette,
     }),
-    [isEstimatorOpen, isMobileNavOpen, openEstimator, closeEstimator, openMobileNav, closeMobileNav]
+    [
+      isEstimatorOpen,
+      isMobileNavOpen,
+      isCommandPaletteOpen,
+      openEstimator,
+      closeEstimator,
+      openMobileNav,
+      closeMobileNav,
+      openCommandPalette,
+      closeCommandPalette,
+      toggleCommandPalette,
+    ]
   );
 
   return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;

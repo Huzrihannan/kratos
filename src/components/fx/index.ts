@@ -36,3 +36,6 @@ export type { HUDProps, HUDClockProps, HUDCoordinatesProps } from './HUD';
 
 export { Glitch } from './Glitch';
 export type { GlitchProps } from './Glitch';
+
+export { Boot } from './Boot';
+export type { BootProps } from './Boot';

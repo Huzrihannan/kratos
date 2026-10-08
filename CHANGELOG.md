@@ -2,6 +2,32 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R3: Global Shell — Boot, Nav, Command Palette, Footer, Transitions] - 2026-10-08
+
+### Added
+- **OS Boot Preloader (`src/components/fx/Boot.tsx`):**
+  - First-visit per session diagnostic sequence with signal red caret draw, typed `Krat.OS` title, and 3-step `[ ok ]` subsystem checks.
+  - Hard cap at 1.4s, instant dismissal via click, Escape, or any key, automatic bypass on mobile (`< 768px`) or `lite`/`off` motion.
+  - Zero LCP delay: underlying DOM remains rendered and fully interactive from first paint.
+- **Global Navigation Bar (`src/components/layout/Nav.tsx`):**
+  - Full-width fixed navigation with 1px border, logo with micro-glitch hover, indexed nav links (`/01 WORK`, `/02 SERVICES`, `/03 ABOUT`, `/04 ESTIMATOR`).
+  - Active route indicators with signal red left bracket and real-time scroll progress bar (1.5px signal red line).
+  - Quick-action `⌘K` / `Ctrl+K` trigger button, theme toggle, and primary CTA (`Estimate project`).
+  - Full-screen mobile drawer with focus trap, staggered `Decode` animations, and quick direct channels.
+- **Command Palette (`src/components/layout/CommandPalette.tsx`):**
+  - Powered by `cmdk` with global `⌘K` / `Ctrl+K` hotkey and backdrop blur.
+  - Navigation section, instant Actions (Estimator, WhatsApp, Call, Email, copy to clipboard), and Settings toggles (Theme, Motion levels).
+  - Terminal easter egg: typing `sudo hire krat.os` unlocks celebratory response and fast-tracks project initiation.
+  - Integrated analytics logging for `palette_open` and `palette_action`.
+- **Contact Dock (`src/components/layout/ContactDock.tsx`):**
+  - Sharp technical dock replacing v1 rounded pill: `[ chat // 3 channels ]` (WhatsApp, Call, Email) with green pulse LED.
+  - Keyboard accessible and suppressed automatically when modals or the command palette are open.
+- **OS Footer & Status Bar (`src/components/layout/Footer.tsx`):**
+  - Charcoal `#212121` footer with giant monospace `Krat.OS` wordmark featuring hover `Decode` and pulsing red dot LED.
+  - Persistent bottom status bar: green status LED (`all systems operational`), live Colombo local time (`UTC+5:30`), version stamp (`v2.0.0-PROD`), and 3-way motion level switcher (`full` / `lite` / `off`).
+- **Mechanical Page Transitions (`src/components/layout/PageTransition.tsx`):**
+  - 700ms red-bar wipe with route path typing (`~/services`), skipped for users with reduced/lite motion. Focus automatically managed to `<main>`.
+
 ## [R2: Design System v2 & Motion Engine] - 2026-10-08
 
 ### Added
