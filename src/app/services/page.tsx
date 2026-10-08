@@ -1,21 +1,20 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Globe,
-  Smartphone,
-  ShoppingBag,
-  Cpu,
-  Palette,
-  ShieldCheck,
-  ArrowRight,
-  Check,
-  Clock,
-  Sparkles,
-  HelpCircle,
-} from "lucide-react";
+import { ArrowRight, Clock } from "lucide-react";
 import { servicesData, ServiceItem } from "@/content/services";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
+import { Decode } from "@/components/fx/Decode";
+import { Window } from "@/components/ui/Window";
+import { ServiceStickyNav } from "@/components/services/ServiceStickyNav";
+import {
+  WebAppScene,
+  MobileAppScene,
+  EcommerceScene,
+  AutomationScene,
+  DesignScene,
+  SupportScene,
+} from "@/components/sections/scenes";
 
 export const metadata: Metadata = {
   title: "Services & Capabilities | Krat.OS Software Solutions",
@@ -27,29 +26,35 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Services & Capabilities | Krat.OS Software Solutions",
     description:
-      "Web apps, mobile apps, and pragmatic AI automations built strong underneath, friendly on top.",
+      "Web apps, mobile apps, and pragmatic AI automations built strong underneath, fast on top.",
     url: "/services",
   },
 };
 
+function getSceneForService(illustration: ServiceItem["illustration"]) {
+  switch (illustration) {
+    case "webapp":
+      return <WebAppScene isHovered={false} />;
+    case "mobile":
+      return <MobileAppScene isHovered={false} />;
+    case "ecommerce":
+      return <EcommerceScene isHovered={false} />;
+    case "ai":
+      return <AutomationScene isHovered={false} />;
+    case "design":
+      return <DesignScene isHovered={false} />;
+    case "maintenance":
+      return <SupportScene isHovered={false} />;
+  }
+}
+
 export default function ServicesPage() {
-  const getServiceIcon = (iconName: ServiceItem["iconName"]) => {
-    const iconClass = "w-6 h-6 stroke-[2.2] text-ink";
-    switch (iconName) {
-      case "Globe":
-        return <Globe className={iconClass} />;
-      case "Smartphone":
-        return <Smartphone className={iconClass} />;
-      case "ShoppingBag":
-        return <ShoppingBag className={iconClass} />;
-      case "Cpu":
-        return <Cpu className={iconClass} />;
-      case "Palette":
-        return <Palette className={iconClass} />;
-      case "ShieldCheck":
-        return <ShieldCheck className={iconClass} />;
-    }
-  };
+  const navModules = servicesData.map((s, idx) => ({
+    id: s.slug,
+    slug: s.slug,
+    index: `0${idx + 1}`,
+    title: s.title.split(" (")[0].replace(" & ", " / "),
+  }));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -96,127 +101,165 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        {/* Header Breadcrumb & Eyebrow */}
+      <div className="min-h-screen pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        {/* Header Eyebrow & Display Headline */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-5 border border-peach">
-            <Sparkles className="w-3.5 h-3.5 text-orange" />
-            <span>{"// what we build"}</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] border border-line bg-surface/80 font-mono text-xs uppercase tracking-mono text-fg-muted mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-red" />
+            <span>/01 — MODULES // ARCHITECTURE & CAPABILITIES</span>
           </div>
 
-          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-ink leading-[1.1] mb-6">
-            Software built with purpose, delivered without drama.
+          <h1 className="font-mono font-bold text-3xl sm:text-4xl md:text-5xl text-fg leading-[1.1] mb-5 tracking-tight">
+            <Decode text="Engineering without compromise." />
           </h1>
 
-          <p className="font-sans text-ink-soft text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto">
-            From zero-latency SaaS platforms to playful mobile experiences, we pair rock-solid technical architectures with joyful interfaces.
+          <p className="font-sans text-fg-muted text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+            From zero-latency SaaS platforms to offline-first mobile apps, we pair rigorous engineering discipline with clean, intuitive interfaces.
           </p>
         </div>
 
-        {/* 6 Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-          {servicesData.map((service) => (
-            <article
-              key={service.id}
-              className="group flex flex-col justify-between rounded-[32px] bg-peach/40 hover:bg-peach/70 border-2 border-peach/80 hover:border-orange/60 p-7 sm:p-9 transition-all duration-300 hover:shadow-lg"
-            >
-              <div>
-                {/* Top strip with Icon & Timeframe */}
-                <div className="flex items-center justify-between gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-orange flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-200">
-                    {getServiceIcon(service.iconName)}
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cream text-ink text-xs font-bold uppercase tracking-wider border border-peach/60">
-                    <Clock className="w-3 h-3 text-orange" />
-                    {service.timeframe}
-                  </span>
-                </div>
+        {/* Main Content Layout: Sticky Left Index on Desktop + Modules Stream */}
+        <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
+          {/* Desktop Sticky Index */}
+          <ServiceStickyNav modules={navModules} />
 
-                {/* Title & Promise */}
-                <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-3 group-hover:text-orange-deep transition-colors">
-                  {service.title}
-                </h2>
-                <p className="text-ink-soft text-base leading-relaxed mb-6">
-                  {service.shortPromise}
-                </p>
+          {/* Modules Stream */}
+          <div className="flex-1 w-full space-y-12">
+            {servicesData.map((service, idx) => {
+              const moduleWindowNum = `module_0${idx + 1}.${service.illustration}`;
 
-                {/* Outcomes Checklist */}
-                <ul className="space-y-3 mb-8">
-                  {service.outcomes.map((outcome, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-ink/90 font-medium leading-snug">
-                      <span className="w-5 h-5 rounded-full bg-orange/30 text-ink-soft flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-ink stroke-[2.5]" />
-                      </span>
-                      <span>{outcome}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Technology Pills */}
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {service.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 rounded-full bg-cream text-ink-soft text-xs font-semibold border border-peach/70"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Bottom Card Action */}
-              <div className="pt-5 border-t border-peach/80 flex items-center justify-between">
-                <Link
-                  href={`/services/${service.slug}`}
-                  className="font-display font-semibold text-base text-ink group-hover:text-orange-deep inline-flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-deep rounded-full px-1"
+              return (
+                <section
+                  key={service.id}
+                  id={service.slug}
+                  aria-label={service.title}
+                  className="scroll-mt-32"
                 >
-                  <span>Explore {service.title}</span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
-                </Link>
-                <div className="w-9 h-9 rounded-full bg-cream text-ink flex items-center justify-center border border-peach group-hover:bg-orange transition-colors">
-                  <ArrowRight className="w-4 h-4 stroke-[2.2]" />
-                </div>
-              </div>
-            </article>
-          ))}
+                  <Window
+                    title={moduleWindowNum}
+                    cornerBrackets
+                    headerRight={
+                      <span className="font-mono text-[10px] text-fg-muted flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-red-text" />
+                        <span>{service.timeframe}</span>
+                      </span>
+                    }
+                    className="p-0 overflow-hidden"
+                  >
+                    <div className="p-5 sm:p-7 space-y-6">
+                      {/* Top Row: Scene Visual & Basic Info */}
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        {/* Scene Visual Container */}
+                        <div className="md:col-span-5 rounded-[2px] border border-line bg-bg p-3 flex items-center justify-center overflow-hidden">
+                          {getSceneForService(service.illustration)}
+                        </div>
+
+                        {/* Title & Promise */}
+                        <div className="md:col-span-7 space-y-3">
+                          <div className="flex items-center gap-2 font-mono text-[11px] text-red-text">
+                            <span>INDEX // 0{idx + 1}</span>
+                            <span>•</span>
+                            <span>PRODUCTION SPEC</span>
+                          </div>
+
+                          <h2 className="font-mono font-bold text-2xl sm:text-3xl text-fg tracking-tight">
+                            {service.title}
+                          </h2>
+
+                          <p className="font-sans text-fg-muted text-sm sm:text-base leading-relaxed">
+                            {service.shortPromise}
+                          </p>
+
+                          {/* Tech Tags */}
+                          <div className="flex flex-wrap gap-1.5 pt-2 font-mono text-[10px]">
+                            {service.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-2 py-0.5 rounded-[2px] bg-bg border border-line text-fg-muted"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Outcomes Checklist */}
+                      <div className="pt-5 border-t border-line">
+                        <span className="font-mono text-[11px] uppercase tracking-mono text-fg-muted block mb-3">
+                          Guaranteed Technical Deliverables:
+                        </span>
+                        <ul className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          {service.outcomes.map((outcome, oIdx) => (
+                            <li
+                              key={oIdx}
+                              className="flex items-start gap-2.5 text-xs text-fg leading-relaxed p-2.5 rounded-[2px] bg-bg/50 border border-line/60"
+                            >
+                              <span className="text-red-text shrink-0 font-mono font-bold mt-0.5">
+                                [✓]
+                              </span>
+                              <span>{outcome}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Footer Link to Module Deep Dive */}
+                      <div className="pt-4 border-t border-line flex items-center justify-between font-mono text-xs">
+                        <span className="text-fg-muted text-[11px]">
+                          STATUS: READY_FOR_DEPLOYMENT
+                        </span>
+                        <Link
+                          href={`/services/${service.slug}`}
+                          className="inline-flex items-center gap-2 text-fg hover:text-red-text transition-colors font-bold uppercase tracking-wider"
+                        >
+                          <span>Explore Architecture Spec</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </Window>
+                </section>
+              );
+            })}
+          </div>
         </div>
 
-        {/* "Not sure what you need?" Band */}
-        <section
-          aria-label="Need guidance?"
-          className="relative rounded-[36px] bg-peach/80 border-2 border-orange/40 p-8 sm:p-12 md:p-16 overflow-hidden text-center max-w-4xl mx-auto shadow-sm"
-        >
-          {/* Decorative Background Blob Accents */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-orange/20 filter blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-butter/30 filter blur-2xl pointer-events-none" />
+        {/* "Not sure what you need?" Bridge Band Opening Estimator */}
+        <div className="mt-20 pt-8 border-t border-line max-w-4xl mx-auto w-full">
+          <Window
+            title="krat.estimator.bridge [CONFIGURATOR_LAUNCH]"
+            cornerBrackets
+            className="p-6 sm:p-10 text-center"
+          >
+            <div className="max-w-2xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-line font-mono text-[11px] text-red-text">
+                <span className="w-1.5 h-1.5 rounded-full bg-red" />
+                <span>SPECIFICATION ASSISTANT</span>
+              </div>
 
-          <div className="relative z-10 flex flex-col items-center">
-            <div className="w-14 h-14 rounded-full bg-orange flex items-center justify-center text-ink mb-6 shadow-sm">
-              <HelpCircle className="w-7 h-7 stroke-[2.5]" />
+              <h2 className="font-mono font-bold text-2xl sm:text-3xl text-fg tracking-tight">
+                Not sure which architecture fits your scope?
+              </h2>
+
+              <p className="font-sans text-fg-muted text-sm sm:text-base leading-relaxed">
+                Run our 60-second interactive configurator. Select your project goals to generate realistic ballpark pricing, milestone pacing, and a live JSON specification.
+              </p>
+
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <EstimatorButton size="lg" withArrow>
+                  Estimate my project
+                </EstimatorButton>
+                <Link
+                  href="/contact"
+                  className="font-mono text-xs uppercase px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors"
+                >
+                  Talk directly with an engineer
+                </Link>
+              </div>
             </div>
-
-            <h2 className="font-display font-bold text-3xl sm:text-4xl text-ink mb-4">
-              Not sure which service fits your project?
-            </h2>
-
-            <p className="text-ink-soft text-base sm:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Answer 5 quick, bubble-picker questions in our interactive Project Estimator. You will get an instant ballpark investment range and a recommended scope in 60 seconds.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <EstimatorButton size="lg" withArrow={true}>
-                Try Project Estimator
-              </EstimatorButton>
-              <Link
-                href="/contact"
-                className="px-6 py-3.5 rounded-full bg-cream text-ink font-semibold text-sm hover:bg-peach border border-peach transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange-deep"
-              >
-                Or message us directly
-              </Link>
-            </div>
-          </div>
-        </section>
+          </Window>
+        </div>
       </div>
     </>
   );

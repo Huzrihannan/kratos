@@ -52,9 +52,9 @@ export const caseStudiesData: CaseStudy[] = [
     challenge:
       "Institutional investors were experiencing 3–5 second latency spikes during market close reconciliations. The previous monolithic portal suffered from cascading timeout errors, cryptic failure modals, and zero real-time trade verification, leading to high drop-off rates on high-value asset transfers.",
     approach:
-      "We tore down the legacy client polling layer and designed an event-driven edge gateway. 'Strong underneath': We modeled a strict PostgreSQL ledger with optimistic balance concurrency locks and WebSocket real-time trade broadcasting. 'Friendly on top': We redesigned the transaction interface with large, reassuring tactile buttons, live pill-status trackers, and inline instant error resolution.",
+      "We tore down the legacy client polling layer and designed an event-driven edge gateway. 'Strong underneath': We modeled a strict PostgreSQL ledger with optimistic balance concurrency locks and WebSocket real-time trade broadcasting. 'Clear on top': We redesigned the transaction interface with clean monospace hierarchy, live status trackers, and inline instant error resolution.",
     solution:
-      "A modular Next.js 15 App Router web application backed by Supabase Edge Functions. Institutional traders now receive sub-100ms trade verifications, tactile tactile confirmation feedback, and automated PDF settlement receipts with one-click sharing.",
+      "A modular Next.js 15 App Router web application backed by Supabase Edge Functions. Institutional traders now receive sub-100ms trade verifications, instant mechanical confirmation feedback, and automated PDF settlement receipts with one-click sharing.",
     results: [
       {
         label: "Settlement Speed",

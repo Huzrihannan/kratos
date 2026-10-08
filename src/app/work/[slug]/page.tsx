@@ -2,16 +2,14 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Shield,
-  Smile,
-  Check,
-  Quote,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Quote, MessageCircle } from "lucide-react";
 import { caseStudiesData } from "@/content/work";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
+import { Decode } from "@/components/fx/Decode";
+import { Odometer } from "@/components/fx/Odometer";
+import { Window } from "@/components/ui/Window";
+import { BeforeAfterSlider } from "@/components/work/BeforeAfterSlider";
+import { siteConfig } from "@/content/site";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -59,7 +57,6 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
   const cleanTitle = study.title.replace("[PLACEHOLDER] ", "");
   const cleanClient = study.clientName.replace("[PLACEHOLDER] ", "");
-
   const nextStudy = caseStudiesData.find((s) => s.slug === study.nextSlug);
 
   const jsonLd = {
@@ -111,225 +108,286 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
-        {/* Back Link */}
+      <div className="min-h-screen pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full font-mono">
+        {/* Navigation Back Bar */}
         <div className="mb-8">
           <Link
             href="/work"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-ink-soft hover:text-orange-deep transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-mono text-fg-muted hover:text-red-text transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>All Case Studies</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>[← ALL CASE STUDIES]</span>
           </Link>
         </div>
 
-        {/* Hero Section */}
-        <header className="mb-14 sm:mb-20">
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <span className="px-3.5 py-1 rounded-full bg-peach text-ink-soft text-xs font-bold uppercase tracking-wider border border-peach/80">
-              {study.industry}
+        {/* Hero Header */}
+        <header className="mb-14 sm:mb-16">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-fg-muted mb-5">
+            <span className="px-2.5 py-1 rounded-[2px] bg-surface border border-line text-red-text font-bold">
+              {study.industry.toUpperCase()}
             </span>
-            <span className="text-ink-soft text-xs font-bold uppercase tracking-wider">
-              Client: {cleanClient}
-            </span>
+            <span>•</span>
+            <span>CLIENT: {cleanClient}</span>
+            <span>•</span>
+            <span className="text-ok">VERIFIED CASE STUDY</span>
           </div>
 
-          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-ink leading-[1.1] mb-6">
-            {cleanTitle}
+          <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-fg leading-[1.1] mb-5 tracking-tight">
+            <Decode text={cleanTitle} />
           </h1>
 
-          <p className="font-sans text-ink-soft text-xl sm:text-2xl leading-relaxed max-w-3xl mb-8">
+          <p className="font-sans text-fg-muted text-lg sm:text-xl leading-relaxed max-w-3xl mb-8">
             {study.summary}
           </p>
 
-          {/* Big Impact Metric Banner */}
-          <div className="p-8 sm:p-10 rounded-[32px] bg-peach/50 border-2 border-orange/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-orange-deep block mb-1">
-                Primary Business Outcome
-              </span>
-              <div className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-ink">
-                {study.metricValue}
-              </div>
-              <span className="text-ink-soft text-sm sm:text-base font-medium">
-                {study.metricLabel}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {study.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 rounded-full bg-cream text-ink text-xs font-semibold border border-peach"
-                >
-                  {tag}
+          {/* Primary Business Outcome HUD Banner */}
+          <Window
+            title="primary_metric.hud [KEY_OUTCOME]"
+            cornerBrackets
+            className="p-6 sm:p-8"
+          >
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <span className="text-[11px] text-red-text font-bold uppercase tracking-mono block mb-1">
+                  CORE PRODUCTION RESULT
                 </span>
-              ))}
+                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-fg tracking-tight">
+                  <Odometer value={study.metricValue} />
+                </div>
+                <span className="font-sans text-xs text-fg-muted mt-1 block">
+                  {study.metricLabel}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {study.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2.5 py-1 rounded-[2px] bg-bg border border-line text-xs text-fg-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          </Window>
         </header>
 
-        {/* The Challenge */}
-        <section aria-label="The Challenge" className="mb-16">
-          <div className="flex items-center gap-2.5 px-3.5 py-1 rounded-full bg-peach/70 text-ink-soft text-xs font-bold uppercase tracking-wider mb-4 w-fit">
-            <span>01 // The Bottleneck</span>
+        {/* Technical Deep Dive: Challenge & Architecture */}
+        <section aria-label="Technical narrative" className="mb-14 sm:mb-16 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Challenge Window */}
+            <Window
+              title="challenge_audit.log [BOTTLENECK]"
+              className="p-6 h-full"
+            >
+              <span className="text-[10px] text-red-text font-bold uppercase tracking-mono block mb-2">
+                {"// SYSTEM BOTTLENECK"}
+              </span>
+              <h2 className="text-xl font-bold text-fg mb-4">
+                The Technical Bottleneck
+              </h2>
+              <p className="font-sans text-sm text-fg-muted leading-relaxed">
+                {study.challenge}
+              </p>
+            </Window>
+
+            {/* Approach Window */}
+            <Window
+              title="architecture_plan.md [STRATEGY]"
+              className="p-6 h-full"
+            >
+              <span className="text-[10px] text-ok font-bold uppercase tracking-mono block mb-2">
+                {"// ARCHITECTURAL INTERVENTION"}
+              </span>
+              <h2 className="text-xl font-bold text-fg mb-4">
+                Our Engineering Strategy
+              </h2>
+              <p className="font-sans text-sm text-fg-muted leading-relaxed">
+                {study.approach}
+              </p>
+            </Window>
           </div>
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-4">
-            The Challenge
-          </h2>
-          <p className="text-ink text-lg leading-relaxed bg-cream/60 p-6 sm:p-8 rounded-[28px] border border-peach/60">
-            {study.challenge}
-          </p>
-        </section>
 
-        {/* Dual Core: Strong Underneath & Friendly On Top */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {/* Strong Underneath */}
-          <section className="p-7 sm:p-8 rounded-[32px] bg-peach/40 border-2 border-peach/80">
-            <div className="w-12 h-12 rounded-2xl bg-cocoa text-cream flex items-center justify-center mb-5 shadow-sm">
-              <Shield className="w-6 h-6 stroke-[2.2]" />
-            </div>
-            <h3 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-3">
-              Strong Underneath
-            </h3>
-            <p className="text-ink-soft text-base leading-relaxed">
-              {study.approach}
-            </p>
-          </section>
-
-          {/* Friendly On Top */}
-          <section className="p-7 sm:p-8 rounded-[32px] bg-peach/60 border-2 border-orange/40">
-            <div className="w-12 h-12 rounded-2xl bg-orange text-ink flex items-center justify-center mb-5 shadow-sm">
-              <Smile className="w-6 h-6 stroke-[2.2]" />
-            </div>
-            <h3 className="font-display font-semibold text-xl sm:text-2xl text-ink mb-3">
-              Friendly On Top
-            </h3>
-            <p className="text-ink-soft text-base leading-relaxed">
+          {/* Solution Window */}
+          <Window
+            title="deployed_solution.spec [PRODUCTION]"
+            cornerBrackets
+            className="p-6 sm:p-8"
+          >
+            <span className="text-[10px] text-fg-muted uppercase tracking-mono block mb-2">
+              {"// DEPLOYED PRODUCTION RUNTIME"}
+            </span>
+            <h2 className="text-2xl font-bold text-fg mb-4">
+              Production Architecture & Implementation
+            </h2>
+            <p className="font-sans text-sm sm:text-base text-fg leading-relaxed">
               {study.solution}
             </p>
-          </section>
-        </div>
+          </Window>
+        </section>
 
-        {/* Circular / Rounded Portal Visual Gallery */}
-        <section aria-label="Visual showcase" className="mb-16">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-6">
-            Architecture & Visual Elements
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Section: Before/After Wipe Slider */}
+        <section aria-label="Architecture comparison slider" className="mb-14 sm:mb-16">
+          <div className="mb-3 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+            <span>[ARCHITECTURE_DIFF]</span>
+            <span>BEFORE VS. AFTER</span>
+          </div>
+          <BeforeAfterSlider />
+        </section>
+
+        {/* Section: Metric Results KPI Grid */}
+        <section aria-label="Measured results" className="mb-14 sm:mb-16">
+          <div className="mb-4 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+            <span>[MEASURED_IMPACT]</span>
+            <span>3 AUDITED METRICS</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {study.results.map((res, idx) => (
               <div
                 key={idx}
-                className="rounded-[32px] bg-peach/30 border border-peach/70 p-6 flex flex-col justify-between text-center items-center hover:bg-peach/50 transition-colors"
+                className="p-5 rounded-[2px] border border-line bg-surface/90 flex flex-col justify-between"
               >
-                {/* Circular Portal Frame */}
-                <div className="w-24 h-24 rounded-full bg-cream border-3 border-orange/50 flex items-center justify-center shadow-sm mb-4">
-                  <span className="font-display font-bold text-2xl text-ink">
-                    {res.value}
-                  </span>
-                </div>
                 <div>
-                  <h4 className="font-display font-semibold text-base text-ink mb-1">
+                  <span className="text-[10px] text-fg-muted uppercase tracking-mono block mb-1">
+                    METRIC_0{idx + 1}
+                  </span>
+                  <div className="text-3xl font-bold text-fg my-2">
+                    <Odometer value={res.value} />
+                  </div>
+                  <h4 className="text-xs font-bold text-fg mb-1">
                     {res.label}
                   </h4>
-                  <p className="text-ink-soft text-xs leading-relaxed">
+                  <p className="font-sans text-[11px] text-fg-muted leading-relaxed">
                     {res.detail}
                   </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Key Deliverables */}
-        <section aria-label="Key deliverables" className="mb-16">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-6">
-            Key Deliverables Handed Over
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {study.keyDeliverables.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3 p-5 rounded-[24px] bg-peach/40 border border-peach/70"
-              >
-                <div className="w-5 h-5 rounded-full bg-orange/40 text-ink flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3 h-3 stroke-[3]" />
+                <div className="pt-3 mt-4 border-t border-line/60 text-[10px] text-ok">
+                  [AUDIT_VERIFIED]
                 </div>
-                <span className="text-ink font-medium text-sm leading-snug">
-                  {item}
-                </span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Client Quote (if present) */}
+        {/* Section: Key Deliverables Artifacts Window */}
+        <section aria-label="Key deliverables" className="mb-14 sm:mb-16">
+          <Window
+            title="shipped_artifacts.log [REPOSITORY_MANIFEST]"
+            className="p-6 sm:p-8"
+          >
+            <span className="text-[10px] text-fg-muted uppercase tracking-mono block mb-2">
+              {"// REPOSITORY ARTIFACTS TRANSFERRED TO CLIENT"}
+            </span>
+            <h2 className="text-xl font-bold text-fg mb-5">
+              Production Artifacts Shipped
+            </h2>
+
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              {study.keyDeliverables.map((item, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-start gap-2.5 p-3 rounded-[2px] bg-bg/60 border border-line/70 text-fg"
+                >
+                  <span className="text-red-text font-bold shrink-0 mt-0.5">
+                    [✓]
+                  </span>
+                  <span className="font-sans leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </Window>
+        </section>
+
+        {/* Client Quote Window (if present) */}
         {study.clientQuote && (
-          <section aria-label="Client feedback" className="mb-20">
-            <div className="p-8 sm:p-10 rounded-[36px] bg-cocoa text-cream relative overflow-hidden shadow-sm">
-              <Quote className="w-12 h-12 text-orange/40 mb-4" />
-              <blockquote className="font-display text-xl sm:text-2xl text-cream/95 leading-relaxed mb-6">
-                &ldquo;{study.clientQuote.text.replace("[PLACEHOLDER] ", "")}&rdquo;
-              </blockquote>
-              <div>
-                <cite className="not-italic font-bold text-butter block text-base">
-                  {study.clientQuote.author.replace("[PLACEHOLDER] ", "")}
-                </cite>
-                <span className="text-cream/60 text-xs">
-                  {study.clientQuote.title}
-                </span>
+          <section aria-label="Client testimony" className="mb-14 sm:mb-16">
+            <Window
+              title="client_verification.sig [VERIFIED_FEEDBACK]"
+              cornerBrackets
+              className="p-6 sm:p-8"
+            >
+              <div className="flex items-start gap-4">
+                <Quote className="w-8 h-8 text-red-text shrink-0 mt-1 opacity-70" />
+                <div className="space-y-4">
+                  <blockquote className="font-sans text-base sm:text-lg text-fg italic leading-relaxed">
+                    &ldquo;{study.clientQuote.text}&rdquo;
+                  </blockquote>
+                  <div className="text-xs">
+                    <span className="font-bold text-fg block">
+                      {study.clientQuote.author}
+                    </span>
+                    <span className="text-fg-muted text-[11px]">
+                      {study.clientQuote.title}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Window>
           </section>
         )}
 
-        {/* Next Project Link Strip */}
+        {/* Next Project Teaser */}
         {nextStudy && (
-          <div className="mb-20 p-6 rounded-[28px] bg-peach/40 border border-peach/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-soft">
-                Next Project
-              </span>
-              <h3 className="font-display font-semibold text-lg sm:text-xl text-ink">
-                {nextStudy.title.replace("[PLACEHOLDER] ", "")}
-              </h3>
-            </div>
+          <section aria-label="Next case study teaser" className="mb-14 sm:mb-16">
             <Link
               href={`/work/${nextStudy.slug}`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cream hover:bg-orange text-ink font-bold text-xs uppercase tracking-wider border border-peach transition-colors shadow-2xs"
+              className="group block p-6 rounded-[2px] border border-line hover:border-line-strong bg-surface/90 transition-colors"
             >
-              <span>View Next Case Study</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="flex items-center justify-between text-[10px] text-fg-muted mb-2">
+                <span>[NEXT_CASE_STUDY]</span>
+                <span className="text-red-text group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                  VIEW CASE STUDY <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-fg">
+                {nextStudy.title.replace("[PLACEHOLDER] ", "")}
+              </h3>
+              <p className="font-sans text-xs text-fg-muted mt-1">
+                {nextStudy.summary}
+              </p>
             </Link>
-          </div>
+          </section>
         )}
 
-        {/* Final CTA */}
-        <section
-          aria-label="Build something similar"
-          className="rounded-[36px] bg-orange p-8 sm:p-12 text-center text-ink flex flex-col items-center shadow-md"
-        >
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-ink mb-4 max-w-xl">
-            Want similar results for your business?
-          </h2>
-          <p className="text-ink/80 text-base sm:text-lg max-w-lg mb-8 leading-relaxed">
-            Let us estimate your build or review your current technical bottlenecks with zero obligation.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <EstimatorButton
-              size="lg"
-              variant="secondary"
-              className="bg-cream hover:bg-cream/90 text-ink"
-            >
-              Estimate Similar Project
-            </EstimatorButton>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-full bg-ink text-cream font-bold text-sm hover:opacity-90 transition-opacity"
-            >
-              <span>Talk to an Engineer</span>
-            </Link>
-          </div>
+        {/* Final Conversion CTA */}
+        <section aria-label="Start your project">
+          <Window
+            title="start_conversation.sh [NEXT_ACTION]"
+            cornerBrackets
+            className="p-6 sm:p-10 text-center"
+          >
+            <div className="max-w-2xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-line text-[11px] text-ok">
+                <span className="w-1.5 h-1.5 rounded-full bg-ok" />
+                <span>SPRINTS READY TO ALLOCATE</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold text-fg tracking-tight">
+                Want similar results for your product?
+              </h2>
+
+              <p className="font-sans text-fg-muted text-sm sm:text-base leading-relaxed">
+                Run our 60-second Estimator to calculate ballpark pricing, or reach out to our senior engineers on WhatsApp.
+              </p>
+
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <EstimatorButton size="lg" withArrow>
+                  Estimate my project
+                </EstimatorButton>
+                <a
+                  href={siteConfig.contact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-ok" />
+                  <span>Chat on WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </Window>
         </section>
       </div>
     </>

@@ -18,16 +18,16 @@ export interface TeamMember {
 export const aboutData = {
   hero: {
     eyebrow: "// who we are",
-    headline: "Software that feels like a friend, engineered like a tank.",
+    headline: "Software that runs your business, engineered like a machine.",
     subhead:
-      "Krat.OS means strength. But we don't believe enterprise strength has to look like cold, gray, robotic tech from 2005. We build soft, warm, joyful interfaces backed by unshakeable architectures.",
+      "Krat.OS means strength. We engineer high-performance systems with mechanical precision, strict types, and zero architectural debt. Real software that founders can depend on.",
   },
 
   story: {
-    title: "Why 'Strong underneath. Friendly on top.'?",
+    title: "Why technical precision over agency fluff?",
     paragraphs: [
-      "Most software development companies force you to choose between two bad extremes: an agency that makes gorgeous designs that crumble under real user traffic, or an enterprise consultancy that builds robust backend code wrapped in an interface only an engineer could tolerate.",
-      "We started Krat.OS Software Solutions to prove that you don't have to choose. Great software should give users a warm, tactile, effortless smile on the surface-while running on strict TypeScript types, sub-second edge queries, and automated deployment pipelines underneath.",
+      "Most software development companies force you to choose between two bad extremes: an agency that makes flashy mockups that crumble under real user traffic, or a sluggish legacy consultancy that builds opaque code wrapped in an interface only an engineer could tolerate.",
+      "We built Krat.OS Software Solutions to prove that you don't have to choose. Great software should give users a fast, tactile, effortless experience on the surface — while running on strict TypeScript types, sub-second edge queries, and automated deployment pipelines underneath.",
       "We speak plain English. We don't hide behind acronyms or sell you bloat you don't need. When you partner with us, you work directly with the senior engineers designing and building your product.",
     ],
   },
@@ -77,7 +77,7 @@ export const aboutData = {
       id: "sarah-jenkins",
       name: "[PLACEHOLDER] Sarah Jenkins",
       role: "Head of Product Design & Motion",
-      bio: "Former design system lead obsessed with bubbly typography, micro-interaction physics, and delightful accessibility.",
+      bio: "Former design system lead obsessed with monospace ergonomics, mechanical precision, and delightful accessibility.",
       specialty: "Design Systems & Tactile UX",
       avatarBg: "#FFD9B8",
       isPlaceholder: true,

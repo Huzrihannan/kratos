@@ -110,6 +110,21 @@
   animation: hero-scroll-pill 1.8s cubic-bezier(0.76, 0, 0.24, 1) infinite;
 }
 
+@keyframes scanline {
+  0% {
+    transform: translateY(0%);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(3500%);
+    opacity: 0.1;
+  }
+}
+
+.animate-scanline {
+  animation: scanline 1.4s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
@@ -125,8 +140,10 @@
   .animate-hero-line-1,
   .animate-hero-line-2,
   .animate-hero-line-3,
-  .animate-hero-scroll-pill {
+  .animate-hero-scroll-pill,
+  .animate-scanline {
     animation: none !important;
     transform: none !important;
   }
 }
+

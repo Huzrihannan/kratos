@@ -87,7 +87,7 @@ export const servicesData: ServiceItem[] = [
     id: "mobile-apps",
     slug: "mobile-apps",
     title: "Mobile Apps (iOS & Android)",
-    shortPromise: "Native-feel cross-platform mobile experiences with tactile physics and 60fps animations.",
+    shortPromise: "Native-feel cross-platform mobile experiences with sub-frame response and 60fps performance.",
     iconName: "Smartphone",
     outcomes: [
       "Unified React Native or Flutter codebase running identically on iOS & Android",
@@ -258,7 +258,7 @@ export const servicesData: ServiceItem[] = [
     id: "ui-ux-design",
     slug: "ui-ux-design",
     title: "UI/UX & Product Design",
-    shortPromise: "Bubbly, memorable design systems and wireframes that turn complex workflows into intuitive joy.",
+    shortPromise: "Precise, modular design systems and wireframes that turn complex workflows into intuitive speed.",
     iconName: "Palette",
     outcomes: [
       "Interactive Figma design systems complete with token architecture",
@@ -272,7 +272,7 @@ export const servicesData: ServiceItem[] = [
     deliverables: [
       "Full Figma component library with variants, auto-layout, and token definitions",
       "High-fidelity interactive prototype demonstrating key user journeys",
-      "Tactile micro-interaction documentation for front-end developers",
+      "Mechanical micro-interaction documentation for front-end developers",
       "Accessibility audit report guaranteeing WCAG 2.1 AA compliance",
       "SVG icon set and custom brand graphic elements",
       "Design token export in CSS variables and Tailwind configuration",
@@ -284,7 +284,7 @@ export const servicesData: ServiceItem[] = [
       },
       {
         title: "Token & Primitive Creation",
-        description: "We establish colors, typography clamps, blob shapes, and elevation models in Figma.",
+        description: "We establish colors, typography clamps, radius tokens, and elevation models in Figma.",
       },
       {
         title: "High-Fidelity Screen Prototyping",
@@ -306,7 +306,7 @@ export const servicesData: ServiceItem[] = [
       },
       {
         question: "Will the design adhere to our existing brand guidelines?",
-        answer: "We can either elevate your existing brand or build an entirely fresh visual language with our bubbly, friendly aesthetic.",
+        answer: "We can either elevate your existing brand or build an entirely fresh visual language with our clean, technical, high-performance aesthetic.",
       },
     ],
     relatedWorkSlugs: ["fintech-portal", "healthtech-mobile"],

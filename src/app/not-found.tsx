@@ -1,79 +1,76 @@
 import React from "react";
 import Link from "next/link";
-import { Home, Sparkles } from "lucide-react";
+import { Terminal } from "lucide-react";
+import { Glitch } from "@/components/fx/Glitch";
+import { Caret } from "@/components/fx/Caret";
+import { SpotlightGrid } from "@/components/fx/SpotlightGrid";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full flex items-center justify-center">
-      <div className="w-full text-center p-8 sm:p-14 rounded-[36px] bg-peach/40 border-2 border-peach/80 relative overflow-hidden shadow-sm">
-        {/* Playful Melting Blobs SVG Graphic */}
-        <div className="relative w-48 h-40 mx-auto mb-8 flex items-center justify-center">
-          <svg
-            viewBox="0 0 200 160"
-            className="w-full h-full drop-shadow-sm select-none"
-            aria-hidden="true"
-          >
-            {/* Background pooled puddle */}
-            <path
-              d="M 20 135 C 20 115, 60 110, 100 110 C 140 110, 180 115, 180 135 C 180 150, 140 155, 100 155 C 60 155, 20 150, 20 135 Z"
-              fill="#FFD9B8"
-            />
-            {/* Melting dripping orange blob */}
-            <path
-              d="M 60 70 C 60 30, 140 30, 140 70 C 140 95, 155 110, 145 130 C 135 145, 115 135, 100 135 C 85 135, 65 145, 55 130 C 45 110, 60 95, 60 70 Z"
-              fill="#FB9A5E"
-            />
-            {/* Dripping puddle droplet */}
-            <circle cx="85" cy="142" r="7" fill="#F47B3A" />
-            <circle cx="120" cy="144" r="5" fill="#FFC857" />
-
-            {/* Cute surprised eye cutouts */}
-            <circle cx="88" cy="72" r="5" fill="#2A1810" />
-            <circle cx="112" cy="72" r="5" fill="#2A1810" />
-            {/* Little smile */}
-            <path
-              d="M 94 85 Q 100 90 106 85"
-              stroke="#2A1810"
-              strokeWidth="3"
-              strokeLinecap="round"
-              fill="none"
-            />
-          </svg>
+    <div className="min-h-screen pt-28 pb-20 px-4 flex items-center justify-center font-mono">
+      <SpotlightGrid className="max-w-3xl w-full p-4 sm:p-8 rounded-[2px] border border-line bg-surface/90 shadow-2xl relative">
+        {/* Chrome Title Bar */}
+        <div className="flex items-center justify-between pb-3 mb-6 border-b border-line text-[11px] text-fg-muted">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-red animate-pulse" />
+            <span className="font-bold text-red-text">CRITICAL_EXCEPTION: KERNEL_PANIC</span>
+          </div>
+          <span className="text-[10px] text-fg-muted">PID: 0x00000404</span>
         </div>
 
-        {/* Big 404 Display */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-orange-deep text-xs font-bold uppercase tracking-[0.2em] mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Error 404</span>
+        {/* Glitching Monospace Header */}
+        <div className="text-center my-6 sm:my-8 space-y-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-red text-[11px] text-red-text font-bold">
+            <span>ERROR CODE: 404</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-fg tracking-tight">
+            <Glitch triggerOnHover={false}>
+              404 — PROCESS NOT FOUND
+            </Glitch>
+          </h1>
+
+          <p className="font-sans text-xs sm:text-sm text-fg-muted max-w-md mx-auto leading-relaxed">
+            The target memory address or route does not exist in the Krat.OS virtual directory table.
+          </p>
         </div>
 
-        <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-ink leading-[1.1] mb-4">
-          Oops! This page melted away.
-        </h1>
+        {/* Memory Dump Stack Trace */}
+        <div className="p-4 sm:p-5 rounded-[2px] bg-bg border border-line text-[11px] space-y-2 mb-8 overflow-x-auto text-fg-muted">
+          <div className="text-red-text font-bold">
+            *** KERNEL DUMP AT ADDRESS 0x000000404 ***
+          </div>
+          <div>FAULT: ROUTE_UNRESOLVED // STATUS: 404_PAGE_NOT_FOUND</div>
+          <div className="text-fg/80 pl-2 border-l border-line space-y-1">
+            <div>at router.resolve (sys/routing.ts:404:12)</div>
+            <div>at dispatch.navigate (sys/kernel.ts:89:4)</div>
+            <div>at runtime.exec (sys/boot.ts:1:1)</div>
+          </div>
+          <div className="pt-2 text-fg flex items-center gap-2">
+            <span>&gt; system halted. awaiting restart instruction</span>
+            <Caret />
+          </div>
+        </div>
 
-        <p className="font-sans text-ink-soft text-base sm:text-lg max-w-md mx-auto mb-10 leading-relaxed">
-          The link you clicked might be outdated or took a detour into a gooey puddle. Let&apos;s get you back to safe, solid ground.
-        </p>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {/* Action Controls */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 border-t border-line">
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-orange hover:bg-orange-deep text-ink font-bold text-base shadow-sm transition-all focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange-deep"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[2px] bg-fg text-bg hover:bg-fg/90 font-bold uppercase tracking-wider text-xs transition-colors"
           >
-            <Home className="w-5 h-5 stroke-[2.2]" />
-            <span>Back to Home</span>
+            <Terminal className="w-3.5 h-3.5 text-red" />
+            <span>cd ~ (Return Home)</span>
           </Link>
           <EstimatorButton
-            size="lg"
-            variant="secondary"
-            className="bg-cream hover:bg-peach text-ink border border-peach"
+            size="md"
+            variant="ghost"
+            className="w-full sm:w-auto text-xs uppercase border border-line hover:border-line-strong"
           >
-            Estimate a Project
+            Estimate a project
           </EstimatorButton>
         </div>
-      </div>
+      </SpotlightGrid>
     </div>
   );
 }

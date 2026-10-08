@@ -3,18 +3,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  Check,
-  Clock,
-  Sparkles,
-  Layers,
   ArrowLeft,
-  Calendar,
-  ExternalLink,
+  ArrowRight,
+  Clock,
+  Layers,
+  MessageCircle,
 } from "lucide-react";
 import { servicesData } from "@/content/services";
 import { caseStudiesData } from "@/content/work";
 import { Accordion } from "@/components/ui/Accordion";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
+import { Decode } from "@/components/fx/Decode";
+import { Window } from "@/components/ui/Window";
+import { ServiceArchitectureDiagram } from "@/components/services/ServiceArchitectureDiagram";
 import { siteConfig } from "@/content/site";
 
 interface PageProps {
@@ -129,203 +130,272 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="min-h-screen pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
-        {/* Back Link */}
+      <div className="min-h-screen pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full font-mono">
+        {/* Navigation Back Bar */}
         <div className="mb-8">
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-ink-soft hover:text-orange-deep transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-mono text-fg-muted hover:text-red-text transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>All Services</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>[← ALL MODULES]</span>
           </Link>
         </div>
 
         {/* Hero Section */}
-        <header className="mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-6 border border-peach">
-            <Sparkles className="w-3.5 h-3.5 text-orange" />
-            <span>{"// service deep-dive"}</span>
+        <header className="mb-14 sm:mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] border border-line bg-surface/80 text-xs uppercase tracking-mono text-fg-muted mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-red" />
+            <span>/01 — MODULE_SPEC // {service.slug.toUpperCase()}</span>
           </div>
 
-          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-ink leading-[1.1] mb-6 max-w-4xl">
-            {service.title}
+          <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-fg leading-[1.1] mb-5 tracking-tight">
+            <Decode text={service.title} />
           </h1>
 
-          <p className="font-sans text-ink-soft text-xl sm:text-2xl leading-relaxed max-w-3xl mb-8">
+          <p className="font-sans text-fg-muted text-lg sm:text-xl leading-relaxed max-w-3xl mb-6">
             {service.shortPromise}
           </p>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-peach text-ink font-bold text-sm border border-peach/80">
-              <Clock className="w-4 h-4 text-orange-deep" />
-              Typical timeframe: {service.timeframe}
+          <div className="flex flex-wrap items-center gap-3 text-xs text-fg-muted">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-surface border border-line text-fg">
+              <Clock className="w-3.5 h-3.5 text-red-text" />
+              <span>TIMEFRAME: {service.timeframe}</span>
             </span>
-            <EstimatorButton size="md" withArrow={true}>
-              Estimate This Service
-            </EstimatorButton>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-surface border border-line text-fg">
+              <Layers className="w-3.5 h-3.5 text-ok" />
+              <span>STACK: {service.tags.length} TECHNOLOGIES</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-surface border border-line text-ok">
+              <span className="w-1.5 h-1.5 rounded-full bg-ok" />
+              <span>STATUS: PRODUCTION_READY</span>
+            </span>
           </div>
         </header>
 
-        {/* Section 1: What's Included / Deliverables */}
-        <section aria-label="What's included" className="mb-20">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-full bg-orange flex items-center justify-center text-ink">
-              <Layers className="w-4 h-4 stroke-[2.5]" />
-            </div>
-            <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink">
-              What is included in every build
-            </h2>
+        {/* Section 1: Animated Architecture Diagram */}
+        <section aria-label="Architecture Diagram" className="mb-14 sm:mb-16">
+          <div className="mb-3 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+            <span>[SYSTEM_TOPOLOGY]</span>
+            <span>PIPELINE_VIEW</span>
+          </div>
+          <ServiceArchitectureDiagram slug={service.slug} />
+        </section>
+
+        {/* Section 2: Two-Column Scope & Stack Dependency Graph */}
+        <section aria-label="Deliverables and Stack" className="mb-14 sm:mb-16 grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Deliverables Window (7 cols) */}
+          <div className="lg:col-span-7">
+            <Window
+              title="module_deliverables.json [INCLUSIONS]"
+              cornerBrackets
+              className="p-5 sm:p-7"
+            >
+              <p className="font-sans text-xs text-fg-muted leading-relaxed mb-5">
+                Every project milestone is packaged into reproducible repository artifacts with 100% IP ownership transferred to your team.
+              </p>
+
+              <ul className="space-y-3">
+                {service.deliverables.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-start gap-3 p-3 rounded-[2px] bg-bg/60 border border-line/70 text-xs text-fg"
+                  >
+                    <span className="text-red-text font-bold shrink-0 mt-0.5">
+                      [✓]
+                    </span>
+                    <span className="font-sans leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </Window>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {service.deliverables.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-start gap-3.5 p-6 rounded-[28px] bg-peach/40 border border-peach/80 hover:bg-peach/60 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-full bg-orange/40 text-ink flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+          {/* Stack Dependency Tree (5 cols) */}
+          <div className="lg:col-span-5">
+            <Window
+              title="dependency_tree.lock [STACK]"
+              className="p-5 sm:p-7 h-full flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <span className="text-xs text-fg-muted uppercase tracking-mono block">
+                  LAYER ARCHITECTURE:
+                </span>
+
+                <div className="space-y-3 text-xs">
+                  <div className="p-3 rounded-[2px] bg-bg border border-line">
+                    <div className="text-[10px] text-red-text font-bold mb-1">
+                      LAYER 01 // INTERFACE & RUNTIME
+                    </div>
+                    <div className="text-fg font-bold">
+                      {service.tags.slice(0, 2).join(" • ")}
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-[2px] bg-bg border border-line">
+                    <div className="text-[10px] text-fg-muted font-bold mb-1">
+                      LAYER 02 // LOGIC & EDGE API
+                    </div>
+                    <div className="text-fg font-bold">
+                      {service.tags.slice(2, 4).join(" • ") || "Edge Functions • Zod"}
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-[2px] bg-bg border border-line">
+                    <div className="text-[10px] text-ok font-bold mb-1">
+                      LAYER 03 // PERSISTENCE & SEC
+                    </div>
+                    <div className="text-fg font-bold">
+                      {service.tags.slice(4).join(" • ") || "PostgreSQL • Row Level Security"}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-ink font-medium text-base leading-snug">
-                  {item}
-                </p>
               </div>
-            ))}
+
+              <div className="pt-4 mt-6 border-t border-line text-[10px] text-fg-muted flex items-center justify-between">
+                <span>LOCK_VERSION: STRICT</span>
+                <span className="text-ok">0 VULNERABILITIES</span>
+              </div>
+            </Window>
           </div>
         </section>
 
-        {/* Section 2: Typical Process & Steps */}
-        <section aria-label="Process and workflow" className="mb-20">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-8">
-            How we take this from idea to production
-          </h2>
+        {/* Section 3: Mini Pipeline (Process Steps) */}
+        <section aria-label="Process Pipeline" className="mb-14 sm:mb-16">
+          <div className="mb-4 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+            <span>[PIPELINE_EXECUTION]</span>
+            <span>4 SPRINT PHASES</span>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {service.processSteps.map((step, idx) => (
               <div
                 key={idx}
-                className="relative rounded-[28px] bg-peach/30 border border-peach/70 p-6 flex flex-col justify-between"
+                className="p-4 rounded-[2px] border border-line bg-surface/80 flex flex-col justify-between h-44 hover:border-line-strong transition-colors"
               >
                 <div>
-                  <span className="font-display font-bold text-3xl text-orange mb-3 block">
-                    0{idx + 1}
-                  </span>
-                  <h3 className="font-display font-semibold text-lg text-ink mb-2">
+                  <div className="flex items-center justify-between text-[10px] text-fg-muted mb-2">
+                    <span className="text-red-text font-bold">PHASE 0{idx + 1}</span>
+                    <span>MILESTONE</span>
+                  </div>
+                  <h4 className="text-xs font-bold text-fg mb-2 leading-snug">
                     {step.title}
-                  </h3>
-                  <p className="text-ink-soft text-sm leading-relaxed">
+                  </h4>
+                  <p className="font-sans text-[11px] text-fg-muted leading-relaxed line-clamp-3">
                     {step.description}
                   </p>
+                </div>
+
+                <div className="pt-2 border-t border-line/60 flex items-center justify-between text-[10px] text-fg-muted">
+                  <span>GATE: PASSED</span>
+                  <span className="text-ok">[ok]</span>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Section 3: Technologies Used */}
-        <section aria-label="Technologies" className="mb-20">
-          <div className="p-8 sm:p-10 rounded-[32px] bg-peach/40 border border-peach/80">
-            <h2 className="font-display font-semibold text-2xl text-ink mb-3">
-              Technologies & Standards
-            </h2>
-            <p className="text-ink-soft text-base mb-6 max-w-2xl">
-              We never use heavy, outdated toolchains or fragile plugins. Every build is built on modern, battle-tested foundations:
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              {service.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-4 py-2 rounded-full bg-cream text-ink font-semibold text-sm border border-peach shadow-2xs"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4: Related Case Studies */}
+        {/* Section 4: Related Work Case Studies (if any) */}
         {relatedStudies.length > 0 && (
-          <section aria-label="Related case studies" className="mb-20">
-            <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-6">
-              Relevant case studies
-            </h2>
+          <section aria-label="Related Case Studies" className="mb-14 sm:mb-16">
+            <div className="mb-4 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+              <span>[VERIFIED_IMPLEMENTATION]</span>
+              <span>CASE STUDIES</span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {relatedStudies.map((study) => (
-                <div
-                  key={study.id}
-                  className="rounded-[32px] bg-peach/40 border-2 border-peach/80 p-7 flex flex-col justify-between"
+              {relatedStudies.map((cs) => (
+                <Window
+                  key={cs.id}
+                  title={`case_study.${cs.slug}`}
+                  cornerBrackets
+                  className="p-5 sm:p-6"
                 >
-                  <div>
-                    <span className="inline-block px-3 py-1 rounded-full bg-cream text-ink text-xs font-bold uppercase tracking-wider mb-3">
-                      {study.industry}
-                    </span>
-                    <h3 className="font-display font-semibold text-xl text-ink mb-2">
-                      {study.title.replace("[PLACEHOLDER] ", "")}
-                    </h3>
-                    <p className="text-ink-soft text-sm leading-relaxed mb-6">
-                      {study.summary}
-                    </p>
+                  <div className="flex items-center justify-between text-[10px] text-red-text mb-2">
+                    <span>{cs.industry}</span>
+                    <span>{cs.metricValue} {cs.metricLabel}</span>
                   </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-peach/70">
-                    <span className="font-display font-bold text-xl text-ink">
-                      {study.metricValue}{" "}
-                      <span className="text-xs font-normal text-ink-soft">
-                        {study.metricLabel}
-                      </span>
-                    </span>
+
+                  <h3 className="text-base sm:text-lg font-bold text-fg mb-2">
+                    {cs.title.replace("[PLACEHOLDER] ", "")}
+                  </h3>
+
+                  <p className="font-sans text-xs text-fg-muted leading-relaxed mb-4">
+                    {cs.summary}
+                  </p>
+
+                  <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
+                    <span className="text-[10px] text-fg-muted">CLIENT: {cs.clientName}</span>
                     <Link
-                      href={`/work/${study.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-orange-deep hover:underline"
+                      href={`/work/${cs.slug}`}
+                      className="inline-flex items-center gap-1.5 text-fg hover:text-red-text transition-colors font-bold uppercase tracking-wider"
                     >
-                      <span>Read Story</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Read Case Study</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
-                </div>
+                </Window>
               ))}
             </div>
           </section>
         )}
 
-        {/* Section 5: Service Specific FAQs */}
-        <section aria-label="Service FAQs" className="mb-20">
-          <h2 className="font-display font-semibold text-2xl sm:text-3xl text-ink mb-6">
-            Frequently asked questions about {service.title}
-          </h2>
-          <Accordion items={accordionItems} />
+        {/* Section 5: Service FAQ */}
+        <section aria-label="Frequently Asked Questions" className="mb-14 sm:mb-16">
+          <Window
+            title="module_faq.terminal [DIRECT_ANSWERS]"
+            className="p-6 sm:p-8"
+          >
+            <div className="mb-6">
+              <span className="text-[11px] text-red-text uppercase tracking-mono block mb-1">
+                {"// ARCHITECTURAL QUESTIONS"}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-fg">
+                Frequently asked regarding {service.title}
+              </h2>
+            </div>
+
+            <Accordion items={accordionItems} />
+          </Window>
         </section>
 
         {/* Section 6: Final CTA */}
-        <section
-          aria-label="Ready to start?"
-          className="rounded-[36px] bg-orange p-8 sm:p-12 md:p-14 text-center text-ink flex flex-col items-center shadow-md"
-        >
-          <h2 className="font-display font-bold text-3xl sm:text-4xl text-ink mb-4 max-w-2xl">
-            Ready to build your {service.title}?
-          </h2>
-          <p className="text-ink/80 text-base sm:text-lg max-w-xl mb-8 leading-relaxed">
-            Get an instant ballpark estimate in 60 seconds, or schedule a 15-minute technical discovery call with our engineering team.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <EstimatorButton
-              size="lg"
-              variant="secondary"
-              className="bg-cream hover:bg-cream/90 text-ink"
-            >
-              Estimate This Project
-            </EstimatorButton>
-            <a
-              href={siteConfig.contact.bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-4 rounded-full bg-ink text-cream font-bold text-sm hover:opacity-90 transition-opacity"
-            >
-              <Calendar className="w-4 h-4" />
-              <span>Book 15-min Discovery</span>
-            </a>
-          </div>
+        <section aria-label="Configure this module">
+          <Window
+            title="deploy_dispatch.sh [INITIALIZE_PROJECT]"
+            cornerBrackets
+            className="p-6 sm:p-10 text-center"
+          >
+            <div className="max-w-2xl mx-auto space-y-4">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-line text-[11px] text-ok">
+                <span className="w-1.5 h-1.5 rounded-full bg-ok" />
+                <span>SPRINT INTAKE OPEN</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold text-fg tracking-tight">
+                Ready to engineer your {service.title}?
+              </h2>
+
+              <p className="font-sans text-fg-muted text-sm sm:text-base leading-relaxed">
+                Configure your requirements in our 60-second Estimator to lock in scope, ballpark pricing, and reserve our next development sprint.
+              </p>
+
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <EstimatorButton size="lg" withArrow>
+                  Estimate this module
+                </EstimatorButton>
+                <a
+                  href={siteConfig.contact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-ok" />
+                  <span>Chat on WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </Window>
         </section>
       </div>
     </>

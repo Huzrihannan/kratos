@@ -2,7 +2,52 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
-## [R7: The Estimator Rebuilt as Configurator] - 2026-10-08
+## [R8: Inner Pages Rebuilt in Krat.OS Brand System] - 2026-10-08
+
+### Added
+- **Route `/services` (`src/app/services/page.tsx` & `ServiceStickyNav.tsx`):**
+  - Desktop sticky left navigation drawer with live scroll-spy tracking module positions (`module_01.web`, `module_02.mobile`, etc.) and signal red indicator caret.
+  - Six module Windows rendering their respective inline SVG motion scenes (`WebAppScene`, `MobileAppScene`, `EcommerceScene`, `AutomationScene`, `DesignScene`, `SupportScene`).
+  - Guaranteed technical deliverables checklist with red square indicators (`[✓]`), timeframe badges, and tech tags.
+  - Estimator bridge card (`NOT_SURE_WHAT_YOU_NEED.SH`) launching the 60-second interactive configurator.
+- **Route `/services/[slug]` (`src/app/services/[slug]/page.tsx` & `ServiceArchitectureDiagram.tsx`):**
+  - Animated SVG pipeline diagram customized per service domain (`[CLIENT]` → `[API_GATEWAY]` → `[QUEUE]` → `[DATABASE]`) with travelling data packets and `useInViewPlayback` off-screen pause.
+  - Deliverables scope window (`module_deliverables.json`) detailing verified inclusions with complete client IP ownership.
+  - Layered stack dependency graph (`LAYER 01: RUNTIME`, `LAYER 02: API`, `LAYER 03: PERSISTENCE`).
+  - 4-phase sprint pipeline (`01_PLAN`, `02_BUILD`, `03_HARDEN`, `04_SHIP`) and service-specific terminal FAQ accordion.
+- **Route `/work` (`src/app/work/page.tsx` & `WorkFilter.tsx`):**
+  - Filterable case study grid reflowing seamlessly with GSAP `Flip` plugin (`Flip.from(state)`) on filter toggle.
+  - Mono tag filters (`[ALL_PROJECTS]`, `[WEB_APPS]`, `[MOBILE_APPS]`, `[AUTOMATION]`) with cream fill and signal red dot active states.
+  - Case study Windows with corner brackets, `<Odometer>` rolling impact metrics (`+142%`, `4.9★`, `-68%`), and status chips.
+- **Route `/work/[slug]` (`src/app/work/[slug]/page.tsx` & `BeforeAfterSlider.tsx`):**
+  - Interactive before/after wipe slider comparing legacy bottlenecks against Krat.OS production architecture with draggable signal red caret divider and keyboard arrow accessibility.
+  - Technical narrative breakdown (`CHALLENGE_AUDIT.LOG`, `ARCHITECTURE_PLAN.MD`, `DEPLOYED_SOLUTION.SPEC`).
+  - 3 audited metric result tiles with `<Odometer>` counters and verified deliverables manifest.
+  - Next case study teaser block wiping into view.
+- **Route `/about` (`src/app/about/page.tsx`, `GitLogTimeline.tsx`, `ContributorCard.tsx`):**
+  - Company story rendered as an authentic `README.md [RAW_PREVIEW]` OS window with commit hash, markdown headers, and code formatting.
+  - Non-negotiable engineering standards checklist with green LEDs (`[ok] 100% Client Code Ownership`, `[ok] Strict TypeScript Typing`, `[ok] Working Software Every Friday`).
+  - Milestone timeline drawn as a linear git commit graph (`git log --graph --oneline --decorate`) with branch markers and commit tags.
+  - Core team framed as repository maintainers with CRT horizontal scanline sweep on avatar hover, strictly preserving `[PLACEHOLDER]` tags.
+- **Route `/contact` (`src/app/contact/page.tsx`, `ContactForm.tsx`, `LiveClock.tsx`):**
+  - Real-time UTC/local HUD clock with second counter and green synchronization LED.
+  - 4-hour SLA response promise card and direct channels (WhatsApp with live indicator, 15-minute discovery booking, direct email).
+  - Terminal-styled dispatcher form (`contact_dispatcher.sh`) with signal red focus caret lighting up on active inputs.
+  - `HTTP/1.1 200 OK // INTAKE_RECORDED` animated success state with SLA countdown and WhatsApp follow-up link.
+- **Route `404` (`src/app/not-found.tsx`):**
+  - Rebuilt as an authentic OS **Kernel Panic** screen (`CRITICAL_EXCEPTION: KERNEL_PANIC`) with `<Glitch>` effect on `404 — PROCESS NOT FOUND`.
+  - Memory dump call stack trace and blinking signal red `<Caret>` prompt.
+  - `cd ~ (Return Home)` navigation button.
+- **Routes `/privacy` & `/terms` (`src/app/privacy/page.tsx` & `src/app/terms/page.tsx`):**
+  - Calm, readable monospace legal documentation with `<Decode>` title scrambling and zero extraneous animation.
+  - Preservation of all legal notices and `[PLACEHOLDER: review by legal]` markers.
+
+### Changed
+- `src/content/about.ts`, `src/content/services.ts`, `src/content/work.ts`: Aligned copy tone with Krat.OS v2 technical brand voice, removing lingering v1 playful references while strictly preserving all `[PLACEHOLDER]` markers and schema types.
+- `src/app/globals.css`: Added keyframe animation and class for `.animate-scanline` with `prefers-reduced-motion` suppression.
+- Production bundle sizes verified across all routes: First Load JS strictly between **157 kB** and **197 kB** gzipped (all 23 to 63 kB below the 220 kB budget).
+
+
 
 ### Added
 - **Interactive Two-Column Configurator (`src/components/estimator/EstimatorWizard.tsx`):**
