@@ -12,7 +12,7 @@ export interface UseInViewPlaybackOptions {
  * is scrolled off-screen or the browser tab is hidden/backgrounded.
  */
 export function useInViewPlayback(
-  targetRef: React.RefObject<HTMLElement | null>,
+  targetRef: React.RefObject<Element | null>,
   options: UseInViewPlaybackOptions = {}
 ): boolean {
   const { threshold = 0.05, rootMargin = "100px" } = options;

@@ -2,6 +2,40 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R5: Home Sections A — Modules, Pipeline, Work, Proof] - 2026-10-08
+
+### Added
+- **Section /01 — Modules (`src/components/sections/Services.tsx`):**
+  - Rebuilt as `"What we build"` with 6 core engineering Windows (`module_01.web` through `module_06.support`).
+  - 3D tilt with subtle glare, corner brackets, and `data-cursor="open"`.
+  - 6 bespoke inline SVG motion scenes (`src/components/sections/scenes/`) with off-screen pause via `useInViewPlayback`:
+    - `WebAppScene`: Assembling UI cards, live chart, and system toast.
+    - `MobileAppScene`: Exploded isometric mobile layer stack with tap ripple.
+    - `EcommerceScene`: Cart-to-checkout pipeline with node progress and badge increment.
+    - `AutomationScene`: Ingestion-to-inference node network with active pulse indicator.
+    - `DesignScene`: Low-fi wireframe morphing into high-fidelity layout handles.
+    - `SupportScene`: Telemetry graph monitor with auto-healing anomaly spike and status shift.
+  - Delivery timeframes (`4 - 10 WEEKS`) and Estimator bridge CTA banner.
+- **Section /02 — Pipeline (`src/components/sections/Process.tsx` & `pipeline/DesktopPipelineTrack.tsx`):**
+  - Rebuilt as `"How we work"` simulating a predictable CI/CD engineering pipeline.
+  - Pinned GSAP ScrollTrigger track on desktop (`DesktopPipelineTrack.tsx`) scrubbed across 5 nodes (`01_discover` ... `05_grow`) with active nodes and synchronized `TypeLines` terminal execution logs; lazy chunked with `ssr: false`.
+  - Mobile/lite mode unpinned vertical step stack with `<Wipe>` reveals and plain, accessible copy.
+- **Section /03 — Selected Work (`src/components/sections/Work.tsx`):**
+  - Rebuilt as `"Things we're proud of"` featuring a scrolling mono `<Tape>` banner of project names.
+  - 3 flagship case study Windows with `<Tilt>`, corner brackets, and interactive `<Odometer>` metric HUD cards (`+142% CONVERSION VELOCITY`, `4.9 APP STORE RATING`, `-68% MANUAL PROCESSING HOURS`).
+  - Strict preservation of `[PLACEHOLDER]` prefix on client and project names.
+- **Section /04 — Signal & Proof (`src/components/sections/Proof.tsx`):**
+  - Rebuilt as `"Verified reliability"` opting into `data-theme="light"` for an intentional cream `#F6EFDD` rhythm break.
+  - 4 technical metric tiles with `<Odometer>` rolling statistics (`99.9% UPTIME`, `<4wks TO FIRST BUILD`, `100% TYPE SAFETY`, `0 LOCK-IN`).
+  - Terminal-style feedback log (`> CLIENT_FEEDBACK.LOG`) with carousel controls, typing quote lines, and signal red caret.
+  - Dev-only banner explicitly clarifying placeholder sample status.
+
+### Changed
+- `src/lib/motion/useInViewPlayback.ts`: Extended ref signature to accept `Element | null` for inline SVG element compatibility.
+- `src/components/fx/Wipe.tsx`: Added optional `delay` prop for staggered vertical reveals.
+- Route `/` production First Load JS verified at 193 kB (27 kB under the 220 kB budget).
+
+
 ## [R4: The Hero — Signature OS Interface] - 2026-10-08
 
 ### Added

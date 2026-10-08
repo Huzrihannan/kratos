@@ -1,191 +1,170 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import {
-  Quote,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck,
-  AlertTriangle,
-} from "lucide-react";
+import { AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Section } from "@/components/ui/Section";
+import { Window } from "@/components/ui/Window";
+import { Odometer } from "@/components/fx/Odometer";
+import { Decode } from "@/components/fx/Decode";
+import { TypeLines, TerminalLine } from "@/components/fx/TypeLines";
+import { Button } from "@/components/ui/Button";
 import { statsData, testimonialsData } from "@/content/proof";
-import { CountUp } from "@/components/fx/CountUp";
-import { Squish } from "@/components/fx/Squish";
+import { useLayoutModal } from "@/lib/modal-context";
 
 export function Proof() {
-  const prefersReducedMotion = useReducedMotion();
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const { openEstimator } = useLayoutModal();
+  const [activeTestimonialIdx, setActiveTestimonialIdx] = useState(0);
 
-  const nextTestimonial = () => {
-    setActiveTestimonial((prev) => (prev + 1) % testimonialsData.length);
-  };
+  const currentTestimonial = testimonialsData[activeTestimonialIdx];
 
-  const prevTestimonial = () => {
-    setActiveTestimonial((prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length);
-  };
-
-  const currentT = testimonialsData[activeTestimonial];
+  const testimonialLines: TerminalLine[] = [
+    {
+      prompt: ">",
+      text: `SESSION // RECORD #${String(activeTestimonialIdx + 1).padStart(4, "0")}`,
+      delay: 150,
+    },
+    {
+      prompt: ">",
+      text: `"${currentTestimonial.quote}"`,
+      delay: 400,
+    },
+    {
+      prompt: "✓",
+      text: `VERIFIED: ${currentTestimonial.author}, ${currentTestimonial.role} — ${currentTestimonial.company}`,
+      status: "ok",
+    },
+  ];
 
   return (
-    <section
+    <Section
       id="proof"
-      aria-label="Social Proof and Impact"
-      className="relative my-16 sm:my-24 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cocoa text-cream rounded-[40px] sm:rounded-[56px] overflow-hidden select-none"
+      eyebrow="/04 — SIGNAL"
+      dataTheme="light"
+      headline={
+        <span>
+          Verified <Decode text="reliability" speed={40} delay={200} />
+        </span>
+      }
+      description="Zero handoffs to junior contractors. Direct communication with senior systems engineers who take accountability for production stability."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted">
+          SIGNAL: VERIFIED // THEME: CREAM
+        </span>
+      }
     >
-      {/* Background ambient lighting */}
-      <div
-        className="pointer-events-none absolute -top-48 -right-48 w-96 h-96 rounded-full bg-orange/15 blur-3xl"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-48 -left-48 w-96 h-96 rounded-full bg-peach/10 blur-3xl"
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* Dev Placeholder Warning Notice */}
-        <div className="mb-10 p-3 sm:p-3.5 rounded-2xl bg-orange/15 border border-orange/30 text-butter flex items-center justify-between gap-3 text-xs font-mono max-w-2xl mx-auto">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-butter shrink-0" />
-            <span>[PLACEHOLDER] Notice: Statistics and testimonials are marked sample data.</span>
-          </div>
-          <span className="opacity-70 text-[10px] hidden sm:inline">PROD QA</span>
+      {/* DEV-ONLY BANNER: All data is [PLACEHOLDER] */}
+      <div className="mb-10 p-3 border border-line-strong/60 bg-surface/80 rounded-[2px] flex items-center justify-between text-xs font-mono text-fg select-none">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 text-red-text shrink-0" />
+          <span>
+            [DEV_NOTICE]: The metrics, statistics, and testimonials in this section are [PLACEHOLDER] sample records pending final production verification.
+          </span>
         </div>
+        <span className="text-[10px] uppercase font-bold text-red-text hidden md:inline">
+          DRAFT // SAMPLE_DATA
+        </span>
+      </div>
 
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ type: "spring", stiffness: 400, damping: 24 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cream/10 text-butter text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-cream/15"
+      {/* 4 ODOMETER STATS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {statsData.map((stat, idx) => (
+          <div
+            key={stat.id}
+            className="p-6 border border-line bg-surface flex flex-col justify-between rounded-[2px] transition-colors hover:border-line-strong"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-butter" />
-            <span>numbers that matter</span>
-          </motion.div>
-
-          <motion.h2
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-            className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-cream tracking-tight leading-[1.12]"
-          >
-            Built for engineering rigor.&nbsp;
-            <br className="hidden sm:inline" />
-            <span className="text-butter">Proven in production.</span>
-          </motion.h2>
-        </div>
-
-        {/* 4 Big Stat Blobs */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20">
-          {statsData.map((stat, idx) => (
-            <motion.div
-              key={stat.id}
-              initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.92, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 24,
-                delay: prefersReducedMotion ? 0 : idx * 0.08,
-              }}
-              className="p-6 sm:p-7 rounded-[32px] bg-cream/5 border border-cream/10 hover:border-orange/40 transition-colors flex flex-col justify-between"
-            >
-              <div>
-                <div className="font-display font-bold text-4xl sm:text-5xl md:text-6xl text-orange tracking-tight mb-2">
-                  <CountUp
-                    value={stat.targetValue}
-                    decimals={stat.targetValue % 1 !== 0 ? 1 : 0}
-                    prefix={stat.prefix}
-                    suffix={stat.suffix}
-                  />
-                </div>
-                <h3 className="font-display font-semibold text-sm sm:text-base text-cream mb-1">
-                  {stat.label}
-                </h3>
+            <div>
+              <div className="font-mono text-[10px] uppercase text-fg-muted mb-2 tracking-wider">
+                SYS_METRIC // 0{idx + 1}
               </div>
-              <p className="font-body text-cream/60 text-xs sm:text-xs leading-relaxed mt-2">
-                {stat.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
 
-        {/* Testimonials Speech Bubble Slider */}
-        <div className="max-w-3xl mx-auto">
-          <div className="relative p-8 sm:p-12 rounded-[40px] bg-cream/10 border-2 border-cream/15 shadow-2xl backdrop-blur-sm">
-            {/* Speech bubble pointer indicator */}
-            <div
-              className="absolute -bottom-4 left-14 w-8 h-8 bg-cream/10 border-r-2 border-b-2 border-cream/15 rotate-45"
-              aria-hidden="true"
+              <div className="font-mono text-3xl sm:text-4xl font-extrabold text-fg tracking-tight mb-2">
+                <Odometer
+                  value={stat.targetValue}
+                  prefix={stat.prefix}
+                  suffix={stat.suffix}
+                  className="text-red-text"
+                />
+              </div>
+
+              <div className="font-mono text-xs font-bold text-fg uppercase tracking-wide mb-1">
+                {stat.label}
+              </div>
+            </div>
+
+            <p className="font-sans text-xs text-fg-muted leading-relaxed mt-4 pt-3 border-t border-line/60">
+              {stat.description}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* CLIENT FEEDBACK TERMINAL WINDOW */}
+      <div className="max-w-4xl mx-auto w-full">
+        <Window
+          title="> client_feedback.log"
+          statusText="[VERIFIED_CLIENT]"
+          cornerBrackets={true}
+          className="border-line-strong bg-surface shadow-card"
+          headerRight={
+            <div className="flex items-center gap-1.5 font-mono text-xs text-fg-muted">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveTestimonialIdx(
+                    (prev) => (prev - 1 + testimonialsData.length) % testimonialsData.length
+                  )
+                }
+                className="p-1 hover:text-fg hover:bg-bg/50 rounded-[1px] transition-colors"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+              </button>
+              <span className="text-[11px] px-1">
+                {activeTestimonialIdx + 1}/{testimonialsData.length}
+              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveTestimonialIdx((prev) => (prev + 1) % testimonialsData.length)
+                }
+                className="p-1 hover:text-fg hover:bg-bg/50 rounded-[1px] transition-colors"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          }
+        >
+          <div className="p-2 sm:p-4 min-h-[160px] flex flex-col justify-between">
+            <TypeLines
+              key={currentTestimonial.id}
+              lines={testimonialLines}
+              className="text-sm sm:text-base leading-relaxed text-fg"
             />
 
-            <Quote className="w-10 h-10 text-butter/70 mb-4 stroke-[1.5]" />
+            <div className="mt-6 pt-3 border-t border-line flex flex-wrap items-center justify-between text-[11px] font-mono text-fg-muted gap-2">
+              <span>STATUS: PRODUCTION CLIENT</span>
+              <span className="text-red-text font-bold">INTEGRITY: 100% [SIGNED]</span>
+            </div>
+          </div>
+        </Window>
+      </div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentT.id}
-                initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="space-y-6"
-              >
-                <p className="font-display text-xl sm:text-2xl md:text-3xl text-cream font-medium leading-snug">
-                  &ldquo;{currentT.quote}&rdquo;
-                </p>
-
-                <div className="flex items-center justify-between pt-4 border-t border-cream/15">
-                  <div className="flex items-center gap-3.5">
-                    <div
-                      className={`w-11 h-11 rounded-full ${currentT.avatarColor} text-ink font-display font-bold text-base flex items-center justify-center`}
-                    >
-                      {currentT.author.charAt(currentT.author.indexOf("]") + 2)}
-                    </div>
-                    <div className="text-left">
-                      <div className="font-display font-bold text-base text-cream">
-                        {currentT.author}
-                      </div>
-                      <div className="text-xs text-cream/70 font-body">
-                        {currentT.role} • {currentT.company}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Navigation Arrows */}
-                  <div className="flex items-center gap-2">
-                    <Squish>
-                      <button
-                        type="button"
-                        onClick={prevTestimonial}
-                        aria-label="Previous testimonial"
-                        className="w-10 h-10 rounded-full bg-cream/10 hover:bg-orange hover:text-ink text-cream flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange"
-                      >
-                        <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
-                      </button>
-                    </Squish>
-
-                    <Squish>
-                      <button
-                        type="button"
-                        onClick={nextTestimonial}
-                        aria-label="Next testimonial"
-                        className="w-10 h-10 rounded-full bg-cream/10 hover:bg-orange hover:text-ink text-cream flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange"
-                      >
-                        <ChevronRight className="w-5 h-5 stroke-[2.5]" />
-                      </button>
-                    </Squish>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+      {/* Estimator Bridge Footer */}
+      <div className="mt-12 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <div className="font-mono text-sm font-bold text-fg">
+            Ready to deploy your next high-performance system?
+          </div>
+          <div className="font-sans text-xs text-fg-muted">
+            Book a direct technical architecture call with our lead engineers.
           </div>
         </div>
+
+        <Button variant="primary" size="md" onClick={openEstimator}>
+          Estimate my project
+        </Button>
       </div>
-    </section>
+    </Section>
   );
 }

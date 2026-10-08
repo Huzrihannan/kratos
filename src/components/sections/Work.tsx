@@ -1,205 +1,188 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  Sparkles,
-  ArrowRight,
-  TrendingUp,
-  Star,
-  Clock,
-  ArrowUpRight,
-} from "lucide-react";
-import { caseStudiesData } from "@/content/work";
-import { Squish } from "@/components/fx/Squish";
+import { ArrowRight, ExternalLink } from "lucide-react";
+import { Section } from "@/components/ui/Section";
+import { Window } from "@/components/ui/Window";
+import { Tilt } from "@/components/fx/Tilt";
+import { Tape } from "@/components/ui/Tape";
+import { Tag } from "@/components/ui/Tag";
+import { Odometer } from "@/components/fx/Odometer";
+import { Decode } from "@/components/fx/Decode";
 import { Button } from "@/components/ui/Button";
+import { caseStudiesData } from "@/content/work";
 import { useLayoutModal } from "@/lib/modal-context";
 
-export function Work() {
-  const prefersReducedMotion = useReducedMotion();
-  const { openEstimator } = useLayoutModal();
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+const WORK_TITLES: Record<string, string> = {
+  "fintech-portal": "project_01.novaledger",
+  "healthtech-mobile": "project_02.vitalsync",
+  "logistics-automation": "project_03.fleetroute",
+};
 
-  const renderMetricIcon = (metricValue: string) => {
-    if (metricValue.includes("★")) return <Star className="w-4 h-4 fill-butter text-butter" />;
-    if (metricValue.includes("-")) return <Clock className="w-4 h-4 text-orange" />;
-    return <TrendingUp className="w-4 h-4 text-[#25D366]" />;
-  };
+const WORK_STATUSES: Record<string, string> = {
+  "fintech-portal": "[PROD_V2]",
+  "healthtech-mobile": "[RELEASE_1.4]",
+  "logistics-automation": "[ACTIVE_DISPATCH]",
+};
+
+export function Work() {
+  const { openEstimator } = useLayoutModal();
+
+  const projectTapeNames = [
+    "[PLACEHOLDER] NOVALEDGER // FINTECH",
+    "[PLACEHOLDER] VITALSYNC // HEALTHTECH",
+    "[PLACEHOLDER] FLEETROUTE // LOGISTICS",
+  ];
 
   return (
-    <section
+    <Section
       id="work"
-      aria-label="Things we're proud of"
-      className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full select-none"
+      eyebrow="/03 — SELECTED WORK"
+      headline={
+        <span>
+          Things we&apos;re <Decode text="proud of" speed={40} delay={200} />
+        </span>
+      }
+      description="Production systems engineered for measurable business outcomes. Real architecture, strict security audits, and zero bloat."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+          ARCHIVE: 03_FLAGSHIP
+        </span>
+      }
     >
-      {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 sm:mb-20">
-        <div>
-          <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ type: "spring", stiffness: 400, damping: 24 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-orange" />
-            <span>things we&apos;re proud of</span>
-          </motion.div>
-
-          <motion.h2
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-            className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-[1.12]"
-          >
-            Real products.&nbsp;
-            <br className="hidden sm:inline" />
-            <span className="text-orange-deep">Measurable impact.</span>
-          </motion.h2>
-        </div>
-
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-          className="shrink-0"
-        >
-          <Squish>
-            <Link
-              href="/work"
-              className="inline-flex items-center gap-2 text-sm sm:text-base font-bold text-ink hover:text-orange-deep transition-colors py-2 px-4 rounded-full bg-peach/50 hover:bg-peach border border-peach focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange-deep"
-            >
-              <span>View all case studies</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Squish>
-        </motion.div>
+      {/* Ticker Tape of Flagship Projects */}
+      <div className="mb-8">
+        <Tape
+          items={projectTapeNames}
+          separator="///"
+          speed={30}
+          className="border-line bg-surface/30"
+        />
       </div>
 
-      {/* Case Study Cards: Grid on Desktop, Horizontal Scroll / Drag on Mobile */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {/* Case Studies Grid (Desktop 3-col grid; Mobile scrollable carousel) */}
+      <div className="flex overflow-x-auto pb-6 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 snap-x snap-mandatory">
         {caseStudiesData.map((study, idx) => {
-          const isHovered = hoveredCard === study.id;
+          const windowTitle = WORK_TITLES[study.id] || `project_0${idx + 1}.sys`;
+          const statusText = WORK_STATUSES[study.id] || "[VERIFIED]";
+
+          // Parse metric value for Odometer
+          const rawValue = study.metricValue.replace(/[^0-9.]/g, "");
+          const prefix = study.metricValue.startsWith("+") ? "+" : "";
+          const suffix = study.metricValue.endsWith("%")
+            ? "%"
+            : study.metricValue.endsWith("x")
+            ? "x"
+            : "";
 
           return (
-            <motion.div
+            <div
               key={study.id}
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 24,
-                delay: prefersReducedMotion ? 0 : idx * 0.1,
-              }}
-              onMouseEnter={() => setHoveredCard(study.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-              className="group rounded-[36px] bg-peach/45 hover:bg-peach/80 border-2 border-orange/20 hover:border-orange transition-all duration-300 p-6 sm:p-7 flex flex-col justify-between shadow-subtle hover:shadow-card overflow-hidden"
+              className="min-w-[280px] sm:min-w-0 w-full shrink-0 snap-center h-full"
             >
-              <div>
-                {/* Visual Preview Container with Signature Circular Portal Mask */}
-                <div className="relative w-full h-52 sm:h-56 rounded-[26px] bg-cream border border-orange/20 overflow-hidden mb-6 flex items-center justify-center p-4">
-                  {/* Circular mask that expands on card hover */}
-                  <div
-                    className={`relative w-40 h-40 rounded-full bg-peach/80 border-2 border-orange/30 flex items-center justify-center transition-all duration-500 overflow-hidden ${
-                      isHovered ? "scale-115 border-orange bg-orange/20" : "scale-100"
-                    }`}
-                  >
-                    {/* Abstract architectural wireframe illustration inside portal */}
-                    <div className="w-28 h-28 rounded-2xl bg-cream/90 shadow-sm border border-orange/25 p-3 flex flex-col justify-between transform -rotate-3 transition-transform duration-300 group-hover:rotate-0">
-                      <div className="flex items-center justify-between">
-                        <div className="w-4 h-4 rounded-full bg-orange/40" />
-                        <div className="w-8 h-2 rounded-full bg-ink/10" />
+              <Tilt maxTilt={4} glare={true} className="h-full">
+                <Window
+                  title={windowTitle}
+                  statusText={statusText}
+                  cornerBrackets={true}
+                  className="h-full flex flex-col justify-between border-line bg-surface/90 hover:border-line-strong transition-colors"
+                >
+                  <div className="flex flex-col gap-4">
+                    {/* Architectural Mockup Header */}
+                    <div className="relative w-full h-40 bg-bg border border-line/60 rounded-[2px] p-4 flex flex-col justify-between overflow-hidden select-none">
+                      {/* Grid registration lines */}
+                      <div
+                        className="absolute inset-0 pointer-events-none opacity-20"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)",
+                          backgroundSize: "20px 20px",
+                        }}
+                        aria-hidden="true"
+                      />
+
+                      <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-fg-muted/70 uppercase">
+                        <span>{study.industry}</span>
+                        <span className="text-red-text font-bold">CLIENT // ENCRYPTED</span>
                       </div>
-                      <div className="space-y-1.5">
-                        <div className="w-full h-2 rounded-full bg-ink/15" />
-                        <div className="w-3/4 h-2 rounded-full bg-ink/10" />
+
+                      {/* Mockup Center Graphic */}
+                      <div className="relative z-10 flex flex-col items-center justify-center my-auto py-2">
+                        <div className="font-mono text-2xl sm:text-3xl font-extrabold text-fg tracking-tight">
+                          <Odometer
+                            value={rawValue || 100}
+                            prefix={prefix}
+                            suffix={suffix}
+                            className="text-red-text"
+                          />
+                        </div>
+                        <span className="font-mono text-[10px] text-fg-muted uppercase tracking-wider mt-1">
+                          {study.metricLabel}
+                        </span>
                       </div>
-                      <div className="w-12 h-3 rounded-full bg-orange text-[9px] font-bold text-ink flex items-center justify-center">
-                        Active
+
+                      <div className="relative z-10 flex items-center justify-between text-[9px] font-mono text-fg-muted/60">
+                        <span>LATENCY: &lt;80MS</span>
+                        <span>STACK: VERIFIED</span>
                       </div>
+                    </div>
+
+                    {/* Title & Description */}
+                    <div>
+                      <h3 className="font-mono text-base sm:text-lg font-bold text-fg mb-1.5 leading-snug">
+                        {study.title}
+                      </h3>
+                      <p className="font-sans text-xs sm:text-sm text-fg-muted leading-relaxed line-clamp-3">
+                        {study.summary}
+                      </p>
+                    </div>
+
+                    {/* Technical Tags */}
+                    <div className="flex flex-wrap gap-1.5 pt-2 border-t border-line/50">
+                      {study.tags.slice(0, 4).map((tag, tIdx) => (
+                        <Tag key={tIdx}>
+                          {tag}
+                        </Tag>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Impact Metric Floating Badge */}
-                  <div className="absolute bottom-3 left-3 px-3.5 py-1.5 rounded-full bg-cocoa text-cream text-xs font-bold flex items-center gap-2 shadow-sm border border-cream/20">
-                    {renderMetricIcon(study.metricValue)}
-                    <span className="font-display tracking-tight text-butter text-sm">
-                      {study.metricValue}
-                    </span>
-                    <span className="text-[11px] font-normal text-cream/80">
-                      {study.metricLabel}
-                    </span>
-                  </div>
-
-                  {/* Industry tag top right */}
-                  <span className="absolute top-3 right-3 text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-cream/90 text-ink-soft border border-peach/80">
-                    {study.industry}
-                  </span>
-                </div>
-
-                {/* Case Study Meta & Title */}
-                <h3 className="font-display font-bold text-xl sm:text-2xl text-ink tracking-tight mb-2 leading-snug group-hover:text-orange-deep transition-colors">
-                  {study.title}
-                </h3>
-
-                <p className="font-body text-ink-soft text-xs sm:text-sm leading-relaxed mb-6">
-                  {study.summary}
-                </p>
-
-                {/* Tag Chips */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
-                  {study.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-cream text-ink-soft border border-orange/15"
+                  {/* Case Study Deep Link */}
+                  <div className="pt-6 mt-4 border-t border-line/50 flex items-center justify-between">
+                    <Link
+                      href={`/work/${study.slug}`}
+                      data-cursor="open"
+                      className="group/link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-fg font-semibold hover:text-red-text transition-colors"
                     >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                      <span>Read case study</span>
+                      <ArrowRight className="h-3.5 w-3.5 transform group-hover/link:translate-x-1 transition-transform" />
+                    </Link>
 
-              {/* Link Footer */}
-              <div className="pt-4 border-t border-orange/15 flex items-center justify-between">
-                <Squish>
-                  <Link
-                    href={`/work#${study.id}`}
-                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-ink hover:text-orange-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-deep rounded p-1"
-                  >
-                    <span>Read case study</span>
-                    <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-                  </Link>
-                </Squish>
-
-                <span className="text-[11px] font-mono text-ink-soft/60">
-                  {study.clientName}
-                </span>
-              </div>
-            </motion.div>
+                    <ExternalLink className="h-3.5 w-3.5 text-fg-muted/50" />
+                  </div>
+                </Window>
+              </Tilt>
+            </div>
           );
         })}
       </div>
 
-      {/* Estimator Hook Button */}
-      <div className="mt-14 sm:mt-16 text-center">
-        <Button
-          variant="primary"
-          size="md"
-          onClick={(e) => {
-            e.preventDefault();
-            openEstimator();
-          }}
-          withArrow
-          className="text-base"
-        >
-          Have a similar project in mind? Let&apos;s talk
+      {/* Estimator Bridge Footer */}
+      <div className="mt-12 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="space-y-0.5 text-center sm:text-left">
+          <div className="font-mono text-xs font-bold text-fg">
+            Have a project with similar technical complexity?
+          </div>
+          <div className="font-sans text-xs text-fg-muted">
+            We will review your architecture and provide an honest scope estimate.
+          </div>
+        </div>
+
+        <Button variant="primary" size="md" onClick={openEstimator}>
+          Estimate my project
         </Button>
       </div>
-    </section>
+    </Section>
   );
 }

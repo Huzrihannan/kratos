@@ -2,208 +2,184 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import {
-  Globe,
-  Smartphone,
-  ShoppingBag,
-  Cpu,
-  Palette,
-  ShieldCheck,
-  ArrowRight,
-  Check,
-  Sparkles,
-} from "lucide-react";
-import { servicesData, ServiceItem } from "@/content/services";
-import { Squish } from "@/components/fx/Squish";
+import { ArrowRight, Plus } from "lucide-react";
+import { Section } from "@/components/ui/Section";
+import { Window } from "@/components/ui/Window";
+import { Tilt } from "@/components/fx/Tilt";
 import { Button } from "@/components/ui/Button";
+import { Decode } from "@/components/fx/Decode";
+import { servicesData } from "@/content/services";
+import dynamic from "next/dynamic";
 import { useLayoutModal } from "@/lib/modal-context";
 
-export function Services() {
-  const prefersReducedMotion = useReducedMotion();
-  const { openEstimator } = useLayoutModal();
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+const WebAppScene = dynamic(
+  () => import("./scenes/WebAppScene").then((m) => m.WebAppScene),
+  { ssr: false }
+);
+const MobileAppScene = dynamic(
+  () => import("./scenes/MobileAppScene").then((m) => m.MobileAppScene),
+  { ssr: false }
+);
+const EcommerceScene = dynamic(
+  () => import("./scenes/EcommerceScene").then((m) => m.EcommerceScene),
+  { ssr: false }
+);
+const AutomationScene = dynamic(
+  () => import("./scenes/AutomationScene").then((m) => m.AutomationScene),
+  { ssr: false }
+);
+const DesignScene = dynamic(
+  () => import("./scenes/DesignScene").then((m) => m.DesignScene),
+  { ssr: false }
+);
+const SupportScene = dynamic(
+  () => import("./scenes/SupportScene").then((m) => m.SupportScene),
+  { ssr: false }
+);
 
-  const getServiceIcon = (iconName: ServiceItem["iconName"]) => {
-    const iconClass = "w-7 h-7 stroke-[2.2] text-ink";
-    switch (iconName) {
-      case "Globe":
-        return <Globe className={iconClass} />;
-      case "Smartphone":
-        return <Smartphone className={iconClass} />;
-      case "ShoppingBag":
-        return <ShoppingBag className={iconClass} />;
-      case "Cpu":
-        return <Cpu className={iconClass} />;
-      case "Palette":
-        return <Palette className={iconClass} />;
-      case "ShieldCheck":
-        return <ShieldCheck className={iconClass} />;
+const MODULE_TITLES: Record<string, string> = {
+  "web-apps": "module_01.web",
+  "mobile-apps": "module_02.mobile",
+  "ecommerce": "module_03.ecommerce",
+  "ai-automation": "module_04.automation",
+  "ui-ux-design": "module_05.design",
+  "maintenance-support": "module_06.support",
+};
+
+export function Services() {
+  const { openEstimator } = useLayoutModal();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const renderScene = (id: string, isHovered: boolean) => {
+    switch (id) {
+      case "web-apps":
+        return <WebAppScene isHovered={isHovered} />;
+      case "mobile-apps":
+        return <MobileAppScene isHovered={isHovered} />;
+      case "ecommerce":
+        return <EcommerceScene isHovered={isHovered} />;
+      case "ai-automation":
+        return <AutomationScene isHovered={isHovered} />;
+      case "ui-ux-design":
+        return <DesignScene isHovered={isHovered} />;
+      case "maintenance-support":
+        return <SupportScene isHovered={isHovered} />;
       default:
-        return <Globe className={iconClass} />;
+        return <WebAppScene isHovered={isHovered} />;
     }
   };
 
   return (
-    <section
+    <Section
       id="services"
-      aria-label="Services"
-      className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full select-none"
+      eyebrow="/01 — MODULES"
+      headline={
+        <span>
+          What we <Decode text="build" speed={40} delay={200} />
+        </span>
+      }
+      description="Six core engineering modules. Modular architecture, strict TypeScript, zero technical debt. Built to deploy fast and stay maintainable for years."
+      hud={
+        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+          CATALOG: 06_ACTIVE
+        </span>
+      }
     >
-      {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-        <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-orange" />
-          <span>what we build</span>
-        </motion.div>
-
-        <motion.h2
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.08 }}
-          className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-ink tracking-tight leading-[1.12]"
-        >
-          Strong architecture underneath.&nbsp;
-          <br className="hidden sm:inline" />
-          <span className="text-orange-deep">Friendly to use</span> on top.
-        </motion.h2>
-
-        <motion.p
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ type: "spring", stiffness: 400, damping: 24, delay: 0.15 }}
-          className="font-body text-ink-soft text-base sm:text-lg md:text-xl mt-4 leading-relaxed max-w-2xl mx-auto"
-        >
-          Every product we build is designed for zero jargon, rock-solid stability,
-          and immediate business outcomes.
-        </motion.p>
-      </div>
-
-      {/* 6 Large Squishy Pill-Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+      {/* 6 Modules Grid (3 columns on desktop, 1 on mobile) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pt-4 pb-12">
         {servicesData.map((service, index) => {
-          const isHovered = hoveredCard === service.id;
+          const isHovered = hoveredIndex === index;
+          const moduleTitle = MODULE_TITLES[service.id] || `module_0${index + 1}.sys`;
 
           return (
-            <motion.div
+            <div
               key={service.id}
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 24,
-                delay: prefersReducedMotion ? 0 : index * 0.06,
-              }}
-              onMouseEnter={() => setHoveredCard(service.id)}
-              onMouseLeave={() => setHoveredCard(null)}
-              className="relative group rounded-[32px] sm:rounded-[36px] bg-peach/45 hover:bg-peach/80 border-2 border-orange/20 hover:border-orange transition-all duration-300 p-7 sm:p-8 flex flex-col justify-between shadow-subtle hover:shadow-card overflow-hidden"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="h-full"
             >
-              {/* Background ambient circular portal glow */}
-              <div
-                className={`absolute -right-12 -top-12 w-44 h-44 rounded-full bg-orange/15 transition-all duration-500 pointer-events-none blur-2xl ${
-                  isHovered ? "scale-150 opacity-100 bg-orange/25" : "scale-100 opacity-50"
-                }`}
-                aria-hidden="true"
-              />
+              <Tilt maxTilt={4} glare={true} className="h-full">
+                <Window
+                  title={moduleTitle}
+                  statusText={`[0${index + 1}]`}
+                  cornerBrackets={true}
+                  className="h-full flex flex-col justify-between border-line bg-surface/90 hover:border-line-strong transition-colors"
+                >
+                  <div className="flex flex-col gap-4">
+                    {/* Inline SVG Motion Scene */}
+                    <div className="w-full bg-bg/50 border border-line/60 rounded-[2px] p-2 overflow-hidden">
+                      {renderScene(service.id, isHovered)}
+                    </div>
 
-              <div>
-                {/* Header: Portal Circle + Title */}
-                <div className="flex items-center justify-between gap-4 mb-6">
-                  {/* Signature Circular Portal Cutout Icon */}
-                  <div
-                    className={`relative w-14 h-14 rounded-full bg-cream border-2 border-orange/40 flex items-center justify-center transition-all duration-300 shadow-sm ${
-                      isHovered ? "scale-110 bg-orange border-orange-deep shadow-glow" : ""
-                    }`}
-                  >
-                    {getServiceIcon(service.iconName)}
+                    {/* Title & One-Line Promise */}
+                    <div>
+                      <h3 className="font-mono text-base sm:text-lg font-bold text-fg mb-1.5 flex items-center gap-2">
+                        <span>{service.title}</span>
+                      </h3>
+                      <p className="font-sans text-xs sm:text-sm text-fg-muted leading-relaxed">
+                        {service.shortPromise}
+                      </p>
+                    </div>
+
+                    {/* 3 Outcomes marked with '+' lines */}
+                    <div className="space-y-1.5 pt-2 border-t border-line/50">
+                      {service.outcomes.map((outcome, oIdx) => (
+                        <div
+                          key={oIdx}
+                          className="flex items-start gap-2 text-[11px] sm:text-xs font-mono text-fg-muted leading-snug"
+                        >
+                          <Plus className="h-3 w-3 text-red-text shrink-0 mt-0.5" />
+                          <span>{outcome}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Tags Pill */}
-                  <span className="text-[11px] font-mono font-medium px-3 py-1 rounded-full bg-cream/90 text-ink-soft border border-peach/80">
-                    {service.tags[0]}
-                  </span>
-                </div>
+                  {/* Open Module Action Link */}
+                  <div className="pt-6 mt-4 border-t border-line/50 flex items-center justify-between">
+                    <Link
+                      href={`/services/${service.slug}`}
+                      data-cursor="open"
+                      className="group/link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-fg font-semibold hover:text-red-text transition-colors"
+                    >
+                      <span>Open module</span>
+                      <ArrowRight className="h-3.5 w-3.5 transform group-hover/link:translate-x-1 transition-transform" />
+                    </Link>
 
-                <h3 className="font-display font-bold text-2xl sm:text-[1.65rem] text-ink tracking-tight mb-2.5 group-hover:text-ink transition-colors leading-snug">
-                  {service.title}
-                </h3>
-
-                <p className="font-body text-ink-soft text-sm sm:text-base leading-relaxed mb-6">
-                  {service.shortPromise}
-                </p>
-
-                {/* 3 Bullet Outcomes */}
-                <ul className="space-y-2.5 mb-8">
-                  {service.outcomes.map((outcome, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-ink/85 font-body">
-                      <div className="w-5 h-5 rounded-full bg-orange/25 text-ink-soft flex items-center justify-center shrink-0 mt-0.5">
-                        <Check className="w-3.5 h-3.5 stroke-[3] text-ink" />
-                      </div>
-                      <span className="leading-snug">{outcome}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Card Footer: Learn More Link with Squish */}
-              <div className="pt-4 border-t border-orange/15 flex items-center justify-between">
-                <Squish>
-                  <Link
-                    href={`/services#${service.id}`}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-ink hover:text-orange-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-deep rounded-full py-1 px-1"
-                  >
-                    <span>Explore service</span>
-                    <div className="w-6 h-6 rounded-full bg-ink text-cream group-hover:bg-orange group-hover:text-ink flex items-center justify-center transition-colors">
-                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
-                    </div>
-                  </Link>
-                </Squish>
-
-                <span className="text-xs font-mono text-ink-soft/70">
-                  0{index + 1}
-                </span>
-              </div>
-            </motion.div>
+                    <span className="font-mono text-[10px] text-fg-muted/60 uppercase tracking-widest">
+                      {service.timeframe}
+                    </span>
+                  </div>
+                </Window>
+              </Tilt>
+            </div>
           );
         })}
       </div>
 
-      {/* Mid-Page Path to Estimator */}
-      <motion.div
-        initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-30px" }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        className="mt-14 sm:mt-16 text-center"
-      >
-        <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 p-2 sm:p-2.5 rounded-full bg-peach/40 border border-peach/80">
-          <span className="text-sm text-ink-soft font-body px-4">
-            Not sure which architecture fits your roadmap?
-          </span>
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={(e) => {
-              e.preventDefault();
-              openEstimator();
-            }}
-            withArrow
-            className="text-sm min-h-[42px]"
-          >
-            Calculate ballpark estimate
-          </Button>
+      {/* Estimator Bridge Banner */}
+      <div className="w-full border border-line bg-surface p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="space-y-1">
+          <div className="font-mono text-xs uppercase tracking-wider text-red-text font-semibold">
+            [ ESTIMATION_ENGINE ]
+          </div>
+          <div className="font-mono text-sm sm:text-base font-bold text-fg">
+            Need a tailored architecture for your specific business requirements?
+          </div>
+          <p className="font-sans text-xs sm:text-sm text-fg-muted">
+            Configure your technical modules, scope, and target timeframe in under 2 minutes.
+          </p>
         </div>
-      </motion.div>
-    </section>
+
+        <Button
+          variant="primary"
+          size="md"
+          onClick={openEstimator}
+          className="shrink-0"
+        >
+          Configure project
+        </Button>
+      </div>
+    </Section>
   );
 }

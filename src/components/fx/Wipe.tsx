@@ -7,6 +7,7 @@ import { useMotionLevel } from "@/lib/motion/MotionContext";
 export interface WipeProps {
   children: React.ReactNode;
   trigger?: boolean;
+  delay?: number;
   duration?: number; // ms or seconds
   direction?: "right" | "left" | "down" | "up";
   className?: string;
@@ -15,6 +16,7 @@ export interface WipeProps {
 export function Wipe({
   children,
   trigger = true,
+  delay = 0,
   duration = 650,
   direction = "right",
   className = "",
@@ -33,10 +35,10 @@ export function Wipe({
     if (trigger) {
       const timeout = setTimeout(() => {
         setUnmasked(true);
-      }, 50);
+      }, Math.max(50, delay));
       return () => clearTimeout(timeout);
     }
-  }, [trigger, isOff]);
+  }, [trigger, isOff, delay]);
 
   const initialClip =
     direction === "left"
