@@ -140,7 +140,7 @@ export function Services() {
                     <Link
                       href={`/services/${service.slug}`}
                       data-cursor="open"
-                      className="group/link inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-fg font-semibold hover:text-red-text transition-colors"
+                      className="group/link inline-flex items-center gap-2 py-2 min-h-[44px] font-mono text-xs uppercase tracking-wider text-fg font-semibold hover:text-red-text transition-colors"
                     >
                       <span>Open module</span>
                       <ArrowRight className="h-3.5 w-3.5 transform group-hover/link:translate-x-1 transition-transform" />

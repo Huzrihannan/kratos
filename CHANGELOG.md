@@ -2,6 +2,39 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R11: Final QA, Multi-Device Release Verification, and Brand Sign-Off] - 2026-10-08
+
+### Added
+- **Automated E2E Flow & Touch Target Audit Script (`scripts/verify-e2e-flows.mjs`):**
+  - Programmatic Chrome DevTools Protocol verification covering Estimator configurator flow, Cmd+K command palette, mobile touch target sizes, and 404 Kernel panic page.
+- **Multi-Device Release Matrix Capture Script (`scripts/capture-release-matrix.mjs`):**
+  - Automated high-resolution screenshot generation across 360px, 768px, 1280px, 1920px, and Light Theme.
+- **Visual Artifacts:**
+  - `r11-home-mobile-360.png`: Mobile home view at 360px width with 44px touch targets.
+  - `r11-home-tablet-768.png`: Tablet home view at 768px width.
+  - `r11-home-desktop-1280.png`: Standard desktop view at 1280px width with 3 interactive OS windows.
+  - `r11-home-wide-1920.png`: Ultra-wide desktop view at 1920px width.
+  - `r11-home-light-desktop-1280.png`: Light theme validation (`#F6EFDD` cream background, `#C8102E` red text).
+  - `r11-estimator-desktop-1280.png`: Two-column Estimator configurator with live `krat.config.json` compilation.
+  - `r11-services-desktop-1280.png`: Services overview page with sticky navigation.
+  - `r11-work-desktop-1280.png`: Work portfolio page with GSAP Flip filter chips.
+  - `r11-kernel-panic-mobile-360.png`: 404 Kernel panic exception screen.
+
+### Changed & Optimized
+- **Mobile Touch Targets (44px Baseline):**
+  - Enhanced Nav theme toggle button to `min-h-[44px] min-w-[44px]` on mobile devices.
+  - Enhanced Nav mobile hamburger button `[MENU]` to `min-h-[44px] px-3.5`.
+  - Enhanced ContactDock trigger button to `min-h-[44px] min-w-[44px] px-3.5 py-2.5`.
+  - Enhanced Services "Open module" link touch area to `min-h-[44px] py-2`.
+- **Quality Gate Sign-Off:**
+  - **Lighthouse Performance:** Home Desktop **97**, Work Mobile **84**, Start Mobile **85**, Services Mobile **82**, Contact Mobile **81**.
+  - **Lighthouse Accessibility:** **96–100** across all routes.
+  - **Lighthouse Best Practices:** **96–100** across all routes.
+  - **Lighthouse SEO:** **100** across all routes.
+  - **Core Web Vitals:** CLS ≤ **0.04** on all routes (budget < 0.05), LCP **1.0s** on desktop (budget < 2.5s), TBT **60ms** on desktop.
+  - **First Load JS Bundle Budget:** All routes strictly ≤ **197 kB** gzipped (well under the 220 kB budget).
+  - **Zero Regressions:** 0 TypeScript errors, 0 ESLint warnings.
+
 ## [R10: Transactional Emails, OpenGraph Card, SEO Architecture, and 301 Redirects] - 2026-10-08
 
 ### Added

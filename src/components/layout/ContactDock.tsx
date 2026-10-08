@@ -136,7 +136,7 @@ export function ContactDock() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
-        className="flex items-center gap-2.5 px-3 py-2 border border-line-strong bg-surface hover:bg-surface/90 text-fg shadow-lg rounded-[2px] active:translate-y-[1px] transition-all text-xs uppercase tracking-wider"
+        className="flex items-center gap-2.5 px-3.5 py-2.5 min-h-[44px] min-w-[44px] border border-line-strong bg-surface hover:bg-surface/90 text-fg shadow-lg rounded-[2px] active:translate-y-[1px] transition-all text-xs uppercase tracking-wider"
         data-cursor="click"
       >
         <span className="h-2 w-2 rounded-full bg-ok animate-pulse" />

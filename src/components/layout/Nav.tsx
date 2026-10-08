@@ -146,7 +146,7 @@ export function Nav() {
               <button
                 type="button"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="inline-flex items-center justify-center h-8 w-8 border border-line bg-surface hover:border-line-strong text-fg font-mono text-xs transition-colors rounded-[2px]"
+                className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] border border-line bg-surface hover:border-line-strong text-fg font-mono text-xs sm:text-[11px] transition-colors rounded-[2px]"
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
                 aria-label="Toggle Theme"
                 data-cursor="click"
@@ -154,7 +154,7 @@ export function Nav() {
                 {theme === 'dark' ? '☼' : '☽'}
               </button>
             ) : (
-              <div className="h-8 w-8" aria-hidden="true" />
+              <div className="min-h-[44px] min-w-[44px]" aria-hidden="true" />
             )}
 
             {/* Primary CTA Button */}
@@ -171,7 +171,7 @@ export function Nav() {
               ref={hamburgerButtonRef}
               type="button"
               onClick={() => setMobileNavOpen(true)}
-              className="md:hidden flex items-center gap-1 px-2.5 py-1 border border-line bg-surface text-fg font-mono text-xs uppercase tracking-wider rounded-[2px]"
+              className="md:hidden flex items-center justify-center min-h-[44px] px-3.5 border border-line bg-surface text-fg font-mono text-xs uppercase tracking-wider rounded-[2px]"
               aria-label="Open mobile menu"
               aria-expanded={isMobileNavOpen}
             >

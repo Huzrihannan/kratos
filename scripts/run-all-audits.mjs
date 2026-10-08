@@ -6,6 +6,7 @@ const routes = [
   { name: "services", path: "/services" },
   { name: "work", path: "/work" },
   { name: "start", path: "/start" },
+  { name: "contact", path: "/contact" },
 ];
 
 const results = {};
