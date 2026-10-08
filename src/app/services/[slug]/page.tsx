@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { servicesData } from "@/content/services";
 import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
 import { Accordion } from "@/components/ui/Accordion";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { Decode } from "@/components/fx/Decode";
@@ -60,8 +61,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const relatedStudies = caseStudiesData.filter((cs) =>
-    service.relatedWorkSlugs.includes(cs.id)
+  const relatedStudies = caseStudiesData.filter(
+    (cs) => service.relatedWorkSlugs.includes(cs.id) && isPublishable(cs)
   );
 
   const jsonLd = {
@@ -317,7 +318,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   </div>
 
                   <h3 className="text-base sm:text-lg font-bold text-fg mb-2">
-                    {cs.title.replace("[PLACEHOLDER] ", "")}
+                    {cs.title}
                   </h3>
 
                   <p className="font-sans text-xs text-fg-muted leading-relaxed mb-4">
@@ -384,15 +385,17 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <EstimatorButton size="lg" withArrow>
                   Estimate this module
                 </EstimatorButton>
-                <a
-                  href={siteConfig.contact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
-                >
-                  <MessageCircle className="w-3.5 h-3.5 text-ok" />
-                  <span>Chat on WhatsApp</span>
-                </a>
+                {siteConfig.contact.whatsappUrl ? (
+                  <a
+                    href={siteConfig.contact.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-ok" />
+                    <span>Chat on WhatsApp</span>
+                  </a>
+                ) : null}
               </div>
             </div>
           </Window>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Quote, MessageCircle } from "lucide-react";
 import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { Decode } from "@/components/fx/Decode";
 import { Odometer } from "@/components/fx/Odometer";
@@ -16,14 +17,14 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return caseStudiesData.map((study) => ({
+  return caseStudiesData.filter(isPublishable).map((study) => ({
     slug: study.slug,
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const study = caseStudiesData.find((s) => s.slug === slug);
+  const study = caseStudiesData.find((s) => s.slug === slug && isPublishable(s));
 
   if (!study) {
     return {
@@ -31,16 +32,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const cleanTitle = study.title.replace("[PLACEHOLDER] ", "");
-
   return {
-    title: `${cleanTitle} | Case Study | Krat.OS`,
+    title: `${study.title} | Case Study | Krat.OS`,
     description: study.summary,
     alternates: {
       canonical: `/work/${study.slug}`,
     },
     openGraph: {
-      title: `${cleanTitle} | Krat.OS Case Study`,
+      title: `${study.title} | Krat.OS Case Study`,
       description: study.summary,
       url: `/work/${study.slug}`,
     },
@@ -49,15 +48,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CaseStudyDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const study = caseStudiesData.find((s) => s.slug === slug);
+  const study = caseStudiesData.find((s) => s.slug === slug && isPublishable(s));
 
   if (!study) {
     notFound();
   }
 
-  const cleanTitle = study.title.replace("[PLACEHOLDER] ", "");
-  const cleanClient = study.clientName.replace("[PLACEHOLDER] ", "");
-  const nextStudy = caseStudiesData.find((s) => s.slug === study.nextSlug);
+  const cleanTitle = study.title;
+  const cleanClient = study.clientName;
+  const nextStudy = caseStudiesData.find((s) => s.slug === study.nextSlug && isPublishable(s));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -342,7 +341,7 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 </span>
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-fg">
-                {nextStudy.title.replace("[PLACEHOLDER] ", "")}
+                {nextStudy.title}
               </h3>
               <p className="font-sans text-xs text-fg-muted mt-1">
                 {nextStudy.summary}
@@ -376,15 +375,17 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
                 <EstimatorButton size="lg" withArrow>
                   Estimate my project
                 </EstimatorButton>
-                <a
-                  href={siteConfig.contact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
-                >
-                  <MessageCircle className="w-3.5 h-3.5 text-ok" />
-                  <span>Chat on WhatsApp</span>
-                </a>
+                {siteConfig.contact.whatsappUrl ? (
+                  <a
+                    href={siteConfig.contact.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors text-xs uppercase"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-ok" />
+                    <span>Chat on WhatsApp</span>
+                  </a>
+                ) : null}
               </div>
             </div>
           </Window>

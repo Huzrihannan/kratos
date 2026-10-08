@@ -12,6 +12,7 @@ import { Odometer } from "@/components/fx/Odometer";
 import { Decode } from "@/components/fx/Decode";
 import { Button } from "@/components/ui/Button";
 import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
 import { useLayoutModal } from "@/lib/modal-context";
 
 const WORK_TITLES: Record<string, string> = {
@@ -28,12 +29,11 @@ const WORK_STATUSES: Record<string, string> = {
 
 export function Work() {
   const { openEstimator } = useLayoutModal();
+  const publishableStudies = caseStudiesData.filter(isPublishable);
 
-  const projectTapeNames = [
-    "[PLACEHOLDER] NOVALEDGER // FINTECH",
-    "[PLACEHOLDER] VITALSYNC // HEALTHTECH",
-    "[PLACEHOLDER] FLEETROUTE // LOGISTICS",
-  ];
+  const projectTapeNames = publishableStudies.map(
+    (s) => `${s.title.toUpperCase()} // ${s.industry.toUpperCase()}`
+  );
 
   return (
     <Section
@@ -52,18 +52,20 @@ export function Work() {
       }
     >
       {/* Ticker Tape of Flagship Projects */}
-      <div className="mb-8">
-        <Tape
-          items={projectTapeNames}
-          separator="///"
-          speed={30}
-          className="border-line bg-surface/30"
-        />
-      </div>
+      {projectTapeNames.length > 0 && (
+        <div className="mb-8">
+          <Tape
+            items={projectTapeNames}
+            separator="///"
+            speed={30}
+            className="border-line bg-surface/30"
+          />
+        </div>
+      )}
 
       {/* Case Studies Grid (Desktop 3-col grid; Mobile scrollable carousel) */}
       <div className="flex overflow-x-auto pb-6 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 snap-x snap-mandatory">
-        {caseStudiesData.map((study, idx) => {
+        {publishableStudies.map((study, idx) => {
           const windowTitle = WORK_TITLES[study.id] || `project_0${idx + 1}.sys`;
           const statusText = WORK_STATUSES[study.id] || "[VERIFIED]";
 

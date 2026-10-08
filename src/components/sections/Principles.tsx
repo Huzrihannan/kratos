@@ -20,7 +20,7 @@ export function Principles() {
       id: "direct-engineers",
       windowTitle: "principle_01.comms",
       badge: "[NO_MIDDLEMEN]",
-      title: "[PLACEHOLDER] Talk directly to the engineers building your code",
+      title: "Talk directly to the engineers building your code",
       shortSummary:
         "Zero account-manager telephone games. When you have a product question, you discuss architecture directly with senior engineers.",
       scene: <ChatStreamScene />,
@@ -35,7 +35,7 @@ export function Principles() {
       id: "fixed-scope",
       windowTitle: "principle_02.scope",
       badge: "[FIXED_MILESTONES]",
-      title: "[PLACEHOLDER] Fixed milestones, zero surprise bills",
+      title: "Fixed milestones, zero surprise bills",
       shortSummary:
         "We scope projects down to concrete milestones before starting. What we quote is what you invest—guaranteed.",
       scene: <ScopeChecklistScene />,
@@ -50,7 +50,7 @@ export function Principles() {
       id: "post-launch",
       windowTitle: "principle_03.warranty",
       badge: "[POST_LAUNCH_SLA]",
-      title: "[PLACEHOLDER] We stay in your corner after launch",
+      title: "We stay in your corner after launch",
       shortSummary:
         "Shipping is just day one. We include 30 days of complimentary bug warranty and offer flexible monthly engineering retainers.",
       scene: <HeartbeatScene />,

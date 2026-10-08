@@ -11,11 +11,16 @@ import { Decode } from '@/components/fx/Decode';
 import { Glitch } from '@/components/fx/Glitch';
 import { Magnetic } from '@/components/fx/Magnetic';
 
+import { caseStudiesData } from '@/content/work';
+import { isPublishable } from '@/lib/content-status';
+
+const hasPublishedWork = caseStudiesData.some(isPublishable);
+
 const NAV_LINKS = [
   { href: '/services', label: 'Services', index: '01' },
-  { href: '/work', label: 'Work', index: '02' },
-  { href: '/about', label: 'About', index: '03' },
-  { href: '/contact', label: 'Contact', index: '04' },
+  ...(hasPublishedWork ? [{ href: '/work', label: 'Work', index: '02' }] : []),
+  { href: '/about', label: 'About', index: hasPublishedWork ? '03' : '02' },
+  { href: '/contact', label: 'Contact', index: hasPublishedWork ? '04' : '03' },
 ];
 
 export function Nav() {

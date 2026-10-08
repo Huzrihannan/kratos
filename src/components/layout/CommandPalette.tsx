@@ -8,6 +8,8 @@ import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { useLayoutModal } from '@/lib/modal-context';
 import { trackEvent } from '@/lib/analytics';
 import { siteConfig } from '@/content/site';
+import { caseStudiesData } from '@/content/work';
+import { isPublishable } from '@/lib/content-status';
 
 export function CommandPalette() {
   const router = useRouter();
@@ -132,23 +134,27 @@ export function CommandPalette() {
                 <span className="opacity-60 text-[10px]">[LAUNCH]</span>
               </Command.Item>
 
-              <Command.Item
-                value="book a 15-min call calendar meeting"
-                onSelect={() => runCommand(() => router.push(siteConfig.contact.bookingUrl), 'book_call')}
-                className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
-              >
-                <span>[→] Book a 15-min Call</span>
-                <span className="opacity-60 text-[10px]">[CALENDAR]</span>
-              </Command.Item>
+              {siteConfig.contact.bookingUrl ? (
+                <Command.Item
+                  value="book a 15-min call calendar meeting"
+                  onSelect={() => runCommand(() => router.push(siteConfig.contact.bookingUrl), 'book_call')}
+                  className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
+                >
+                  <span>[→] Book a 15-min Call</span>
+                  <span className="opacity-60 text-[10px]">[CALENDAR]</span>
+                </Command.Item>
+              ) : null}
 
-              <Command.Item
-                value="chat on whatsapp instant message support"
-                onSelect={() => runCommand(() => window.open(siteConfig.contact.whatsappUrl, '_blank'), 'whatsapp')}
-                className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
-              >
-                <span>[WA] Chat on WhatsApp</span>
-                <span className="opacity-60 text-[10px]">[EXTERNAL]</span>
-              </Command.Item>
+              {siteConfig.contact.whatsappUrl ? (
+                <Command.Item
+                  value="chat on whatsapp instant message support"
+                  onSelect={() => runCommand(() => window.open(siteConfig.contact.whatsappUrl, '_blank'), 'whatsapp')}
+                  className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
+                >
+                  <span>[WA] Chat on WhatsApp</span>
+                  <span className="opacity-60 text-[10px]">[EXTERNAL]</span>
+                </Command.Item>
+              ) : null}
 
               <Command.Item
                 value="email us contact message engineering"
@@ -177,7 +183,9 @@ export function CommandPalette() {
               {[
                 { label: 'Home (~/)', path: '/' },
                 { label: 'Services (~/services)', path: '/services' },
-                { label: 'Work & Case Studies (~/work)', path: '/work' },
+                ...(caseStudiesData.some(isPublishable)
+                  ? [{ label: 'Work & Case Studies (~/work)', path: '/work' }]
+                  : []),
                 { label: 'About Krat.OS (~/about)', path: '/about' },
                 { label: 'Contact (~/contact)', path: '/contact' },
                 { label: 'Design System Lab (~/design-system)', path: '/design-system' },

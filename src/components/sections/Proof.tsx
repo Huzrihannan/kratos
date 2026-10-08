@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { Window } from "@/components/ui/Window";
 import { Odometer } from "@/components/fx/Odometer";
@@ -52,18 +52,6 @@ export function Proof() {
         </span>
       }
     >
-      {/* DEV-ONLY BANNER: All data is [PLACEHOLDER] */}
-      <div className="mb-10 p-3 border border-line-strong/60 bg-surface/80 rounded-[2px] flex items-center justify-between text-xs font-mono text-fg select-none">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-red-text shrink-0" />
-          <span>
-            [DEV_NOTICE]: The metrics, statistics, and testimonials in this section are [PLACEHOLDER] sample records pending final production verification.
-          </span>
-        </div>
-        <span className="text-[10px] uppercase font-bold text-red-text hidden md:inline">
-          DRAFT // SAMPLE_DATA
-        </span>
-      </div>
 
       {/* 4 ODOMETER STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

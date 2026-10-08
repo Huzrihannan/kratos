@@ -42,24 +42,32 @@ export function ContactDock() {
   }
 
   const channels = [
-    {
-      id: 'whatsapp',
-      label: 'Chat on WhatsApp',
-      sublabel: 'Typical response < 15m',
-      href: siteConfig.contact.whatsappUrl,
-      icon: MessageCircle,
-      external: true,
-      onClick: () => trackEvent('whatsapp_click', { location: 'contact_dock' }),
-    },
-    {
-      id: 'booking',
-      label: 'Book a 15-min Call',
-      sublabel: 'Direct with founders',
-      href: siteConfig.contact.bookingUrl,
-      icon: Calendar,
-      external: false,
-      onClick: () => trackEvent('booking_click', { location: 'contact_dock' }),
-    },
+    ...(siteConfig.contact.whatsappUrl
+      ? [
+          {
+            id: 'whatsapp',
+            label: 'Chat on WhatsApp',
+            sublabel: 'Direct with founders',
+            href: siteConfig.contact.whatsappUrl,
+            icon: MessageCircle,
+            external: true,
+            onClick: () => trackEvent('whatsapp_click', { location: 'contact_dock' }),
+          },
+        ]
+      : []),
+    ...(siteConfig.contact.bookingUrl
+      ? [
+          {
+            id: 'booking',
+            label: 'Book a 15-min Call',
+            sublabel: 'Direct with founders',
+            href: siteConfig.contact.bookingUrl,
+            icon: Calendar,
+            external: false,
+            onClick: () => trackEvent('booking_click', { location: 'contact_dock' }),
+          },
+        ]
+      : []),
     {
       id: 'email',
       label: 'Email Engineering',
@@ -141,7 +149,7 @@ export function ContactDock() {
       >
         <span className="h-2 w-2 rounded-full bg-ok animate-pulse" />
         <span className="font-semibold text-fg">CHAT</span>
-        <span className="text-fg-muted text-[10px] hidden sm:inline">{'// 3 CHANNELS'}</span>
+        <span className="text-fg-muted text-[10px] hidden sm:inline">{`// ${channels.length} CHANNEL${channels.length === 1 ? '' : 'S'}`}</span>
       </button>
     </div>
   );

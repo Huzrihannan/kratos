@@ -11,7 +11,6 @@ interface ContributorCardProps {
 
 export function ContributorCard({ member, className }: ContributorCardProps) {
   const initials = member.name
-    .replace("[PLACEHOLDER] ", "")
     .split(" ")
     .map((n) => n[0])
     .join("")

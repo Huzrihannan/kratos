@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { servicesData } from "@/content/services";
 import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
 
 export const dynamic = "force-static";
 
@@ -66,12 +67,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const workRoutes: MetadataRoute.Sitemap = caseStudiesData.map((w) => ({
-    url: `${baseUrl}/work/${w.slug}`,
-    lastModified: now,
-    changeFrequency: "monthly",
-    priority: 0.8,
-  }));
+  const workRoutes: MetadataRoute.Sitemap = caseStudiesData
+    .filter(isPublishable)
+    .map((w) => ({
+      url: `${baseUrl}/work/${w.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    }));
 
   return [...coreRoutes, ...serviceRoutes, ...workRoutes];
 }

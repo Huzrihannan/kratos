@@ -34,7 +34,7 @@ const PIPELINE_STEPS: PipelineStep[] = [
     number: "01",
     nodeKey: "01_discover",
     title: "Discover",
-    timeframe: "[PLACEHOLDER] Week 1",
+    timeframe: "Discovery & Scope",
     summary: "We analyze technical constraints, user bottlenecks, and data boundaries to define clear milestones.",
     terminalLines: [
       { prompt: "$", text: "krat inspect --scope requirements", delay: 180 },
@@ -46,7 +46,7 @@ const PIPELINE_STEPS: PipelineStep[] = [
     number: "02",
     nodeKey: "02_design",
     title: "Design",
-    timeframe: "[PLACEHOLDER] Weeks 2–3",
+    timeframe: "Design & Systems",
     summary: "High-fidelity interactive components and token architecture that validate user flows before coding.",
     terminalLines: [
       { prompt: "$", text: "krat prototype --interactive", delay: 180 },
@@ -58,7 +58,7 @@ const PIPELINE_STEPS: PipelineStep[] = [
     number: "03",
     nodeKey: "03_build",
     title: "Build",
-    timeframe: "[PLACEHOLDER] Weeks 4–8",
+    timeframe: "Sprint Engineering",
     summary: "Two-week agile sprints with working staging builds every Friday, strict types, and zero outsourcing.",
     terminalLines: [
       { prompt: "$", text: "krat sprint --fullstack", delay: 180 },
@@ -70,7 +70,7 @@ const PIPELINE_STEPS: PipelineStep[] = [
     number: "04",
     nodeKey: "04_launch",
     title: "Launch",
-    timeframe: "[PLACEHOLDER] Week 9",
+    timeframe: "Production Launch",
     summary: "Edge caching, security audit, DNS routing, and zero-downtime cutover with automated verification.",
     terminalLines: [
       { prompt: "$", text: "krat deploy --production", delay: 180 },
@@ -82,7 +82,7 @@ const PIPELINE_STEPS: PipelineStep[] = [
     number: "05",
     nodeKey: "05_grow",
     title: "Grow",
-    timeframe: "[PLACEHOLDER] Ongoing",
+    timeframe: "Continuous Retainer",
     summary: "Continuous telemetry, SLA monitoring, and monthly feature iteration cycles as your engineering partner.",
     terminalLines: [
       { prompt: "$", text: "krat monitor --telemetry", delay: 180 },

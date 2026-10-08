@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { aboutData } from "@/content/about";
+import { isPublishable } from "@/lib/content-status";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { Decode } from "@/components/fx/Decode";
 import { Window } from "@/components/ui/Window";
@@ -205,19 +206,21 @@ export default function AboutPage() {
           <GitLogTimeline />
         </section>
 
-        {/* Section 4: Team as Contributors with CRT Scanline on Hover */}
-        <section aria-label="Team Contributors" className="mb-16 sm:mb-20">
-          <div className="mb-4 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
-            <span>[CONTRIBUTORS]</span>
-            <span>CORE REPOSITORY MAINTAINERS</span>
-          </div>
+        {/* Section 4: Team as Contributors (Rendered when team profiles are published) */}
+        {aboutData.team.filter(isPublishable).length > 0 && (
+          <section aria-label="Team Contributors" className="mb-16 sm:mb-20">
+            <div className="mb-4 flex items-center justify-between text-xs text-fg-muted uppercase tracking-mono">
+              <span>[CONTRIBUTORS]</span>
+              <span>CORE REPOSITORY MAINTAINERS</span>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {aboutData.team.map((member) => (
-              <ContributorCard key={member.id} member={member} />
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {aboutData.team.filter(isPublishable).map((member) => (
+                <ContributorCard key={member.id} member={member} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Section 5: Working Principles */}
         <section aria-label="Working Principles" className="mb-16 sm:mb-20">

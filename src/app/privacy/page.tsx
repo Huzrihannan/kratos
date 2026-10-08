@@ -23,14 +23,14 @@ export default function PrivacyPage() {
           className="inline-flex items-center gap-2 text-xs uppercase tracking-mono text-fg-muted hover:text-red-text transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>[← BACK TO HOME]</span>
+          <span>BACK TO HOME</span>
         </Link>
       </div>
 
       <Window
-        title="legal_privacy.md [DOCUMENTATION]"
+        title="legal_privacy.md [DATA_SPEC]"
         cornerBrackets
-        className="p-6 sm:p-10"
+        className="p-6 sm:p-10 shadow-card"
       >
         <div className="flex items-center gap-2 text-xs text-red-text uppercase tracking-mono mb-4">
           <Shield className="w-3.5 h-3.5" />
@@ -41,14 +41,10 @@ export default function PrivacyPage() {
           <Decode text="Privacy Policy" />
         </h1>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs text-fg-muted mb-6 pb-4 border-b border-line">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-fg-muted mb-8 pb-4 border-b border-line">
           <span>LAST_UPDATED: OCTOBER 2026</span>
           <span>•</span>
-          <span className="text-red-text font-bold">[PLACEHOLDER: REVIEW BY LEGAL]</span>
-        </div>
-
-        <div className="p-3.5 rounded-[2px] bg-bg border border-line text-xs text-fg-muted mb-8 leading-relaxed">
-          <strong className="text-fg">NOTICE:</strong> This privacy documentation represents a structured baseline for development preview. It must be customized with accredited legal counsel prior to formal enterprise contracting.
+          <span className="text-ok font-bold">STATUS: ACTIVE_SPECIFICATION</span>
         </div>
 
         <div className="space-y-8 font-sans text-sm text-fg/90 leading-relaxed">
@@ -57,22 +53,27 @@ export default function PrivacyPage() {
               1. Information We Collect
             </h2>
             <p>
-              When you interact with the Krat.OS website, Project Estimator, or inquiry dispatcher, we may collect information you voluntarily transmit, including:
+              When you interact with the Krat.OS website, Project Estimator, or contact dispatchers, we collect only the information necessary to provide project estimates and communicate with you:
             </p>
             <ul className="list-disc pl-5 mt-2 space-y-1.5 text-fg-muted">
-              <li>Contact identity: your name, business email address, and optional WhatsApp/phone number.</li>
-              <li>Project scope data: selected architectures, timeline urgency, budget bands, and technical specifications.</li>
-              <li>Telemetry: anonymized analytics pings, IP address (for rate limiting and DDoS prevention), and browser user-agent.</li>
+              <li><strong className="text-fg">Identity &amp; Contact:</strong> Your name, work email address, and optional telephone or WhatsApp number.</li>
+              <li><strong className="text-fg">Project Specifications:</strong> Selected architecture modules, timeline requirements, target budget ranges, and project descriptions submitted via our forms.</li>
+              <li><strong className="text-fg">Technical Telemetry:</strong> Anonymized interaction events, page URL, referrer parameters, and IP address strictly for rate limiting, DDoS prevention, and security auditing.</li>
             </ul>
           </section>
 
           <section>
             <h2 className="font-mono text-base font-bold text-fg mb-2">
-              2. How We Use Submitted Data
+              2. Data Storage &amp; Third-Party Processors
             </h2>
             <p>
-              Submitted data is used exclusively to compile your ballpark estimates, reply to engineering inquiries, schedule discovery calls, and deliver technical roadmaps. We do not sell, rent, or monetize your contact information to third-party data brokers or marketing lists.
+              We do not sell, rent, or monetize your information. We utilize trusted, industry-standard infrastructure providers to process and safeguard your data:
             </p>
+            <ul className="list-disc pl-5 mt-2 space-y-1.5 text-fg-muted">
+              <li><strong className="text-fg">Database Storage (Supabase):</strong> Lead records are stored in access-controlled PostgreSQL instances with Row-Level Security (RLS) policies and encrypted at rest.</li>
+              <li><strong className="text-fg">Transactional Delivery (Resend):</strong> Project estimates and inquiry notifications are delivered to you and our lead engineers via Resend transactional email API over TLS 1.3.</li>
+              <li><strong className="text-fg">Spam Prevention (Cloudflare Turnstile):</strong> Form submissions are verified with Cloudflare Turnstile to prevent automated abuse without invasive captcha puzzles.</li>
+            </ul>
           </section>
 
           <section>
@@ -80,25 +81,25 @@ export default function PrivacyPage() {
               3. Data Security &amp; Encryption
             </h2>
             <p>
-              All traffic between your browser and our infrastructure is encrypted in transit via SSL/TLS 1.3. Lead records are stored in access-controlled databases with row-level security (RLS) policies. In-memory IP rate limiting prevents automated abuse.
+              All traffic between your browser and our infrastructure is strictly encrypted in transit via SSL/TLS 1.3 with modern cipher suites. Database connections enforce SSL with automated security patching and daily backups.
             </p>
           </section>
 
           <section>
             <h2 className="font-mono text-base font-bold text-fg mb-2">
-              4. Tracking &amp; Spam Protection
+              4. Cookies &amp; Tracking
             </h2>
             <p>
-              We avoid intrusive third-party cross-site advertising cookies. Cloudflare Turnstile protects form endpoints without invasive puzzle captchas.
+              We avoid intrusive third-party cross-site advertising cookies and behavioral trackers. Client preferences (such as color theme and motion accessibility level) are stored locally in your browser storage (localStorage) and never transmitted to ad brokers.
             </p>
           </section>
 
           <section>
             <h2 className="font-mono text-base font-bold text-fg mb-2">
-              5. Data Sovereignty &amp; Your Rights
+              5. Your Rights &amp; Data Deletion
             </h2>
             <p>
-              Under applicable regulations (including GDPR and CCPA), you have the right to request access to any personal data on file or request immediate and complete deletion.
+              Under applicable privacy regulations (including GDPR and CCPA), you have the right to inspect, correct, or request the immediate deletion of your submitted contact records from our database.
             </p>
           </section>
 
@@ -107,7 +108,7 @@ export default function PrivacyPage() {
               6. Privacy Inquiries
             </h2>
             <p>
-              For privacy requests or record purge verification, email our engineering leads directly at{" "}
+              For data access requests, records purge requests, or security notices, email our engineering leads directly at{" "}
               <a href="mailto:privacy@krat-os.dev" className="text-red-text font-bold underline font-mono">
                 privacy@krat-os.dev
               </a>.

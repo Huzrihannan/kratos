@@ -79,18 +79,20 @@ export function Faq() {
             Estimate my project
           </Button>
 
-          <Button
-            variant="ghost"
-            size="md"
-            href={siteConfig.contact.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            withArrow={false}
-            className="w-full sm:w-auto font-mono text-xs uppercase border-line hover:border-line-strong"
-          >
-            <MessageSquare className="w-3.5 h-3.5 mr-2 text-ok" />
-            <span>Chat on WhatsApp</span>
-          </Button>
+          {siteConfig.contact.whatsappUrl ? (
+            <Button
+              variant="ghost"
+              size="md"
+              href={siteConfig.contact.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              withArrow={false}
+              className="w-full sm:w-auto font-mono text-xs uppercase border-line hover:border-line-strong"
+            >
+              <MessageSquare className="w-3.5 h-3.5 mr-2 text-ok" />
+              <span>Chat on WhatsApp</span>
+            </Button>
+          ) : null}
         </div>
       </div>
     </Section>

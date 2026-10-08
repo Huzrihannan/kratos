@@ -103,35 +103,39 @@ export function FinalCta() {
               </Button>
             </Magnetic>
 
-            <Button
-              variant="ghost"
-              size="lg"
-              href={siteConfig.contact.bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              withArrow={false}
-              className="w-full sm:w-auto min-h-[52px] text-xs sm:text-sm font-mono uppercase tracking-wider border-line hover:border-line-strong hover:bg-surface text-fg"
-            >
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>Book a 15-min call</span>
-            </Button>
+            {siteConfig.contact.bookingUrl ? (
+              <Button
+                variant="ghost"
+                size="lg"
+                href={siteConfig.contact.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                withArrow={false}
+                className="w-full sm:w-auto min-h-[52px] text-xs sm:text-sm font-mono uppercase tracking-wider border-line hover:border-line-strong hover:bg-surface text-fg"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                <span>Book a 15-min call</span>
+              </Button>
+            ) : null}
           </div>
 
-          {/* Direct WhatsApp Channel Link */}
-          <a
-            href={siteConfig.contact.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center flex-wrap gap-2 font-mono text-xs text-fg-muted hover:text-fg transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text max-w-sm text-center"
-          >
-            <MessageSquare className="w-3.5 h-3.5 text-ok group-hover:scale-110 transition-transform shrink-0" />
-            <span className="underline decoration-line-strong underline-offset-4">
-              Prefer WhatsApp? Chat directly with our founders
-            </span>
-            <span className="text-red-text font-bold shrink-0" aria-hidden="true">
-              →
-            </span>
-          </a>
+          {/* Direct WhatsApp Channel Link (if configured) */}
+          {siteConfig.contact.whatsappUrl ? (
+            <a
+              href={siteConfig.contact.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center flex-wrap gap-2 font-mono text-xs text-fg-muted hover:text-fg transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text max-w-sm text-center"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-ok group-hover:scale-110 transition-transform shrink-0" />
+              <span className="underline decoration-line-strong underline-offset-4">
+                Prefer WhatsApp? Chat directly with our founders
+              </span>
+              <span className="text-red-text font-bold shrink-0" aria-hidden="true">
+                →
+              </span>
+            </a>
+          ) : null}
         </div>
       </SpotlightGrid>
     </section>

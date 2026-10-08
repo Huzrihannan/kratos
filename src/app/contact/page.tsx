@@ -97,72 +97,76 @@ export default function ContactPage() {
           <div className="lg:col-span-5 space-y-6">
             {/* SLA Response Promise Window */}
             <Window
-              title="sla_commitment.log [4H_WINDOW]"
+              title="sla_commitment.log [RESPONSE_PROTOCOL]"
               cornerBrackets
               className="p-5 sm:p-6"
             >
               <div className="flex items-center gap-2 text-ok text-[11px] font-bold mb-2">
                 <Clock className="w-4 h-4 text-ok" />
-                <span>4-HOUR RESPONSE PROMISE // MON-FRI</span>
+                <span>DIRECT RESPONSE COMMITMENT // MON-FRI</span>
               </div>
               <p className="font-sans text-xs text-fg-muted leading-relaxed">
-                When you submit a project inquiry, a senior systems engineer reviews your requirements and responds with technical next steps within 4 business hours.
+                When you submit a project inquiry, a senior systems engineer reviews your technical requirements and responds directly with concrete next steps.
               </p>
             </Window>
 
             {/* Fast Channel Cards */}
             <div className="space-y-3">
-              {/* WhatsApp Card */}
-              <a
-                href={siteConfig.contact.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between p-4 rounded-[2px] border border-line hover:border-line-strong bg-surface/90 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-[2px] border border-line bg-bg flex items-center justify-center text-ok">
-                    <MessageCircle className="w-4 h-4" />
+              {/* WhatsApp Card (Rendered only if configured) */}
+              {siteConfig.contact.whatsappNumber && siteConfig.contact.whatsappUrl && (
+                <a
+                  href={siteConfig.contact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between p-4 rounded-[2px] border border-line hover:border-line-strong bg-surface/90 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-[2px] border border-line bg-bg flex items-center justify-center text-ok">
+                      <MessageCircle className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xs text-fg">
+                        WhatsApp Quick Channel
+                      </h3>
+                      <p className="font-sans text-[11px] text-fg-muted">
+                        Fastest response for quick scope checks
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-xs text-fg">
-                      WhatsApp Quick Channel
-                    </h3>
-                    <p className="font-sans text-[11px] text-fg-muted">
-                      Fastest response for quick scope checks
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[11px] text-red-text font-bold uppercase flex items-center gap-1">
-                  <span>Chat</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-              </a>
+                  <span className="text-[11px] text-red-text font-bold uppercase flex items-center gap-1">
+                    <span>Chat</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
+                </a>
+              )}
 
-              {/* Book Call Card */}
-              <a
-                href={siteConfig.contact.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center justify-between p-4 rounded-[2px] border border-line hover:border-line-strong bg-surface/90 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-[2px] border border-line bg-bg flex items-center justify-center text-red-text">
-                    <Calendar className="w-4 h-4" />
+              {/* Book Call Card (Rendered only if configured) */}
+              {siteConfig.contact.bookingUrl && (
+                <a
+                  href={siteConfig.contact.bookingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between p-4 rounded-[2px] border border-line hover:border-line-strong bg-surface/90 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-[2px] border border-line bg-bg flex items-center justify-center text-red-text">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-xs text-fg">
+                        Book a 15-Minute Call
+                      </h3>
+                      <p className="font-sans text-[11px] text-fg-muted">
+                        Direct engineering discovery session
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-xs text-fg">
-                      Book a 15-Minute Call
-                    </h3>
-                    <p className="font-sans text-[11px] text-fg-muted">
-                      Direct engineering discovery session
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[11px] text-fg font-bold uppercase flex items-center gap-1 group-hover:text-red-text transition-colors">
-                  <span>Schedule</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-              </a>
+                  <span className="text-[11px] text-fg font-bold uppercase flex items-center gap-1 group-hover:text-red-text transition-colors">
+                    <span>Schedule</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </span>
+                </a>
+              )}
 
               {/* Direct Email Card */}
               <a

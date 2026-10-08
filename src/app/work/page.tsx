@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
 import { WorkFilter } from "@/components/work/WorkFilter";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { Decode } from "@/components/fx/Decode";
@@ -11,7 +12,7 @@ import { siteConfig } from "@/content/site";
 export const metadata: Metadata = {
   title: "Work & Case Studies | Krat.OS Software Solutions",
   description:
-    "Explore real software solutions built by Krat.OS: FinTech transaction portals, pediatric telehealth mobile apps, and automated freight dispatch systems.",
+    "Explore software architecture solutions built by Krat.OS: cloud platforms, high-performance mobile apps, and automated workflows.",
   alternates: {
     canonical: "/work",
   },
@@ -24,6 +25,8 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
+  const publishedStudies = caseStudiesData.filter(isPublishable);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -44,21 +47,25 @@ export default function WorkPage() {
           },
         ],
       },
-      {
-        "@type": "ItemList",
-        name: "Case Studies by Krat.OS Software Solutions",
-        description: "Portfolio of delivered software applications and client results.",
-        itemListElement: caseStudiesData.map((study, idx) => ({
-          "@type": "ListItem",
-          position: idx + 1,
-          item: {
-            "@type": "CreativeWork",
-            name: study.title.replace("[PLACEHOLDER] ", ""),
-            description: study.summary,
-            url: `https://krat-os.dev/work/${study.slug}`,
-          },
-        })),
-      },
+      ...(publishedStudies.length > 0
+        ? [
+            {
+              "@type": "ItemList",
+              name: "Case Studies by Krat.OS Software Solutions",
+              description: "Portfolio of delivered software applications and client results.",
+              itemListElement: publishedStudies.map((study, idx) => ({
+                "@type": "ListItem",
+                position: idx + 1,
+                item: {
+                  "@type": "CreativeWork",
+                  name: study.title,
+                  description: study.summary,
+                  url: `https://krat-os.dev/work/${study.slug}`,
+                },
+              })),
+            },
+          ]
+        : []),
     ],
   };
 
@@ -96,10 +103,44 @@ export default function WorkPage() {
           </div>
         </div>
 
-        {/* Filterable Case Studies Grid with GSAP Flip */}
-        <div className="mb-20">
-          <WorkFilter initialStudies={caseStudiesData} />
-        </div>
+        {/* Case Studies Grid OR Calm Empty State */}
+        {publishedStudies.length > 0 ? (
+          <div className="mb-20">
+            <WorkFilter initialStudies={publishedStudies} />
+          </div>
+        ) : (
+          <div className="max-w-3xl mx-auto w-full mb-20">
+            <Window
+              title="status_report.log [COMPILING_RETROSPECTIVES]"
+              cornerBrackets
+              className="p-8 sm:p-12 text-center border-line bg-surface shadow-card"
+            >
+              <div className="space-y-4 max-w-xl mx-auto">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] bg-bg border border-line text-xs text-ok">
+                  <span className="w-1.5 h-1.5 rounded-full bg-ok animate-pulse" />
+                  <span>ACTIVE REPOSITORIES IN PRODUCTION</span>
+                </div>
+                <h2 className="font-mono text-xl sm:text-2xl font-bold text-fg">
+                  Architecture Retrospectives in Progress
+                </h2>
+                <p className="font-sans text-sm text-fg-muted leading-relaxed">
+                  We are currently compiling in-depth technical case studies and architectural breakdowns with client permission. In the meantime, you can explore our technical modules or calculate a scope projection in our interactive estimator.
+                </p>
+                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <EstimatorButton size="lg" withArrow>
+                    Estimate my project
+                  </EstimatorButton>
+                  <Link
+                    href="/services"
+                    className="text-xs uppercase px-6 py-3.5 rounded-[2px] border border-line bg-surface hover:border-line-strong text-fg transition-colors"
+                  >
+                    Explore engineering modules
+                  </Link>
+                </div>
+              </div>
+            </Window>
+          </div>
+        )}
 
         {/* Bottom Conversion Band */}
         <div className="max-w-4xl mx-auto w-full">
@@ -109,7 +150,7 @@ export default function WorkPage() {
             className="p-6 sm:p-10 text-center"
           >
             <div className="max-w-2xl mx-auto space-y-4">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-line text-[11px] text-red-text">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-bg border border-line text-red-text text-[11px]">
                 <span className="w-1.5 h-1.5 rounded-full bg-red" />
                 <span>NEW PROJECT ARCHITECTURE</span>
               </div>

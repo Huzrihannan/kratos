@@ -137,7 +137,7 @@ export function WorkFilter({ initialStudies }: WorkFilterProps) {
 
                     {/* Client & Title */}
                     <h3 className="font-bold text-lg sm:text-xl text-fg mb-2 leading-snug">
-                      {study.title.replace("[PLACEHOLDER] ", "")}
+                      {study.title}
                     </h3>
                     <p className="font-sans text-xs text-fg-muted leading-relaxed mb-5">
                       {study.summary}
@@ -164,7 +164,7 @@ export function WorkFilter({ initialStudies }: WorkFilterProps) {
                     <Link
                       href={`/work/${study.slug}`}
                       className="inline-flex items-center gap-1.5 text-fg hover:text-red-text font-bold uppercase tracking-wider transition-colors"
-                      aria-label={`Read case study for ${study.title.replace("[PLACEHOLDER] ", "")}`}
+                      aria-label={`Read case study for ${study.title}`}
                     >
                       <span>Read Study</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />

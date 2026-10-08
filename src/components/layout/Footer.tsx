@@ -11,10 +11,14 @@ import { HUDClock } from '@/components/fx/HUD';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { useLayoutModal } from '@/lib/modal-context';
 
+import { caseStudiesData } from '@/content/work';
+import { isPublishable } from '@/lib/content-status';
+
 export function Footer() {
   const { openEstimator } = useLayoutModal();
   const { level, setLevel } = useMotionLevel();
   const [wordmarkHoverKey, setWordmarkHoverKey] = useState(0);
+  const hasPublishedWork = caseStudiesData.some(isPublishable);
 
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
@@ -68,11 +72,13 @@ export function Footer() {
                   Services
                 </Link>
               </li>
-              <li>
-                <Link href="/work" className="hover:text-fg transition-colors">
-                  Case Studies
-                </Link>
-              </li>
+              {hasPublishedWork && (
+                <li>
+                  <Link href="/work" className="hover:text-fg transition-colors">
+                    Case Studies
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/about" className="hover:text-fg transition-colors">
                   About
@@ -108,8 +114,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/services/cloud-infra" className="hover:text-fg transition-colors">
-                  Resilient Cloud &amp; APIs
+                <Link href="/services/maintenance-support" className="hover:text-fg transition-colors">
+                  System Maintenance &amp; Evolution
                 </Link>
               </li>
             </ul>
@@ -169,13 +175,13 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-fg transition-colors">
-              [ PRIVACY ]
+              PRIVACY
             </Link>
             <Link href="/terms" className="hover:text-fg transition-colors">
-              [ TERMS ]
+              TERMS
             </Link>
             <Link href="/design-system" className="hover:text-fg transition-colors">
-              [ SYSTEM LAB ]
+              SYSTEM LAB
             </Link>
           </div>
         </div>
@@ -191,9 +197,9 @@ export function Footer() {
             <span className="hidden sm:inline">{'// LATENCY < 20MS'}</span>
           </div>
 
-          {/* Center: Live Colombo Clock (Placeholder time zone per brief) */}
+          {/* Center: Live Colombo Clock */}
           <div className="flex items-center gap-4">
-            <HUDClock timeZone="Asia/Colombo" label="COLOMBO [PLACEHOLDER]" />
+            <HUDClock timeZone="Asia/Colombo" label="COLOMBO" />
             <span className="hidden md:inline">•</span>
             <span className="hidden md:inline">KERNEL: V2.0</span>
           </div>

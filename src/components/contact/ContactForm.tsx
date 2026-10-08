@@ -81,27 +81,29 @@ export function ContactForm({ className }: { className?: string }) {
               <span>INQUIRY_DISPATCH_SUCCESSFUL</span>
             </div>
             <p className="text-fg-muted leading-relaxed font-sans text-xs">
-              Thank you for reaching out. A senior engineer will review your project requirements and email you an actionable response within <strong className="text-fg">4 business hours</strong>.
+              Thank you for reaching out. A senior engineer will review your project requirements and email you an actionable response promptly.
             </p>
           </div>
 
           <div className="text-[11px] text-fg-muted space-y-1">
             <div>&gt; target: engineering_dispatch_queue</div>
-            <div>&gt; sla_countdown: ACTIVE (4h window)</div>
+            <div>&gt; review_status: QUEUED FOR DIRECT REVIEW</div>
             <div>&gt; confidentiality: NDA protected</div>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-line">
-          <a
-            href={siteConfig.contact.whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[2px] bg-fg text-bg font-bold uppercase tracking-wider text-xs hover:bg-fg/90 transition-colors"
-          >
-            <MessageCircle className="w-3.5 h-3.5 text-red" />
-            <span>Chat right now on WhatsApp</span>
-          </a>
+          {siteConfig.contact.whatsappUrl ? (
+            <a
+              href={siteConfig.contact.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[2px] bg-fg text-bg font-bold uppercase tracking-wider text-xs hover:bg-fg/90 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5 text-red" />
+              <span>Chat right now on WhatsApp</span>
+            </a>
+          ) : null}
           <button
             type="button"
             onClick={() => setIsSuccess(false)}
