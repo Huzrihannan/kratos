@@ -45,6 +45,11 @@ export function Boot({ force = false, onComplete }: BootProps) {
     }
 
     try {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.get('noboot') === 'true') {
+        setActive(false);
+        return;
+      }
       const alreadyBooted = sessionStorage.getItem('krat_os_booted');
       if (alreadyBooted && !force) {
         return;

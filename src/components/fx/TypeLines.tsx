@@ -18,16 +18,25 @@ export type TypeLineItem = TerminalLine;
 export interface TypeLinesProps {
   lines: TerminalLine[];
   loop?: boolean;
+  onComplete?: () => void;
   className?: string;
 }
 
-export function TypeLines({ lines, loop = false, className = "" }: TypeLinesProps) {
+export function TypeLines({ lines, loop = false, onComplete, className = "" }: TypeLinesProps) {
   const { isOff } = useMotionLevel();
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Reset when lines list changes
+  useEffect(() => {
+    setCurrentLineIndex(0);
+    setCurrentCharIndex(0);
+    setProgress(0);
+    setCompleted(false);
+  }, [lines]);
 
   useEffect(() => {
     if (isOff) {
@@ -40,7 +49,11 @@ export function TypeLines({ lines, loop = false, className = "" }: TypeLinesProp
 
     if (currentLineIndex >= lines.length) {
       setCompleted(true);
-      if (loop) {
+      if (onComplete) {
+        timerRef.current = setTimeout(() => {
+          onComplete();
+        }, 2200);
+      } else if (loop) {
         timerRef.current = setTimeout(() => {
           setCurrentLineIndex(0);
           setCurrentCharIndex(0);
@@ -87,7 +100,7 @@ export function TypeLines({ lines, loop = false, className = "" }: TypeLinesProp
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [currentLineIndex, currentCharIndex, progress, lines, loop, isOff]);
+  }, [currentLineIndex, currentCharIndex, progress, lines, loop, isOff, onComplete]);
 
   return (
     <div

@@ -2,6 +2,38 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R4: The Hero — Signature OS Interface] - 2026-10-08
+
+### Added
+- **Signature Hero Section (`src/components/sections/Hero.tsx`):**
+  - **Background Layers:**
+    - Layer 1: Static server-painted CSS blueprint grid with `+` registration marks and center dots via vector SVG pattern.
+    - Layer 2: Subtle fine grain texture overlay (`3.5%` mix-blend-overlay).
+    - Layer 3: Dynamic WebGL `ShaderField` (`ogl`) with cursor repulsion warp and `#FD142B` red signal light source, lazy-loaded post-paint via `requestIdleCallback` (bypassed in `lite` and `off` modes).
+  - **HUD Corners (`aria-hidden`):**
+    - Top-left: `KRAT.OS // SOFTWARE SOLUTIONS // V2.0`.
+    - Top-right: Live Colombo local clock (`HUDClock`).
+    - Bottom-left: Real-time cursor coordinates `x:0412 y:0233` on desktop (`HUDCoordinates`).
+    - Bottom-right: Technical `scroll` indicator with signal red bar sliding down.
+  - **LCP-Optimized Headline:**
+    - JetBrains Mono 800 (`clamp(1.85rem, 5.2vw, 5.25rem)` with `-0.04em` tracking): `"We build the software your business runs on."`
+    - Revealed via zero-JS CSS line masks (`animate-hero-line-1`, `animate-hero-line-2`, `animate-hero-line-3`) with no `opacity-0` initial state.
+    - Post-hydration mechanical `Decode` effect on accent words `"runs on."` in signal red followed by blinking square-wave red `Caret`.
+  - **Subhead & Direct CTAs:**
+    - Geist subhead: `"Web apps, mobile apps and automation, designed and engineered end to end. Plain talk, precise work."`
+    - Primary CTA: `"Estimate my project"` with `<Magnetic>` leaning toward pointer and triggering Estimator modal.
+    - Ghost CTA: `"See our work"` navigating to `/work`.
+    - Availability status chip: `● TAKING ON NEW PROJECTS FOR Q4`.
+    - Client trust tape: Monochrome `[PLACEHOLDER]` partner names in velocity-reactive `<Tape>`.
+  - **Interactive OS Windows Suite (`src/components/sections/hero/`):**
+    - `TerminalWindow.tsx`: Simulated OS terminal running `TypeLines` cycling through `web-app`, `mobile-app`, and `automation` scaffolding pipelines with mechanical progress bars and completion checks.
+    - `CodeWindow.tsx`: Syntax-highlighted technical code window in semantic cream, muted, and signal red tokens.
+    - `SignalWindow.tsx`: Abstract SVG carrier waveform and sparkline with active carrier LED and zero invented numbers/metrics.
+    - Desktop: Windows feature click-to-bring-to-front z-ordering, Framer Motion inertial drag, and contextual `[drag]` crosshair cursor.
+    - Mobile (< 768px): Seamlessly collapses to full-width Terminal window below CTAs with zero horizontal overflow.
+  - Verified bundle size: Route `/` at 32 kB, First Load JS 196 kB (budget <= 220 kB).
+  - Visual verification captured at 360px, 768px, 1280px, and 1920px in both dark and light modes.
+
 ## [R3: Global Shell — Boot, Nav, Command Palette, Footer, Transitions] - 2026-10-08
 
 ### Added

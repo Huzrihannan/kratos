@@ -17,6 +17,9 @@ export interface WindowProps {
   headerRight?: React.ReactNode;
   variant?: "default" | "active" | "subtle";
   id?: string;
+  zIndex?: number;
+  onBringToFront?: () => void;
+  style?: React.CSSProperties;
 }
 
 export function Window({
@@ -31,10 +34,14 @@ export function Window({
   headerRight,
   variant = "default",
   id,
+  zIndex: controlledZIndex,
+  onBringToFront,
+  style,
 }: WindowProps) {
   const effectiveStatus = statusText || status;
   const { isFull } = useMotionLevel();
-  const [zIndex, setZIndex] = useState(10);
+  const [internalZIndex, setInternalZIndex] = useState(10);
+  const currentZIndex = controlledZIndex ?? internalZIndex;
 
   const variantStyles = {
     default: "border-line bg-surface/90 hover:border-line-strong",
@@ -44,7 +51,11 @@ export function Window({
 
   const handlePointerDown = () => {
     if (draggable) {
-      setZIndex(40);
+      if (onBringToFront) {
+        onBringToFront();
+      } else {
+        setInternalZIndex(40);
+      }
     }
   };
 
@@ -56,7 +67,7 @@ export function Window({
         variantStyles[variant],
         className
       )}
-      style={{ zIndex }}
+      style={{ zIndex: currentZIndex, ...style }}
       onPointerDown={handlePointerDown}
     >
       {/* Optional Corner Brackets (HUD registration marks) */}
@@ -83,6 +94,7 @@ export function Window({
 
       {/* Chrome Title Bar */}
       <div
+        data-cursor={draggable && isFull ? "drag" : undefined}
         className={cn(
           "flex items-center justify-between px-3 py-2 border-b border-line bg-surface select-none",
           draggable && isFull && "cursor-grab active:cursor-grabbing"
@@ -125,7 +137,7 @@ export function Window({
         dragElastic={0.08}
         dragTransition={{ bounceStiffness: 400, bounceDamping: 25 }}
         whileDrag={{ scale: 1.01 }}
-        style={{ zIndex }}
+        style={{ zIndex: currentZIndex, ...style }}
       >
         {windowContent}
       </motion.div>

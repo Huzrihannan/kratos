@@ -1,482 +1,280 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import {
-  motion,
-  useReducedMotion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import {
-  ArrowDown,
-  CheckCircle2,
-  TrendingUp,
-  Sparkles,
-} from "lucide-react";
-import { GooeyBlobs } from "@/components/fx/GooeyBlobs";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
-import { Pill } from "@/components/ui/Pill";
-import { Squish } from "@/components/fx/Squish";
+import { StatusChip } from "@/components/ui/StatusChip";
+import { Tape } from "@/components/ui/Tape";
+import { Decode } from "@/components/fx/Decode";
+import { Caret } from "@/components/fx/Caret";
 import { Magnetic } from "@/components/fx/Magnetic";
-import { siteConfig } from "@/content/site";
+import { HUDClock, HUDCoordinates } from "@/components/fx/HUD";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
 import { useLayoutModal } from "@/lib/modal-context";
+import { siteConfig } from "@/content/site";
+import { TerminalWindow } from "./hero/TerminalWindow";
+import { CodeWindow } from "./hero/CodeWindow";
+import { SignalWindow } from "./hero/SignalWindow";
+
+// Lazy-load ShaderField with no SSR so ogl never delays initial LCP paint
+const ShaderField = dynamic(
+  () => import("@/components/fx/ShaderField").then((mod) => mod.ShaderField),
+  { ssr: false }
+);
 
 export function Hero() {
   const { openEstimator } = useLayoutModal();
-  const prefersReducedMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-  const portalRef = useRef<HTMLDivElement>(null);
+  const { isFull } = useMotionLevel();
+  const [shaderMounted, setShaderMounted] = useState(false);
+  const [activeWindow, setActiveWindow] = useState<"terminal" | "code" | "signal">("terminal");
+  const dragContainerRef = useRef<HTMLDivElement>(null);
 
-  // Defer heavy canvas blob mounting until after initial paint for instant LCP
+  // Defer ShaderField until after first paint via requestIdleCallback or timer
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!isFull) return;
 
-  // Parallax tilt logic for the signature interactive portal
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+    const triggerMount = () => setShaderMounted(true);
 
-  const springConfig = { stiffness: 220, damping: 24 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
-  const smoothMouseY = useSpring(mouseY, springConfig);
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      const handle = (window as Window).requestIdleCallback(triggerMount, { timeout: 1200 });
+      return () => (window as Window).cancelIdleCallback(handle);
+    } else {
+      const timer = setTimeout(triggerMount, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [isFull]);
 
-  const tiltX = useTransform(smoothMouseY, [-180, 180], [8, -8]);
-  const tiltY = useTransform(smoothMouseX, [-180, 180], [-8, 8]);
-
-  const handlePortalMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || !portalRef.current) return;
-    const rect = portalRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set(e.clientX - centerX);
-    mouseY.set(e.clientY - centerY);
+  const handlePointerInteraction = () => {
+    if (!shaderMounted && isFull) {
+      setShaderMounted(true);
+    }
   };
 
-  const handlePortalMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
-  const placeholderPartners = [
-    "[PLACEHOLDER] NovaLab",
-    "[PLACEHOLDER] Bloomly",
-    "[PLACEHOLDER] PulseFlow",
-    "[PLACEHOLDER] OrbitCraft",
+  const partnerLogos = [
+    "[PLACEHOLDER] NOVA LABS",
+    "[PLACEHOLDER] PULSEFLOW",
+    "[PLACEHOLDER] VERTEX SYSTEMS",
+    "[PLACEHOLDER] ORBIT CORE",
+    "[PLACEHOLDER] HYPERION AI",
   ];
 
   return (
-    <section className="relative min-h-[calc(100vh-5rem)] flex flex-col justify-between overflow-hidden bg-cream px-4 sm:px-6 md:px-12 lg:px-16 pt-4 sm:pt-8 pb-12">
-      {/* Background GooeyBlobs Layer — loaded after mount to guarantee instant LCP */}
-      {mounted && (
+    <section
+      onPointerMove={handlePointerInteraction}
+      className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-between overflow-hidden bg-bg text-fg px-4 sm:px-6 md:px-10 lg:px-16 pt-12 sm:pt-14 pb-10 select-auto"
+    >
+      {/* LAYER 1: Static Blueprint Dot Grid with + Registration Marks (Server Painted Instantly) */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none opacity-30 select-none z-0"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern
+            id="hero-blueprint-pattern"
+            width="44"
+            height="44"
+            patternUnits="userSpaceOnUse"
+          >
+            {/* Center Dot */}
+            <circle cx="22" cy="22" r="1" fill="var(--line-strong)" opacity="0.6" />
+            {/* Corner + Registration Marks */}
+            <path
+              d="M 0 3 L 0 -3 M -3 0 L 3 0"
+              stroke="var(--line-strong)"
+              strokeWidth="1"
+              opacity="0.45"
+            />
+            <path
+              d="M 44 3 L 44 -3 M 41 0 L 47 0"
+              stroke="var(--line-strong)"
+              strokeWidth="1"
+              opacity="0.45"
+            />
+            <path
+              d="M 0 47 L 0 41 M -3 44 L 3 44"
+              stroke="var(--line-strong)"
+              strokeWidth="1"
+              opacity="0.45"
+            />
+            <path
+              d="M 44 47 L 44 41 M 41 44 L 47 44"
+              stroke="var(--line-strong)"
+              strokeWidth="1"
+              opacity="0.45"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hero-blueprint-pattern)" />
+      </svg>
+
+      {/* LAYER 2: Noise / Grain Overlay (3.5% mix-blend-overlay) */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay select-none z-0"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* LAYER 3: WebGL ShaderField (Loaded deferred; lite/off keeps layer 1 only) */}
+      {shaderMounted && isFull && (
         <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-80"
+          className="absolute inset-0 pointer-events-none z-0 opacity-80"
           aria-hidden="true"
         >
-          <GooeyBlobs
-            blobCount={5}
-            speed={0.8}
-            cursorAttraction={0.04}
-            className="w-full h-full"
-          />
+          <ShaderField />
         </div>
       )}
 
-      {/* Main Hero Grid Content */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center flex-1 my-auto">
-        {/* Left Column: Headlines, CTAs, and Trust Strip (7 cols on lg) */}
-        <div className="lg:col-span-7 flex flex-col items-start text-left pt-2 sm:pt-4">
-          {/* Availability Pill */}
-          <motion.div
-            initial={prefersReducedMotion ? {} : { y: 8 }}
-            animate={{ y: 0 }}
-            transition={{
-              type: "spring" as const,
-              stiffness: 400,
-              damping: 24,
-            }}
-            className="mb-4 sm:mb-6"
-          >
-            <Pill variant="availability">
-              {siteConfig.availability.chipText}
-            </Pill>
-          </motion.div>
+      {/* HUD CORNERS (aria-hidden) */}
+      <div
+        className="absolute top-4 left-4 sm:top-5 sm:left-8 z-20 pointer-events-none hidden sm:flex items-center gap-2 font-mono text-[10px] text-fg-muted/70 uppercase tracking-[0.08em] select-none"
+        aria-hidden="true"
+      >
+        <span className="h-1.5 w-1.5 bg-red-text rounded-[1px]" />
+        <span>KRAT.OS // SOFTWARE SOLUTIONS // V2.0</span>
+      </div>
 
-          {/* Signature Headline (Fredoka, tight leading, spring overshoot, self-drawing underline blobs) */}
-          <h1 className="font-display font-bold text-ink leading-[1.08] sm:leading-[1.05] tracking-tight text-[clamp(2.15rem,5.8vw,5.5rem)] text-balance">
-            {/* "Software that's " */}
-            <motion.span
-              className="inline-block"
-              initial={prefersReducedMotion ? {} : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 400,
-                damping: 20,
-                delay: prefersReducedMotion ? 0 : 0.05,
-              }}
-            >
-              Software that&apos;s&nbsp;
-            </motion.span>
+      <div
+        className="absolute top-4 right-4 sm:top-5 sm:right-8 z-20 pointer-events-none flex items-center gap-2 select-none"
+        aria-hidden="true"
+      >
+        <HUDClock timeZone="Asia/Colombo" label="CMB" />
+      </div>
 
-            {/* "strong" with self-drawing rounded underline blob */}
-            <motion.span
-              className="relative inline-block whitespace-nowrap text-ink"
-              initial={prefersReducedMotion ? {} : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 400,
-                damping: 20,
-                delay: prefersReducedMotion ? 0 : 0.15,
-              }}
-            >
-              <span>strong</span>
-              {/* Hand-drawn rounded orange underline blob */}
-              <svg
-                className="absolute -bottom-1 left-0 w-full h-2.5 sm:h-3 text-orange overflow-visible pointer-events-none"
-                viewBox="0 0 100 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <motion.path
-                  d="M 2 6 Q 25 1 50 5 Q 75 9 98 4"
-                  stroke="currentColor"
-                  strokeWidth="7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  initial={prefersReducedMotion ? { pathLength: 1 } : { pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: prefersReducedMotion ? 0 : 0.45,
-                    ease: [0.34, 1.56, 0.64, 1],
-                  }}
-                />
-              </svg>
-            </motion.span>
+      <div
+        className="absolute bottom-4 left-4 sm:bottom-5 sm:left-8 z-20 pointer-events-none hidden lg:flex items-center gap-2 select-none"
+        aria-hidden="true"
+      >
+        <HUDCoordinates prefix="LOC" />
+      </div>
 
-            {/* " underneath." */}
-            <motion.span
-              className="inline-block"
-              initial={prefersReducedMotion ? {} : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 400,
-                damping: 20,
-                delay: prefersReducedMotion ? 0 : 0.22,
-              }}
-            >
-              &nbsp;underneath.
-            </motion.span>
+      <div
+        className="absolute bottom-4 right-4 sm:bottom-5 sm:right-8 z-20 pointer-events-none flex items-center gap-2 font-mono text-[10px] text-fg-muted/70 uppercase tracking-[0.08em] select-none"
+        aria-hidden="true"
+      >
+        <span>scroll</span>
+        <div className="h-5 w-[2px] bg-line relative overflow-hidden">
+          <div className="absolute inset-x-0 h-2 bg-red animate-hero-scroll-pill" />
+        </div>
+      </div>
 
-            <br className="hidden sm:inline" />
+      {/* MAIN HERO GRID */}
+      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center my-auto pt-6 sm:pt-8 pb-8">
+        {/* LEFT COLUMN: Typography, CTAs, Availability & Trust (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col items-start text-left">
+          {/* Status Chip */}
+          <div className="mb-4 sm:mb-6">
+            <StatusChip
+              status="ok"
+              label={siteConfig.availability.chipText}
+            />
+          </div>
 
-            {/* "Friendly" with self-drawing rounded orange underline blob */}
-            <motion.span
-              className="relative inline-block whitespace-nowrap text-ink"
-              initial={prefersReducedMotion ? {} : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 400,
-                damping: 20,
-                delay: prefersReducedMotion ? 0 : 0.3,
-              }}
-            >
-              <span>Friendly</span>
-              {/* Hand-drawn rounded orange underline blob */}
-              <svg
-                className="absolute -bottom-1 left-0 w-full h-2.5 sm:h-3 text-orange overflow-visible pointer-events-none"
-                viewBox="0 0 100 10"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <motion.path
-                  d="M 2 5 Q 30 9 55 5 Q 80 1 98 5"
-                  stroke="currentColor"
-                  strokeWidth="7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  initial={prefersReducedMotion ? { pathLength: 1 } : { pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: prefersReducedMotion ? 0 : 0.6,
-                    ease: [0.34, 1.56, 0.64, 1],
-                  }}
-                />
-              </svg>
-            </motion.span>
-
-            {/* " on top." */}
-            <motion.span
-              className="inline-block"
-              initial={prefersReducedMotion ? {} : { y: 12 }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring" as const,
-                stiffness: 400,
-                damping: 20,
-                delay: prefersReducedMotion ? 0 : 0.38,
-              }}
-            >
-              &nbsp;on top.
-            </motion.span>
+          {/* Headline (JetBrains Mono 800, CSS Line Mask Reveal for fast LCP) */}
+          <h1 className="font-mono font-extrabold text-fg text-[clamp(1.85rem,5.2vw,5.25rem)] leading-[1.0] tracking-[-0.04em] mb-6">
+            <span className="block overflow-hidden">
+              <span className="inline-block animate-hero-line-1">
+                <span className="sm:hidden">We build the</span>
+                <span className="hidden sm:inline">We build the software</span>
+              </span>
+            </span>
+            <span className="block overflow-hidden sm:hidden">
+              <span className="inline-block animate-hero-line-2">
+                software your
+              </span>
+            </span>
+            <span className="block overflow-hidden">
+              <span className="inline-block animate-hero-line-3 sm:animate-hero-line-2">
+                <span className="hidden sm:inline">your </span>business{" "}
+                <span className="text-red font-mono font-extrabold inline-flex items-baseline">
+                  <Decode text="runs on." speed={34} delay={300} />
+                </span>
+                <Caret className="ml-1 sm:ml-2" width={8} height="0.82em" />
+              </span>
+            </span>
           </h1>
 
-          {/* Sub-headline (Outfit, max 55ch) */}
-          <motion.p
-            initial={prefersReducedMotion ? {} : { y: 8 }}
-            animate={{ y: 0 }}
-            transition={{
-              type: "spring" as const,
-              stiffness: 400,
-              damping: 24,
-            }}
-            className="mt-5 mb-7 max-w-[55ch] text-base sm:text-lg md:text-xl text-ink-soft leading-relaxed font-body font-normal"
-          >
-            We build web apps, mobile apps and smart automations for teams who
-            want results, without the jargon or the runaround.
-          </motion.p>
+          {/* Subhead (Geist, max 55ch) */}
+          <p className="font-sans text-fg-muted text-base sm:text-lg leading-relaxed max-w-[55ch] mb-8">
+            Web apps, mobile apps and automation, designed and engineered end to
+            end. Plain talk, precise work.
+          </p>
 
-          {/* Action CTAs */}
-          <motion.div
-            initial={prefersReducedMotion ? {} : { y: 8 }}
-            animate={{ y: 0 }}
-            transition={{
-              type: "spring" as const,
-              stiffness: 400,
-              damping: 24,
-            }}
-            className="flex flex-wrap items-center gap-3.5 w-full sm:w-auto"
-          >
-            <Magnetic strength={0.22}>
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-4 mb-8">
+            <Magnetic>
               <Button
                 variant="primary"
                 size="lg"
-                href={siteConfig.cta.estimator.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  openEstimator();
-                }}
-                withArrow
-                className="w-full sm:w-auto text-base sm:text-lg min-h-[50px]"
+                onClick={openEstimator}
               >
-                {siteConfig.cta.estimator.label}
+                Estimate my project
               </Button>
             </Magnetic>
-
             <Button
               variant="ghost"
               size="lg"
               href="/work"
-              withArrow={false}
-              className="w-full sm:w-auto text-base sm:text-lg min-h-[50px] border-ink/30 hover:border-ink hover:bg-peach/30"
             >
               See our work
             </Button>
-          </motion.div>
+          </div>
 
-          {/* Trust Strip Under CTAs */}
-          <motion.div
-            initial={prefersReducedMotion ? {} : { y: 8 }}
-            animate={{ y: 0 }}
-            transition={{
-              type: "spring" as const,
-              stiffness: 350,
-              damping: 25,
-            }}
-            className="mt-8 sm:mt-10 pt-5 border-t border-peach/80 w-full"
-          >
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 sm:gap-4">
-              <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft/80 shrink-0 font-body">
-                Trusted by founders &amp; teams at:
-              </span>
-
-              <div className="flex flex-wrap items-center gap-2">
-                {placeholderPartners.map((partner) => (
-                  <span
-                    key={partner}
-                    className="inline-flex items-center px-3 py-1 rounded-full bg-peach/70 text-ink-soft text-xs font-medium border border-orange/15 shadow-2xs"
-                  >
-                    {partner}
-                  </span>
-                ))}
-              </div>
+          {/* Trust Strip Tape */}
+          <div className="w-full max-w-xl">
+            <div className="text-[10px] font-mono text-fg-muted/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-2 select-none">
+              <span>TRUSTED ARCHITECTURE</span>
+              <span className="h-px bg-line/80 flex-1" />
             </div>
-          </motion.div>
-        </div>
-
-        {/* Right Column: Signature Interactive Circular Portal (5 cols on lg) */}
-        <div className="lg:col-span-5 flex justify-center items-center mt-6 lg:mt-0">
-          <div
-            ref={portalRef}
-            onMouseMove={handlePortalMouseMove}
-            onMouseLeave={handlePortalMouseLeave}
-            className="relative flex items-center justify-center cursor-default select-none perspective-1000"
-          >
-            {/* Circular Portal Frame (Portal motif echoing 'a' and 'o' logo counters) */}
-            <motion.div
-              style={{
-                rotateX: prefersReducedMotion ? 0 : tiltX,
-                rotateY: prefersReducedMotion ? 0 : tiltY,
-                transformStyle: "preserve-3d",
-              }}
-              className="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] lg:w-[450px] lg:h-[450px] rounded-full bg-gradient-to-br from-peach/85 via-peach/50 to-orange/20 border-4 border-orange/35 shadow-blob flex items-center justify-center overflow-hidden"
-            >
-              {/* Inner ambient glow blobs */}
-              <div
-                className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-orange/20 blur-2xl"
-                aria-hidden="true"
-              />
-              <div
-                className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-butter/30 blur-2xl"
-                aria-hidden="true"
-              />
-
-              {/* Scaled Cards Container to ensure perfect responsive fit */}
-              <div className="relative w-full h-full scale-[0.74] sm:scale-[0.88] lg:scale-100 origin-center">
-                {/* Card 1: Chat Bubble Card (Top Left) */}
-                <motion.div
-                  animate={
-                    prefersReducedMotion
-                      ? {}
-                      : {
-                          y: [-5, 5, -5],
-                          rotate: [-1, 1, -1],
-                        }
-                  }
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4.6,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute top-8 left-8 z-20 max-w-[210px] p-3.5 rounded-[22px] bg-cream/95 backdrop-blur-md shadow-card border border-orange/20"
-                >
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="w-5 h-5 rounded-full bg-orange/25 text-ink flex items-center justify-center text-[10px] font-bold">
-                      K
-                    </span>
-                    <span className="text-[11px] font-bold text-ink tracking-tight">
-                      Sprint Chat
-                    </span>
-                    <span className="ml-auto w-2 h-2 rounded-full bg-butter animate-pulse" />
-                  </div>
-                  <div className="space-y-1.5 text-xs">
-                    <div className="bg-peach/50 px-2.5 py-1.5 rounded-2xl text-ink-soft text-[11px]">
-                      &ldquo;Can we ship to production?&rdquo;
-                    </div>
-                    <div className="bg-orange text-ink font-semibold px-2.5 py-1.5 rounded-2xl text-[11px] flex items-center gap-1.5 shadow-sm">
-                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                      <span>Deployed &amp; live! 🚀</span>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Card 2: Conversion Metric Pill Card (Center Right) */}
-                <motion.div
-                  animate={
-                    prefersReducedMotion
-                      ? {}
-                      : {
-                          y: [5, -7, 5],
-                          rotate: [1, -1, 1],
-                        }
-                  }
-                  transition={{
-                    repeat: Infinity,
-                    duration: 5.2,
-                    ease: "easeInOut",
-                    delay: 0.8,
-                  }}
-                  className="absolute top-36 right-6 z-30 p-3.5 rounded-[26px] bg-cream/95 backdrop-blur-md shadow-card border border-orange/20 min-w-[195px]"
-                >
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <div className="flex items-center gap-1.5 text-ink font-bold text-xs">
-                      <TrendingUp className="w-4 h-4 stroke-[2.5] text-orange-deep" />
-                      <span>Conversion</span>
-                    </div>
-                    <span className="text-[10px] bg-butter px-2 py-0.5 rounded-full font-bold text-ink">
-                      +142%
-                    </span>
-                  </div>
-                  {/* Mini SVG Sparkline */}
-                  <svg
-                    className="w-full h-7 text-orange"
-                    viewBox="0 0 100 28"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M 2 22 Q 25 20 45 12 T 75 10 T 98 4"
-                      stroke="#FB9A5E"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="98" cy="4" r="3.5" fill="#F47B3A" />
-                  </svg>
-                  <div className="flex justify-between items-center text-[10px] text-ink-soft font-medium mt-0.5">
-                    <span>99.9% uptime</span>
-                    <span className="font-semibold text-ink">0.4s LCP</span>
-                  </div>
-                </motion.div>
-
-                {/* Card 3: Quality Checkmark Chip (Bottom Center) */}
-                <motion.div
-                  animate={
-                    prefersReducedMotion
-                      ? {}
-                      : {
-                          y: [-4, 5, -4],
-                        }
-                  }
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4.8,
-                    ease: "easeInOut",
-                    delay: 1.6,
-                  }}
-                  className="absolute bottom-8 left-10 z-20 flex items-center gap-2 px-3.5 py-2 rounded-full bg-cocoa text-cream shadow-card border border-butter/30 text-xs font-semibold"
-                >
-                  <div className="w-4 h-4 rounded-full bg-butter text-ink flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-3 h-3 stroke-[2.8]" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] font-bold text-cream">
-                      100% Type-Safe • 0 Jargon
-                    </span>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
+            <Tape
+              items={partnerLogos}
+              separator="///"
+              speed={34}
+              className="border-line bg-surface/40"
+            />
           </div>
         </div>
-      </div>
 
-      {/* Bottom Scroll Cue */}
-      <div className="relative z-10 flex justify-center pt-6 sm:pt-4">
-        <Squish>
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-peach/80 hover:bg-peach text-ink font-semibold text-xs uppercase tracking-wider transition-colors shadow-subtle border border-orange/20 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-orange-deep"
-            aria-label="Explore our solutions"
-          >
-            <span>Explore our solutions</span>
-            <motion.span
-              animate={prefersReducedMotion ? {} : { y: [0, 4, 0] }}
-              transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-            >
-              <ArrowDown className="w-3.5 h-3.5 stroke-[2.5]" />
-            </motion.span>
-          </Link>
-        </Squish>
+        {/* RIGHT COLUMN: Interactive OS Windows (5 cols desktop; Mobile shows Terminal only below CTAs) */}
+        <div
+          ref={dragContainerRef}
+          className="lg:col-span-5 relative w-full flex flex-col lg:h-[480px] lg:justify-center items-center lg:items-end"
+        >
+          {/* WINDOW 1: Terminal Window (Main, shown on both Mobile and Desktop) */}
+          <div className="w-full max-w-[420px] lg:absolute lg:top-8 lg:left-0 z-20">
+            <TerminalWindow
+              draggable={true}
+              dragConstraints={dragContainerRef}
+              zIndex={activeWindow === "terminal" ? 35 : 20}
+              onBringToFront={() => setActiveWindow("terminal")}
+              className="w-full shadow-card"
+            />
+          </div>
+
+          {/* WINDOW 2: Code Window (Desktop only) */}
+          <div className="hidden lg:block w-[340px] absolute -top-4 right-0 z-10">
+            <CodeWindow
+              draggable={true}
+              dragConstraints={dragContainerRef}
+              zIndex={activeWindow === "code" ? 35 : 15}
+              onBringToFront={() => setActiveWindow("code")}
+              className="w-full shadow-card opacity-95 hover:opacity-100 transition-opacity"
+            />
+          </div>
+
+          {/* WINDOW 3: Signal Waveform Window (Desktop only) */}
+          <div className="hidden lg:block w-[290px] absolute bottom-2 right-4 z-10">
+            <SignalWindow
+              draggable={true}
+              dragConstraints={dragContainerRef}
+              zIndex={activeWindow === "signal" ? 35 : 10}
+              onBringToFront={() => setActiveWindow("signal")}
+              className="w-full shadow-card opacity-95 hover:opacity-100 transition-opacity"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
