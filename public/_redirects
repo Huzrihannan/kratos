@@ -1,0 +1,5 @@
+# Krat.OS Permanent 301 Redirects for Legacy URLs
+/estimator /start 301
+/portfolio /work 301
+/case-studies /work 301
+/case-studies/* /work/:splat 301

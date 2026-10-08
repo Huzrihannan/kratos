@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const dynamic = "force-static";
-export const alt = "Krat.OS Software Solutions — Strong underneath. Friendly on top.";
+export const alt = "Krat.OS — Software solutions. The operating system for your business.";
 export const size = {
   width: 1200,
   height: 630,
@@ -17,115 +17,310 @@ export default function Image() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#FDEBD9", // cream
+          backgroundColor: "#212121",
           position: "relative",
-          fontFamily: "sans-serif",
-          padding: "60px",
+          padding: "36px",
+          fontFamily: "monospace",
         }}
       >
-        {/* Soft Background Blobs */}
+        {/* Hairline Technical Outer Frame */}
         <div
           style={{
-            position: "absolute",
-            top: "-80px",
-            right: "-80px",
-            width: "360px",
-            height: "360px",
-            borderRadius: "50%",
-            backgroundColor: "#FFD9B8", // peach
-            filter: "blur(50px)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: "-60px",
-            left: "-60px",
-            width: "320px",
-            height: "320px",
-            borderRadius: "50%",
-            backgroundColor: "#FFC857", // butter
-            opacity: 0.6,
-            filter: "blur(40px)",
-          }}
-        />
-
-        {/* Central Card */}
-        <div
-          style={{
+            width: "100%",
+            height: "100%",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(255, 217, 184, 0.6)",
-            border: "4px solid #FB9A5E",
-            borderRadius: "48px",
-            padding: "50px 70px",
-            textAlign: "center",
-            maxWidth: "960px",
-            boxShadow: "0 20px 40px rgba(42, 24, 16, 0.08)",
+            justifyContent: "space-between",
+            backgroundColor: "#262626",
+            border: "1px solid #3A3A3A",
+            borderRadius: "2px",
+            padding: "40px 48px",
+            position: "relative",
           }}
         >
-          {/* Tagline Eyebrow */}
+          {/* Top Registration Marks */}
           <div
             style={{
-              fontSize: "18px",
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "4px",
-              color: "#F47B3A",
-              marginBottom: "16px",
-            }}
-          >
-            software solutions
-          </div>
-
-          {/* Wordmark */}
-          <div
-            style={{
-              fontSize: "92px",
+              position: "absolute",
+              top: "-8px",
+              left: "-8px",
+              color: "#FD142B",
+              fontSize: "16px",
               fontWeight: 900,
-              color: "#FB9A5E",
-              letterSpacing: "-2px",
               lineHeight: 1,
-              marginBottom: "20px",
-              textShadow: "0 4px 12px rgba(244, 123, 58, 0.25)",
             }}
           >
-            krat.os
+            +
           </div>
-
-          {/* Headline */}
           <div
             style={{
-              fontSize: "36px",
-              fontWeight: 700,
-              color: "#2A1810",
-              marginBottom: "24px",
-              lineHeight: 1.2,
+              position: "absolute",
+              top: "-8px",
+              right: "-8px",
+              color: "#FD142B",
+              fontSize: "16px",
+              fontWeight: 900,
+              lineHeight: 1,
             }}
           >
-            Strong underneath. Friendly on top.
+            +
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-8px",
+              left: "-8px",
+              color: "#FD142B",
+              fontSize: "16px",
+              fontWeight: 900,
+              lineHeight: 1,
+            }}
+          >
+            +
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "-8px",
+              right: "-8px",
+              color: "#FD142B",
+              fontSize: "16px",
+              fontWeight: 900,
+              lineHeight: 1,
+            }}
+          >
+            +
           </div>
 
-          {/* Feature Badge Pills */}
+          {/* Top HUD Header Bar */}
           <div
             style={{
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              gap: "12px",
-              backgroundColor: "#FDEBD9",
-              padding: "10px 24px",
-              borderRadius: "9999px",
-              border: "2px solid rgba(251, 154, 94, 0.4)",
-              fontSize: "16px",
-              fontWeight: 700,
-              color: "#6B4A3A",
+              borderBottom: "1px solid #3A3A3A",
+              paddingBottom: "16px",
             }}
           >
-            Web Apps & SaaS • Mobile Apps • Pragmatic AI Automations
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <div
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  backgroundColor: "#3DDC84",
+                }}
+              />
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  letterSpacing: "2px",
+                  color: "#A8A294",
+                  textTransform: "uppercase",
+                }}
+              >
+                /00 — ROOT_MANIFEST // KRAT.OS_KERNEL
+              </div>
+            </div>
+
+            <div
+              style={{
+                fontSize: "12px",
+                fontWeight: 700,
+                letterSpacing: "2px",
+                color: "#3DDC84",
+                textTransform: "uppercase",
+              }}
+            >
+              [STATUS: PRODUCTION_READY]
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              margin: "auto 0",
+            }}
+          >
+            {/* Wordmark Lockup */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}
+            >
+              {/* Tall Flat Red Vertical Bar (Caret) */}
+              <div
+                style={{
+                  width: "14px",
+                  height: "76px",
+                  backgroundColor: "#FD142B",
+                  marginRight: "22px",
+                  borderRadius: "1px",
+                }}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    fontSize: "76px",
+                    fontWeight: 900,
+                    letterSpacing: "-3px",
+                    lineHeight: 1,
+                  }}
+                >
+                  <span style={{ color: "#EFE3CF" }}>Krat</span>
+                  <span style={{ color: "#FD142B" }}>.</span>
+                  <span style={{ color: "#EFE3CF" }}>OS</span>
+                </div>
+                <div
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    letterSpacing: "4px",
+                    color: "#A8A294",
+                    textTransform: "uppercase",
+                    marginTop: "6px",
+                  }}
+                >
+                  Software solutions
+                </div>
+              </div>
+            </div>
+
+            {/* Headline */}
+            <div
+              style={{
+                fontSize: "36px",
+                fontWeight: 800,
+                letterSpacing: "-1px",
+                color: "#EFE3CF",
+                marginBottom: "12px",
+                lineHeight: 1.2,
+              }}
+            >
+              The operating system for your business.
+            </div>
+
+            {/* Subtitle */}
+            <div
+              style={{
+                fontSize: "20px",
+                lineHeight: 1.4,
+                color: "#A8A294",
+                maxWidth: "880px",
+              }}
+            >
+              Web apps, mobile platforms, and workflow automations engineered end-to-end. Dependable results without the jargon.
+            </div>
+          </div>
+
+          {/* Bottom Capabilities Row & Domain Tag */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderTop: "1px solid #3A3A3A",
+              paddingTop: "20px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+              }}
+            >
+              <div
+                style={{
+                  backgroundColor: "#2B2B2B",
+                  border: "1px solid #3A3A3A",
+                  borderRadius: "2px",
+                  padding: "8px 14px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#EFE3CF",
+                  letterSpacing: "1px",
+                }}
+              >
+                [01 WEB APPS]
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#2B2B2B",
+                  border: "1px solid #3A3A3A",
+                  borderRadius: "2px",
+                  padding: "8px 14px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#EFE3CF",
+                  letterSpacing: "1px",
+                }}
+              >
+                [02 MOBILE]
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#2B2B2B",
+                  border: "1px solid #3A3A3A",
+                  borderRadius: "2px",
+                  padding: "8px 14px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#EFE3CF",
+                  letterSpacing: "1px",
+                }}
+              >
+                [03 AUTOMATION]
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#2B2B2B",
+                  border: "1px solid #3A3A3A",
+                  borderRadius: "2px",
+                  padding: "8px 14px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#EFE3CF",
+                  letterSpacing: "1px",
+                }}
+              >
+                [04 MODERNIZATION]
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                fontSize: "14px",
+                fontWeight: 700,
+                color: "#EFE3CF",
+                letterSpacing: "1px",
+              }}
+            >
+              <span>krat-os.dev</span>
+              <span style={{ color: "#FD142B" }}>{"//"}</span>
+              <span>2026</span>
+            </div>
           </div>
         </div>
       </div>

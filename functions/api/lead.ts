@@ -146,7 +146,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
             from: "Krat.OS Website <notifications@krat-os.dev>",
             to: [notifyEmail],
             reply_to: lead.email,
-            subject: `🚀 New Lead: ${lead.name} (${lead.projectType})`,
+            subject: `[INTAKE_ALERT] New Lead: ${lead.name} (${lead.projectType})`,
             text: `New lead from ${lead.name} (${lead.email}):\nProject: ${lead.projectType}\nBudget: ${lead.budget}\nMessage: ${lead.message}`,
           }),
         });

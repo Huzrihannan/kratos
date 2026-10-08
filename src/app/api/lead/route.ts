@@ -99,6 +99,8 @@ async function saveLeadToSupabase(lead: LeadInput, ip: string, userAgent: string
 async function sendResendEmails(lead: LeadInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   const notifyEmail = process.env.LEAD_NOTIFY_EMAIL || "hello@krat-os.dev";
+  const rawWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+1234567890";
+  const cleanWhatsapp = rawWhatsapp.replace(/[^0-9]/g, "");
 
   const isMock = !apiKey || apiKey.startsWith("re_your_api");
 
@@ -106,55 +108,223 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
   const formattedMax = lead.estimateMax ? `$${lead.estimateMax.toLocaleString()}` : "N/A";
   const rangeStr = lead.estimateMin && lead.estimateMax ? `${formattedMin} – ${formattedMax}` : lead.budget;
 
-  // 1. Team Notification Email Content
+  // 1. Team Notification Email Content (Monospace OS Terminal Alert)
   const teamHtml = `
-    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #FDEBD9; padding: 32px; border-radius: 24px; color: #2A1810;">
-      <h2 style="color: #F47B3A; margin-top: 0;">🚀 New Project Lead: ${lead.name}</h2>
-      <p style="font-size: 16px;"><strong>Source:</strong> ${lead.source}</p>
-      <div style="background: #ffffff; padding: 24px; border-radius: 16px; margin: 20px 0;">
-        <p><strong>Contact:</strong> ${lead.name} &lt;${lead.email}&gt;</p>
-        <p><strong>Phone / WhatsApp:</strong> ${lead.phone || "Not provided"}</p>
-        <p><strong>Project Type:</strong> ${lead.projectType}</p>
-        <p><strong>Needs:</strong> ${lead.needs.join(", ")}</p>
-        <p><strong>Timeline:</strong> ${lead.timeline}</p>
-        <p><strong>Budget Band:</strong> ${lead.budget}</p>
-        <p><strong>Computed Ballpark:</strong> ${rangeStr}</p>
-        ${lead.link ? `<p><strong>Link / Reference:</strong> <a href="${lead.link}">${lead.link}</a></p>` : ""}
-        ${lead.message ? `<p><strong>Project Notes:</strong><br/>${lead.message.replace(/\n/g, "<br/>")}</p>` : ""}
-      </div>
-      <p style="font-size: 12px; color: #6B4A3A;">Attribution: UTM Source=${lead.utmSource || "direct"} | Page=${lead.pageUrl || "/"}</p>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/></head>
+<body style="margin: 0; padding: 24px 0; background-color: #161616; font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; color: #EFE3CF;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 620px; margin: 0 auto; background-color: #212121; border: 1px solid #3A3A3A; border-radius: 2px;">
+    <tr>
+      <td style="padding: 24px 28px; border-bottom: 1px solid #3A3A3A;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <span style="display: inline-block; width: 4px; height: 18px; background-color: #FD142B; vertical-align: middle; margin-right: 8px;"></span>
+              <strong style="font-size: 16px; letter-spacing: -0.02em; color: #EFE3CF;">KRAT.OS // INTAKE_DISPATCH</strong>
+            </td>
+            <td align="right" style="font-size: 11px; color: #A8A294; letter-spacing: 0.08em; text-transform: uppercase;">
+              [INTAKE_ALERT]
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 24px 28px;">
+        <div style="font-size: 12px; color: #A8A294; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.08em;">
+          /01 SPECIFICATION // PAYLOAD_MANIFEST
+        </div>
+
+        <table role="presentation" width="100%" cellpadding="8" cellspacing="0" style="background-color: #2B2B2B; border: 1px solid #3A3A3A; border-radius: 2px; font-size: 13px; margin-bottom: 20px;">
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td width="35%" style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Client</td>
+            <td style="color: #EFE3CF; font-weight: 700; border-bottom: 1px solid #3A3A3A;">${lead.name} &lt;<a href="mailto:${lead.email}" style="color: #EFE3CF; text-decoration: underline;">${lead.email}</a>&gt;</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Phone / WA</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #3A3A3A;">${lead.phone || "Not provided"}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Project Type</td>
+            <td style="color: #EFE3CF; font-weight: 700; border-bottom: 1px solid #3A3A3A;">${lead.projectType}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Capabilities</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #3A3A3A;">${lead.needs.join(", ")}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Timeline</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #3A3A3A;">${lead.timeline}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Budget Band</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #3A3A3A;">${lead.budget}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #3A3A3A;">
+            <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Ballpark Range</td>
+            <td style="color: #FD142B; font-weight: 800; border-bottom: 1px solid #3A3A3A; font-size: 14px;">${rangeStr}</td>
+          </tr>
+          ${
+            lead.link
+              ? `<tr style="border-bottom: 1px solid #3A3A3A;">
+                  <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #3A3A3A;">Reference</td>
+                  <td style="border-bottom: 1px solid #3A3A3A;"><a href="${lead.link}" style="color: #FF5E70; text-decoration: underline;">${lead.link}</a></td>
+                </tr>`
+              : ""
+          }
+          ${
+            lead.message
+              ? `<tr>
+                  <td style="color: #A8A294; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; vertical-align: top;">Project Notes</td>
+                  <td style="color: #EFE3CF; white-space: pre-wrap;">${lead.message.replace(/\n/g, "<br/>")}</td>
+                </tr>`
+              : ""
+          }
+        </table>
+
+        <div style="font-size: 11px; color: #7A7A7A; padding: 12px 16px; background-color: #1A1A1A; border: 1px solid #2B2B2B; border-radius: 2px;">
+          <div>ATTRIBUTION: Source=${lead.source} | UTM_Source=${lead.utmSource || "direct"} | Page=${lead.pageUrl || "/"}</div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 16px 28px; border-top: 1px solid #3A3A3A; font-size: 11px; color: #A8A294; text-align: center;">
+        Krat.OS — Software solutions. Lead engine automated receipt.
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
   `;
 
-  // 2. Client Confirmation & Ballpark Auto-Reply
+  // 2. Client Confirmation & Ballpark Auto-Reply (Terminal Receipt)
   const clientHtml = `
-    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #FDEBD9; padding: 36px; border-radius: 28px; color: #2A1810;">
-      <h1 style="color: #2A1810; margin-top: 0; font-size: 26px;">Hi ${lead.name}, thank you for reaching out to Krat.OS!</h1>
-      <p style="font-size: 16px; line-height: 1.5; color: #6B4A3A;">
-        We received your project details for <strong>${lead.projectType}</strong>. Here is the ballpark estimate based on your scope:
-      </p>
-      <div style="background: #FFD9B8; border: 2px solid #FB9A5E; padding: 24px; border-radius: 20px; text-align: center; margin: 24px 0;">
-        <span style="font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #F47B3A;">Estimated Ballpark Range</span>
-        <div style="font-size: 32px; font-weight: bold; color: #2A1810; margin: 8px 0;">${rangeStr}</div>
-        <span style="font-size: 13px; color: #6B4A3A;">Estimated timeline: ${lead.timeline}</span>
-      </div>
-      <p style="font-size: 15px; color: #2A1810; line-height: 1.6;">
-        <em>A ballpark, not a quote. Let's make it real.</em> We would love to chat through your timeline, goals, and technical details to give you an exact roadmap.
-      </p>
-      <div style="margin: 28px 0; text-align: center;">
-        <a href="${process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min"}" style="background: #FB9A5E; color: #2A1810; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 9999px; display: inline-block; font-size: 16px;">
-          Book a 15-Minute Call
-        </a>
-      </div>
-      <p style="font-size: 13px; color: #6B4A3A; margin-top: 32px; border-top: 1px solid #FFD9B8; padding-top: 16px;">
-        Krat.OS Software Solutions • Strong underneath. Friendly on top.
-      </p>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/></head>
+<body style="margin: 0; padding: 24px 0; background-color: #161616; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #EFE3CF;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 620px; margin: 0 auto; background-color: #212121; border: 1px solid #3A3A3A; border-radius: 2px;">
+    <tr>
+      <td style="padding: 28px 32px 20px; border-bottom: 1px solid #3A3A3A;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="width: 5px; height: 26px; background-color: #FD142B; padding: 0;"></td>
+                  <td style="padding-left: 10px;">
+                    <span style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 22px; font-weight: 800; color: #EFE3CF; letter-spacing: -0.04em;">Krat<span style="color: #FD142B;">.</span>OS</span>
+                    <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 10px; color: #A8A294; letter-spacing: 0.08em; text-transform: uppercase;">Software solutions</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td align="right">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #3DDC84; vertical-align: middle; margin-right: 6px;"></span>
+              <span style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 11px; color: #A8A294; text-transform: uppercase; letter-spacing: 0.05em;">[SPEC_LOGGED]</span>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 32px;">
+        <h2 style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 18px; font-weight: 700; color: #EFE3CF; margin: 0 0 12px 0; letter-spacing: -0.02em;">
+          Hi ${lead.name}, your project intake has been compiled.
+        </h2>
+        <p style="font-size: 14px; line-height: 1.6; color: #A8A294; margin: 0 0 24px 0;">
+          We received your configuration for <strong style="color: #EFE3CF;">${lead.projectType}</strong>. Based on your submitted scope and architectural requirements, here is your preliminary ballpark estimate:
+        </p>
+
+        <!-- Highlight Spec Box -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #2B2B2B; border: 1px solid #444444; border-radius: 2px; margin-bottom: 24px;">
+          <tr>
+            <td style="padding: 24px; text-align: center;">
+              <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #A8A294; margin-bottom: 8px;">
+                Estimated Ballpark Range
+              </div>
+              <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 32px; font-weight: 800; color: #EFE3CF; letter-spacing: -0.02em; margin-bottom: 8px;">
+                ${rangeStr}
+              </div>
+              <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 12px; color: #A8A294;">
+                Estimated Sprint Delivery: <strong style="color: #EFE3CF;">${lead.timeline}</strong>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Config Breakdown -->
+        <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #A8A294; margin-bottom: 10px;">
+          /02 SCOPE // LOGGED_PARAMETERS
+        </div>
+        <table role="presentation" width="100%" cellpadding="8" cellspacing="0" style="background-color: #1A1A1A; border: 1px solid #3A3A3A; border-radius: 2px; font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 12px; margin-bottom: 24px;">
+          <tr style="border-bottom: 1px solid #2B2B2B;">
+            <td width="35%" style="color: #7A7A7A; border-bottom: 1px solid #2B2B2B;">MODULE</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #2B2B2B;">${lead.projectType}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #2B2B2B;">
+            <td style="color: #7A7A7A; border-bottom: 1px solid #2B2B2B;">CAPABILITIES</td>
+            <td style="color: #EFE3CF; border-bottom: 1px solid #2B2B2B;">${lead.needs.join(", ")}</td>
+          </tr>
+          <tr>
+            <td style="color: #7A7A7A;">BUDGET TARGET</td>
+            <td style="color: #EFE3CF;">${lead.budget}</td>
+          </tr>
+        </table>
+
+        <!-- Signature Brand Statement -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 24px; border-left: 3px solid #FD142B; padding-left: 14px;">
+          <tr>
+            <td>
+              <div style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 14px; font-style: italic; color: #EFE3CF;">
+                &ldquo;A ballpark, not a quote. Let&rsquo;s make it real.&rdquo;
+              </div>
+              <div style="font-size: 13px; color: #A8A294; line-height: 1.5; margin-top: 6px;">
+                Our engineering team reviews every submission within 4 hours. We would love to chat through your timeline, goals, and technical details to give you an exact roadmap.
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Conversion CTAs -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 28px 0 12px;">
+          <tr>
+            <td>
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="border-radius: 2px; background-color: #EFE3CF; border-left: 4px solid #FD142B;">
+                    <a href="${process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min"}" style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 13px; font-weight: 700; color: #212121; text-decoration: none; padding: 12px 22px; display: inline-block;">
+                      Book a 15-Minute Call &rarr;
+                    </a>
+                  </td>
+                  <td style="width: 12px;"></td>
+                  <td style="border-radius: 2px; background-color: #2B2B2B; border: 1px solid #444444;">
+                    <a href="https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent("Hi Krat.OS! I just submitted an estimate for " + lead.projectType)}" style="font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; font-size: 13px; font-weight: 600; color: #EFE3CF; text-decoration: none; padding: 12px 18px; display: inline-block;">
+                      Chat on WhatsApp &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 20px 32px; border-top: 1px solid #3A3A3A; font-size: 11px; color: #7A7A7A; font-family: 'JetBrains Mono', Menlo, Consolas, Monaco, monospace; line-height: 1.6;">
+        <div>Krat.OS &mdash; Software solutions. Web apps, mobile apps, and automation engineered end-to-end.</div>
+        <div style="margin-top: 4px;">Global Remote (HQ: San Francisco, CA) &bull; <a href="https://krat-os.dev" style="color: #A8A294; text-decoration: underline;">krat-os.dev</a></div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
   `;
 
   if (isMock) {
-    console.log("[Resend Mock] Internal Lead Alert to:", notifyEmail, `Subject: New Lead: ${lead.name}`);
-    console.log("[Resend Mock] Auto-Reply to:", lead.email, `Subject: Your Krat.OS Ballpark Estimate`);
+    console.log("[Resend Mock] Internal Lead Alert to:", notifyEmail, `Subject: [INTAKE_ALERT] New Lead: ${lead.name}`);
+    console.log("[Resend Mock] Auto-Reply to:", lead.email, `Subject: [SPEC_RECEIPT] Project Estimate Ballpark: ${lead.projectType}`);
     return;
   }
 
@@ -170,7 +340,7 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
         from: "Krat.OS Website <notifications@krat-os.dev>",
         to: [notifyEmail],
         reply_to: lead.email,
-        subject: `🚀 New Lead: ${lead.name} (${lead.projectType})`,
+        subject: `[INTAKE_ALERT] New Lead: ${lead.name} (${lead.projectType})`,
         html: teamHtml,
       }),
     });
@@ -186,7 +356,7 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
         from: "Krat.OS Software Solutions <hello@krat-os.dev>",
         to: [lead.email],
         reply_to: notifyEmail,
-        subject: `Your Krat.OS Ballpark Estimate for ${lead.projectType}`,
+        subject: `[SPEC_RECEIPT] Project Estimate Ballpark: ${lead.projectType}`,
         html: clientHtml,
       }),
     });

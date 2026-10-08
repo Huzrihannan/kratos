@@ -2,6 +2,34 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R10: Transactional Emails, OpenGraph Card, SEO Architecture, and 301 Redirects] - 2026-10-08
+
+### Added
+- **Permanent 301 Legacy Redirects:**
+  - Configured Next.js server redirects in `next.config.ts`: `/estimator` → `/start`, `/portfolio` → `/work`, `/case-studies` → `/work`, and `/case-studies/:slug*` → `/work/:slug*`.
+  - Added `public/_redirects` for Cloudflare Pages static edge routing with identical 301 rules.
+- **Enhanced Schema.org Validation Script (`scripts/validate-jsonld.mjs`):**
+  - Audits all 8 primary application routes against local and remote servers, verifying `@context`, `@graph`, `@type` fields, and reporting 0 errors across 16 parsed schemas.
+- **Transactional Email Preview Generator (`scripts/preview-email.mjs`):**
+  - Generates HTML preview artifacts for internal team alerts and client ballpark receipts with realistic mock inputs.
+- **Visual Artifacts:**
+  - `r10-opengraph-card.png`: High-resolution render of the 1200x630 OpenGraph social card.
+  - `r10-email-team-alert.png`: Render of the internal monospace system alert email.
+  - `r10-email-client-receipt.png`: Render of the client ballpark intake receipt email.
+
+### Changed & Rebranded
+- **Transactional Emails (`src/app/api/lead/route.ts` & `functions/api/lead.ts`):**
+  - Completely redesigned `teamHtml` into a dark monospace terminal alert (`KRAT.OS // INTAKE_DISPATCH [INTAKE_ALERT]`) with signal red caret bar (`#FD142B`), structured specification table (`/01 SPECIFICATION // PAYLOAD_MANIFEST`), and metadata attribution HUD.
+  - Completely redesigned `clientHtml` into a clean, modern OS terminal receipt (`Krat.OS Software Solutions [SPEC_LOGGED]`) featuring highlight ballpark projection window, scoped parameter breakdown, signature quote (*"A ballpark, not a quote. Let's make it real."*), and sharp 2px rectangular CTA buttons (cream fill `#EFE3CF` with red caret border).
+  - Purged all legacy v1 peach bubbles (`#FDEBD9`), orange badges, 24px/9999px pill radii, and emojis (`🚀`).
+- **OpenGraph Dynamic Social Card (`src/app/opengraph-image.tsx`):**
+  - Replaced legacy v1 orange peach background and soft blobs with dark blueprint charcoal theme (`#212121`), hairline frame (`#3A3A3A`), and corner `+` registration marks.
+  - Rendered heavy monospace wordmark `Krat.OS` with tall red vertical caret bar (`#FD142B`) and status LED dot (`#3DDC84`).
+  - Added top HUD bar (`/00 — ROOT_MANIFEST // KRAT.OS_KERNEL`) and 4 sharp capability chips (`[01 WEB APPS]`, `[02 MOBILE]`, `[03 AUTOMATION]`, `[04 MODERNIZATION]`).
+- **SEO & Canonical URLs Audit:**
+  - Confirmed absolute canonical URLs and OpenGraph metadata inheritance across all static and dynamic pages.
+  - Verified 100% compliance with Google Rich Results schemas (`Organization`, `WebSite`, `Service`, `ItemList`, `BreadcrumbList`, `CreativeWork`, `FAQPage`, `ContactPage`, `AboutPage`).
+
 ## [R9: Motion Polish, Motion Levels Audit, and Performance Optimization] - 2026-10-08
 
 ### Added

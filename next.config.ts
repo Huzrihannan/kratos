@@ -20,6 +20,29 @@ if (process.env.NEXT_EXPORT !== "true") {
       ],
     },
   ];
+
+  nextConfig.redirects = async () => [
+    {
+      source: "/estimator",
+      destination: "/start",
+      permanent: true,
+    },
+    {
+      source: "/portfolio",
+      destination: "/work",
+      permanent: true,
+    },
+    {
+      source: "/case-studies",
+      destination: "/work",
+      permanent: true,
+    },
+    {
+      source: "/case-studies/:slug*",
+      destination: "/work/:slug*",
+      permanent: true,
+    },
+  ];
 }
 
 export default nextConfig;
