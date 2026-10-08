@@ -8,7 +8,7 @@ export interface AttributionData {
   referrer?: string;
 }
 
-const STORAGE_KEY = "kratos_attribution";
+const STORAGE_KEY = "krat_os_attribution";
 
 export function captureAttribution(): void {
   if (typeof window === "undefined") return;

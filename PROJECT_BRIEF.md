@@ -1,30 +1,44 @@
-You are the lead front-end engineer and creative technologist building the marketing website for KRATOS SOFTWARE SOLUTIONS, a software development company. The brand logo is a fat, fully rounded, bubbly lowercase wordmark "kratos" in warm orange on soft cream, with the tagline "software solutions" in widely spaced rounded lowercase.
+# Krat.OS — Project Brief & Always-On Rules (v2)
 
-GOAL
-The site must be visually memorable within 5 seconds and convert visitors into leads. Every page drives toward one action: starting a project conversation (Project Estimator, WhatsApp, book a call, or email).
+You are the lead front-end engineer and creative technologist redesigning the marketing website for KRAT.OS (written exactly "Krat.OS"), a software development company. The site already exists as v1 (old brand "Kratos", soft orange, rounded blobs). You are rebuilding its look, brand, copy tone and motion. You are NOT changing the lead engine, API contracts, env variable names, analytics events or route structure unless a prompt says so.
 
-POSITIONING
-"Strong underneath. Friendly on top." Kratos means strength; the look is soft, warm and playful. The tone is confident, plain-spoken, jargon-free.
+## THE LOGO
+Wordmark "Krat.OS" in a heavy monospace face, with a tall flat red vertical bar to its left, a round red dot as the period, and the tagline "Software solutions" in the same mono family below. Two versions: cream (#EFE3CF) on charcoal (#212121), and charcoal (#292926) on cream (#F6EFDD). The red bar is a text caret / progress bar. The red dot is a status LED / pulse.
 
-DESIGN LANGUAGE
-- Shape: everything is pill / blob / circle. Radii are large (min 24px on cards, full on buttons and chips). No sharp corners, no thin 1px hairline aesthetics, no drop-shadow-heavy "material" look; use soft, flat color blocks with occasional gentle shadow.
-- Motif: circular "portal" cut-outs (from the o/a counters of the logo) used as image masks and hover reveals. Letterforms that merge, blobs that merge (gooey effect).
-- Motion: springy and tactile. Elements "squish" slightly on press (scale ~0.96) and overshoot slightly on entrance. Scroll reveals are subtle. Everything respects prefers-reduced-motion (replace with simple fades).
-- Palette tokens (CSS variables, Tailwind-mapped): cream #FDEBD9 (background), peach #FFD9B8 (surfaces), orange #FB9A5E (brand), orange-deep #F47B3A (hover/pressed), ink #2A1810 (text), ink-soft #6B4A3A (secondary text), cocoa #3B2218 (dark sections), butter #FFC857 (tiny highlights).
-- HARD RULES: never use orange for body or small text on cream (contrast fails); text on orange is ink. Do not use purple/blue gradients, generic stock "tech" imagery, glassmorphism, or default template layouts. Do not use emojis as icons; use a consistent rounded icon set (Lucide with rounded stroke, or custom SVG).
-- Typography: Fredoka (600-700) for headlines, Outfit for body and UI, wide-tracked lowercase labels echoing the logo tagline. Fluid type scale with clamp(). Headlines can be very large.
+## GOAL
+Modern, techy, premium, with real creativity. Visually memorable in 5 seconds, still converting visitors into leads. Every page drives toward one action: starting a project conversation (Estimator, WhatsApp, book a call, email).
 
-TECH STACK (do not substitute without asking)
-Next.js App Router + TypeScript (strict), Tailwind CSS, Motion (Framer Motion), Lenis smooth scroll, React Hook Form + Zod, Resend for email, Supabase for lead storage, Cloudflare Turnstile + honeypot for spam, deployed on Vercel. Follow the folder structure in the section "Architecture" of this repo's README/prompt pack (src/components/{ui,fx,sections,estimator,layout}, src/content, src/lib, src/app/api/lead).
+## CONCEPT
+The website behaves like an operating system for your business: boot sequence, windows, command palette (Cmd/Ctrl+K), status bar, caret, HUD micro-type, pipeline. Rule: metaphor lives in the decoration; anything clickable uses plain words ("Estimate my project", not "Initialize").
 
-ENGINEERING STANDARDS
-- Mobile-first. Test at 360, 768, 1280, 1920 widths. Touch targets min 44px.
-- Performance budget: Lighthouse >= 95 on Performance, Accessibility, Best Practices, SEO on mobile. LCP < 2.5s, CLS < 0.05. Use next/image, next/font, lazy-load below-the-fold effects, no layout shift from fonts or animations.
-- Accessibility: semantic HTML, visible focus states (a thick orange-deep ring), keyboard navigable, aria labels, alt text, color contrast AA minimum.
-- Content lives in src/content as typed data, not hard-coded in components. Use clearly marked placeholder copy (prefix "[PLACEHOLDER]") where real content is missing. Never invent client names, testimonials, statistics or awards.
-- Secrets only via environment variables; ship a complete .env.example. Never commit secrets.
-- Small, reusable components. No dead code. Comment only non-obvious logic.
-- After finishing any task: run lint, typecheck and build; fix all errors; then verify visually in the browser at mobile and desktop widths and attach screenshots to your walkthrough.
+## VOICE
+Precise, confident, plain-spoken, a little dry wit. Short sentences. Speak to the founder or manager with a problem, not to an engineer. No jargon, no hype words ("cutting-edge", "synergy", "revolutionary").
 
-WORKING STYLE
-For any task with more than ~3 files, first produce an implementation plan and wait for approval. Ask before making irreversible or architecture-changing decisions. Keep a running CHANGELOG.md of what was built.
+## DESIGN LANGUAGE
+- Shapes: sharp rectangles. Radius 0 to 4px maximum on any box. Circles only for the red dot, status LEDs and avatars. 1px hairline borders, corner brackets on feature windows, blueprint dot grid with "+" registration marks. NO pills, NO blobs, NO gooey effects, NO soft drop shadows, NO glassmorphism, NO purple or blue gradients, NO stock tech imagery, NO emoji as icons (use Lucide with a 1.5px stroke or custom SVG).
+- Color (semantic tokens, theme-aware; dark is default, light theme fully supported; sections may opt into the other theme via data-theme):
+  bg #212121 / #F6EFDD; surface #2B2B2B / #EBE3CD; fg #EFE3CF / #292926; fg-muted #A8A294 / #6B665A; line #3A3A3A / #D6CDB5 (decorative only); line-strong #7A7A7A / #8A8473 (inputs and anything that must be perceivable); red #FD142B; red-text #FF4A5C (dark) / #C8102E (light); ok #3DDC84 / #1E9E5A (status LED only).
+- RED RULES: red is a laser pointer, not a paint bucket (under about 10% of any viewport). Pure red only for shapes, the caret, LEDs, thin lines and display text of 24px or larger. Small red text uses red-text. NEVER place small text on a red fill. Primary buttons are cream fill with charcoal text and a red accent.
+- Typography: JetBrains Mono (headlines 700-800 with -0.04em tracking, labels, numbers, code) and Geist (body). Labels are small uppercase mono, tracked 0.08em, like "/01 — MODULES". Fluid type with clamp(); headlines up to about 8rem. Load with next/font.
+
+## MOTION RULES
+- Mechanical precision, not bounce: no springs, no squish, no overshoot. Easing: expo-out (0.16,1,0.3,1) for reveals, power4 in-out (0.76,0,0.24,1) for wipes, linear for typing/progress. Durations: micro 150ms, UI 300ms, section 700ms, hero 1200ms. Typing 28-40ms per char with jitter.
+- Named effects live in src/components/fx and are reused (Boot, Decode, Caret, TypeLines, SpotlightGrid, ShaderField, Window, Pipeline, Odometer, Wipe, Tilt, Tape, Magnetic, Crosshair, HUD, Glitch). Do not write one-off animations inside sections when a named effect exists.
+- One tool per job: GSAP + ScrollTrigger + SplitText for choreography, pinned scenes and text effects; Lenis wired to ScrollTrigger; Motion (Framer Motion) ONLY for mount/unmount, drag and shared layout; ogl for the single hero shader; cmdk for the command palette; next-themes for theme; inline SVG for motion-graphic scenes.
+- MotionContext with three levels: full, lite, off. off = prefers-reduced-motion (everything in final state, no loops). lite = Save-Data, low-end devices, small screens (no shader, no custom cursor, no tilt, no pinned scenes). A footer toggle lets users switch.
+- Animate only transform, opacity, clip-path, and filter sparingly; never layout properties. will-change only while animating. Pause every loop and canvas when off-screen or the tab is hidden. One WebGL canvas at a time, DPR capped at 1.5. Max two pinned scenes on the home page, each at most 250vh; never hijack the wheel. No flashing above 3Hz.
+- Real text stays real: headings that decode or type keep their true text in the DOM from first paint. Decorative HUD elements are aria-hidden.
+
+## TECH STACK
+Existing: Next.js App Router + TypeScript strict, Tailwind, React Hook Form + Zod, Resend, Supabase, Turnstile, Vercel. Add: gsap (ScrollTrigger, SplitText), ogl, cmdk, next-themes. Remove when unused: Fredoka, Outfit, GooeyBlobs, Squish, CircleReveal, CursorFollower and any orange tokens.
+
+## ENGINEERING STANDARDS
+- Mobile-first. Test 360, 768, 1280, 1920. Touch targets at least 44px.
+- Targets on mobile: Lighthouse Performance >= 90, Accessibility / Best Practices / SEO >= 95, LCP < 2.5s, CLS < 0.05, INP < 200ms. Home first-load JS about 220 KB gzipped or less; heavy effects in lazy chunks (dynamic import, ssr false). Report bundle sizes after every prompt.
+- Accessibility: semantic HTML, visible focus (2px red-text outline with 2px offset), full keyboard support, AA contrast at minimum, command palette and modals with proper focus management.
+- Content lives in src/content as typed data. Prefix unfinished copy with "[PLACEHOLDER]". Never invent clients, testimonials, statistics, awards or live metrics; decorative charts must carry no numbers.
+- Secrets only via environment variables. Small reusable components, no dead code.
+- After every task: lint, typecheck, build, existing tests; then verify in the browser at mobile and desktop widths and attach screenshots to the walkthrough.
+
+## WORKING STYLE
+For any task touching more than about 3 files, produce an implementation plan first and wait for approval. Ask before architecture-changing decisions. Keep CHANGELOG.md updated. Work on branch redesign/krat-os-v2.

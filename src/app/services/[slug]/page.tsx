@@ -33,18 +33,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!service) {
     return {
-      title: "Service Not Found | Kratos Software Solutions",
+      title: "Service Not Found | Krat.OS Software Solutions",
     };
   }
 
   return {
-    title: `${service.title} | Kratos Software Solutions`,
+    title: `${service.title} | Krat.OS Software Solutions`,
     description: service.shortPromise,
     alternates: {
       canonical: `/services/${service.slug}`,
     },
     openGraph: {
-      title: `${service.title} | Kratos Software Solutions`,
+      title: `${service.title} | Krat.OS Software Solutions`,
       description: service.shortPromise,
       url: `/services/${service.slug}`,
     },
@@ -72,12 +72,12 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         description: service.detailSummary,
         provider: {
           "@type": "Organization",
-          name: "Kratos Software Solutions",
-          url: "https://kratos.dev",
+          name: "Krat.OS Software Solutions",
+          url: "https://krat-os.dev",
         },
         serviceType: service.title,
-        termsOfService: "https://kratos.dev/terms",
-        url: `https://kratos.dev/services/${service.slug}`,
+        termsOfService: "https://krat-os.dev/terms",
+        url: `https://krat-os.dev/services/${service.slug}`,
       },
       {
         "@type": "BreadcrumbList",
@@ -86,19 +86,19 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://kratos.dev/services",
+            item: "https://krat-os.dev/services",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: service.title,
-            item: `https://kratos.dev/services/${service.slug}`,
+            item: `https://krat-os.dev/services/${service.slug}`,
           },
         ],
       },

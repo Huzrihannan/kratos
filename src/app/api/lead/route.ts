@@ -98,7 +98,7 @@ async function saveLeadToSupabase(lead: LeadInput, ip: string, userAgent: string
 // Helper to send transactional emails via Resend
 async function sendResendEmails(lead: LeadInput): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
-  const notifyEmail = process.env.LEAD_NOTIFY_EMAIL || "hello@kratos.dev";
+  const notifyEmail = process.env.LEAD_NOTIFY_EMAIL || "hello@krat-os.dev";
 
   const isMock = !apiKey || apiKey.startsWith("re_your_api");
 
@@ -129,7 +129,7 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
   // 2. Client Confirmation & Ballpark Auto-Reply
   const clientHtml = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #FDEBD9; padding: 36px; border-radius: 28px; color: #2A1810;">
-      <h1 style="color: #2A1810; margin-top: 0; font-size: 26px;">Hi ${lead.name}, thank you for reaching out to Kratos!</h1>
+      <h1 style="color: #2A1810; margin-top: 0; font-size: 26px;">Hi ${lead.name}, thank you for reaching out to Krat.OS!</h1>
       <p style="font-size: 16px; line-height: 1.5; color: #6B4A3A;">
         We received your project details for <strong>${lead.projectType}</strong>. Here is the ballpark estimate based on your scope:
       </p>
@@ -142,19 +142,19 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
         <em>A ballpark, not a quote. Let's make it real.</em> We would love to chat through your timeline, goals, and technical details to give you an exact roadmap.
       </p>
       <div style="margin: 28px 0; text-align: center;">
-        <a href="${process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/kratos/15min"}" style="background: #FB9A5E; color: #2A1810; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 9999px; display: inline-block; font-size: 16px;">
+        <a href="${process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min"}" style="background: #FB9A5E; color: #2A1810; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 9999px; display: inline-block; font-size: 16px;">
           Book a 15-Minute Call
         </a>
       </div>
       <p style="font-size: 13px; color: #6B4A3A; margin-top: 32px; border-top: 1px solid #FFD9B8; padding-top: 16px;">
-        Kratos Software Solutions • Strong underneath. Friendly on top.
+        Krat.OS Software Solutions • Strong underneath. Friendly on top.
       </p>
     </div>
   `;
 
   if (isMock) {
     console.log("[Resend Mock] Internal Lead Alert to:", notifyEmail, `Subject: New Lead: ${lead.name}`);
-    console.log("[Resend Mock] Auto-Reply to:", lead.email, `Subject: Your Kratos Ballpark Estimate`);
+    console.log("[Resend Mock] Auto-Reply to:", lead.email, `Subject: Your Krat.OS Ballpark Estimate`);
     return;
   }
 
@@ -167,7 +167,7 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        from: "Kratos Website <notifications@kratos.dev>",
+        from: "Krat.OS Website <notifications@krat-os.dev>",
         to: [notifyEmail],
         reply_to: lead.email,
         subject: `🚀 New Lead: ${lead.name} (${lead.projectType})`,
@@ -183,10 +183,10 @@ async function sendResendEmails(lead: LeadInput): Promise<void> {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        from: "Kratos Software Solutions <hello@kratos.dev>",
+        from: "Krat.OS Software Solutions <hello@krat-os.dev>",
         to: [lead.email],
         reply_to: notifyEmail,
-        subject: `Your Kratos Ballpark Estimate for ${lead.projectType}`,
+        subject: `Your Krat.OS Ballpark Estimate for ${lead.projectType}`,
         html: clientHtml,
       }),
     });

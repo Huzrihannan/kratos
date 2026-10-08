@@ -135,7 +135,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
     // Optional Resend email
     if (env.RESEND_API_KEY && !env.RESEND_API_KEY.startsWith("re_your_api")) {
       try {
-        const notifyEmail = env.LEAD_NOTIFY_EMAIL || "hello@kratos.dev";
+        const notifyEmail = env.LEAD_NOTIFY_EMAIL || "hello@krat-os.dev";
         await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -143,7 +143,7 @@ export const onRequestPost = async (context: { request: Request; env: Env }) => 
             Authorization: `Bearer ${env.RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: "Kratos Website <notifications@kratos.dev>",
+            from: "Krat.OS Website <notifications@krat-os.dev>",
             to: [notifyEmail],
             reply_to: lead.email,
             subject: `🚀 New Lead: ${lead.name} (${lead.projectType})`,

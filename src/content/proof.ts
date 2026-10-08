@@ -57,7 +57,7 @@ export const statsData: StatItem[] = [
 export const testimonialsData: TestimonialItem[] = [
   {
     id: "testimonial-1",
-    quote: "Kratos moved faster than our internal team ever could. In 6 weeks we had an enterprise-grade portal running in production that our customers actually enjoy using.",
+    quote: "Krat.OS moved faster than our internal team ever could. In 6 weeks we had an enterprise-grade portal running in production that our customers actually enjoy using.",
     author: "[PLACEHOLDER] Marcus Vance",
     role: "VP of Product",
     company: "[PLACEHOLDER] Horizon Health Technologies",

@@ -4,14 +4,14 @@ import { Sparkles } from "lucide-react";
 import { EstimatorWizard } from "@/components/estimator/EstimatorWizard";
 
 export const metadata: Metadata = {
-  title: "Project Estimator | Kratos Software Solutions",
+  title: "Project Estimator | Krat.OS Software Solutions",
   description:
     "Get an instant ballpark estimate and timeline for your web app, mobile product, or automation workflow in under 60 seconds.",
   alternates: {
     canonical: "/start",
   },
   openGraph: {
-    title: "Project Estimator | Kratos Software Solutions",
+    title: "Project Estimator | Krat.OS Software Solutions",
     description:
       "Get an instant ballpark estimate and timeline for your web app, mobile product, or automation workflow in under 60 seconds.",
     url: "/start",
@@ -27,13 +27,13 @@ export default function StartPage() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://kratos.dev",
+        item: "https://krat-os.dev",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Project Estimator",
-        item: "https://kratos.dev/start",
+        item: "https://krat-os.dev/start",
       },
     ],
   };

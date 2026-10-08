@@ -4,8 +4,8 @@ import Link from "next/link";
 import { FileText, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Kratos Software Solutions",
-  description: "Terms of service and engagement conditions for Kratos Software Solutions.",
+  title: "Terms of Service | Krat.OS Software Solutions",
+  description: "Terms of service and engagement conditions for Krat.OS Software Solutions.",
   alternates: {
     canonical: "/terms",
   },
@@ -47,7 +47,7 @@ export default function TermsPage() {
               1. Nature of Website Estimates
             </h2>
             <p>
-              Calculations, numbers, and ballpark ranges produced by the Kratos Project Estimator are non-binding budgetary estimates intended to assist project planning. Formal, binding commitments are exclusively defined in mutually executed Statements of Work (SOWs) specifying technical scope, milestones, and deliverables.
+              Calculations, numbers, and ballpark ranges produced by the Krat.OS Project Estimator are non-binding budgetary estimates intended to assist project planning. Formal, binding commitments are exclusively defined in mutually executed Statements of Work (SOWs) specifying technical scope, milestones, and deliverables.
             </p>
           </section>
 
@@ -98,8 +98,8 @@ export default function TermsPage() {
             </h2>
             <p>
               For legal questions regarding contracts, NDAs, or master service agreements, contact us at{" "}
-              <a href="mailto:legal@kratos.dev" className="text-orange-deep font-semibold underline">
-                legal@kratos.dev
+              <a href="mailto:legal@krat-os.dev" className="text-orange-deep font-semibold underline">
+                legal@krat-os.dev
               </a>.
             </p>
           </section>

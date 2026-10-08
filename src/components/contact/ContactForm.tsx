@@ -277,7 +277,7 @@ export function ContactForm() {
                 className="mt-1 w-5 h-5 rounded-md border-2 border-peach accent-orange cursor-pointer focus-visible:ring-2 focus-visible:ring-orange-deep"
               />
               <label htmlFor="contact-consent" className="text-xs text-ink-soft leading-normal cursor-pointer select-none">
-                I agree to let Kratos Software Solutions contact me by email or phone regarding this project inquiry. Zero spam, ever.
+                I agree to let Krat.OS Software Solutions contact me by email or phone regarding this project inquiry. Zero spam, ever.
               </label>
             </div>
             {errors.consent && (

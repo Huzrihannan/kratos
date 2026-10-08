@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const dynamic = "force-static";
-export const alt = "Kratos Software Solutions — Strong underneath. Friendly on top.";
+export const alt = "Krat.OS Software Solutions — Strong underneath. Friendly on top.";
 export const size = {
   width: 1200,
   height: 630,
@@ -94,7 +94,7 @@ export default function Image() {
               textShadow: "0 4px 12px rgba(244, 123, 58, 0.25)",
             }}
           >
-            kratos
+            krat.os
           </div>
 
           {/* Headline */}

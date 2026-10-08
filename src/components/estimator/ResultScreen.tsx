@@ -43,7 +43,7 @@ export function ResultScreen({
   }, [calculation, projectTypeName]);
 
   const whatsappMessage = encodeURIComponent(
-    `Hi Kratos! I just estimated a ${projectTypeName} project (${calculation.formattedRange}, ~${calculation.formattedTimeline}). My name is ${leadName}. Let's chat!`
+    `Hi Krat.OS! I just estimated a ${projectTypeName} project (${calculation.formattedRange}, ~${calculation.formattedTimeline}). My name is ${leadName}. Let's chat!`
   );
   const whatsappUrl = `https://wa.me/${siteConfig.contact.whatsappNumber.replace(
     /[^0-9]/g,

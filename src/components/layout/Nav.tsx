@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
@@ -12,6 +11,7 @@ import { Button } from "@/components/ui/Button";
 import { Pill } from "@/components/ui/Pill";
 import { Squish } from "@/components/fx/Squish";
 import { Magnetic } from "@/components/fx/Magnetic";
+import { Logo } from "@/components/ui/Logo";
 
 export function Nav() {
   const pathname = usePathname();
@@ -133,7 +133,7 @@ export function Nav() {
           <Link
             href="/"
             className="flex items-center gap-2 group rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-deep"
-            aria-label="Kratos Software Solutions home"
+            aria-label="Krat.OS Software Solutions home"
           >
             <motion.div
               whileHover={
@@ -145,15 +145,9 @@ export function Nav() {
                       transition: { duration: 0.45, ease: "easeInOut" },
                     }
               }
-              className="relative h-9 w-28 sm:h-10 sm:w-32 origin-left cursor-pointer"
+              className="flex items-center cursor-pointer"
             >
-              <Image
-                src="/brand/logo.svg"
-                alt="Kratos"
-                fill
-                priority
-                className="object-contain object-left"
-              />
+              <Logo variant="auto" height={32} />
             </motion.div>
           </Link>
 
@@ -250,16 +244,10 @@ export function Nav() {
               <Link
                 href="/"
                 onClick={handleCloseMenu}
-                className="relative h-10 w-32 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-deep rounded-full"
-                aria-label="Kratos home"
+                className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text"
+                aria-label="Krat.OS home"
               >
-                <Image
-                  src="/brand/logo.svg"
-                  alt="Kratos"
-                  fill
-                  priority
-                  className="object-contain object-left"
-                />
+                <Logo variant="auto" height={32} />
               </Link>
 
               <button

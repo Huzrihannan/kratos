@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/design-system"],
     },
-    sitemap: "https://kratos.dev/sitemap.xml",
+    sitemap: "https://krat-os.dev/sitemap.xml",
   };
 }

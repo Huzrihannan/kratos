@@ -29,20 +29,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!study) {
     return {
-      title: "Case Study Not Found | Kratos Software Solutions",
+      title: "Case Study Not Found | Krat.OS Software Solutions",
     };
   }
 
   const cleanTitle = study.title.replace("[PLACEHOLDER] ", "");
 
   return {
-    title: `${cleanTitle} | Case Study | Kratos`,
+    title: `${cleanTitle} | Case Study | Krat.OS`,
     description: study.summary,
     alternates: {
       canonical: `/work/${study.slug}`,
     },
     openGraph: {
-      title: `${cleanTitle} | Kratos Case Study`,
+      title: `${cleanTitle} | Krat.OS Case Study`,
       description: study.summary,
       url: `/work/${study.slug}`,
     },
@@ -72,11 +72,11 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
         description: study.summary,
         creator: {
           "@type": "Organization",
-          name: "Kratos Software Solutions",
-          url: "https://kratos.dev",
+          name: "Krat.OS Software Solutions",
+          url: "https://krat-os.dev",
         },
         about: study.industry,
-        url: `https://kratos.dev/work/${study.slug}`,
+        url: `https://krat-os.dev/work/${study.slug}`,
       },
       {
         "@type": "BreadcrumbList",
@@ -85,19 +85,19 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Work",
-            item: "https://kratos.dev/work",
+            item: "https://krat-os.dev/work",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: cleanTitle,
-            item: `https://kratos.dev/work/${study.slug}`,
+            item: `https://krat-os.dev/work/${study.slug}`,
           },
         ],
       },

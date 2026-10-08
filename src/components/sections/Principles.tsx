@@ -10,7 +10,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-export function WhyKratos() {
+export function Principles() {
   const prefersReducedMotion = useReducedMotion();
 
   const differentiators = [
@@ -57,7 +57,7 @@ export function WhyKratos() {
 
   return (
     <section
-      aria-label="Why Kratos"
+      aria-label="Why Krat.OS"
       className="relative py-20 sm:py-28 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full select-none"
     >
       {/* Section Header */}
@@ -70,7 +70,7 @@ export function WhyKratos() {
           className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-peach/80 text-ink-soft text-xs font-bold uppercase tracking-[0.2em] mb-4 border border-peach"
         >
           <Sparkles className="w-3.5 h-3.5 text-orange" />
-          <span>why kratos</span>
+          <span>why krat.os</span>
         </motion.div>
 
         <motion.h2

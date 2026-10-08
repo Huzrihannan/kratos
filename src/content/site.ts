@@ -57,26 +57,26 @@ const rawWhatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+1234567890";
 const cleanWhatsapp = rawWhatsapp.replace(/[^0-9]/g, "");
 
 export const siteConfig: SiteConfig = {
-  name: "Kratos Software Solutions",
-  tagline: "software solutions",
-  positioning: "Strong underneath. Friendly on top.",
+  name: "Krat.OS",
+  tagline: "Software solutions",
+  positioning: "We build the software your business runs on.",
   shortPitch:
-    "We build web apps, mobile apps, and smart automations for teams who want dependable results without the jargon.",
+    "We build web applications, mobile platforms, and automated workflow engines for teams who want dependable results without the jargon.",
 
   availability: {
     status: "available",
-    chipText: "Taking on new projects for November",
-    details: "Currently scheduling discovery calls and technical roadmaps.",
+    chipText: "Taking on new projects for Q4",
+    details: "Currently scheduling technical discovery sessions and system architecture audits.",
   },
 
   contact: {
-    email: process.env.LEAD_NOTIFY_EMAIL || "hello@kratos.dev",
+    email: process.env.LEAD_NOTIFY_EMAIL || "hello@krat-os.dev",
     phone: rawWhatsapp,
     whatsappNumber: rawWhatsapp,
     whatsappUrl: `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-      "Hi Kratos! I would like to chat about a project."
+      "Hi Krat.OS! I would like to chat about a project."
     )}`,
-    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/kratos/15min",
+    bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min",
     location: "Global Remote (HQ: San Francisco, CA)",
   },
 
@@ -110,9 +110,9 @@ export const siteConfig: SiteConfig = {
       title: "Reach Out",
       links: [
         { label: "Start a Conversation", href: "/contact" },
-        { label: "Book a 15-min Call", href: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/kratos/15min", external: true },
+        { label: "Book a 15-min Call", href: process.env.NEXT_PUBLIC_BOOKING_URL || "https://cal.com/krat-os/15min", external: true },
         { label: "Chat on WhatsApp", href: `https://wa.me/${cleanWhatsapp}`, external: true },
-        { label: "hello@kratos.dev", href: "mailto:hello@kratos.dev" },
+        { label: "hello@krat-os.dev", href: "mailto:hello@krat-os.dev" },
       ],
     },
   ],

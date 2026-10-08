@@ -8,14 +8,14 @@ import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Work & Case Studies | Kratos Software Solutions",
+  title: "Work & Case Studies | Krat.OS Software Solutions",
   description:
-    "Explore real software solutions built by Kratos: FinTech transaction portals, pediatric telehealth mobile apps, and automated freight dispatch systems.",
+    "Explore real software solutions built by Krat.OS: FinTech transaction portals, pediatric telehealth mobile apps, and automated freight dispatch systems.",
   alternates: {
     canonical: "/work",
   },
   openGraph: {
-    title: "Work & Case Studies | Kratos Software Solutions",
+    title: "Work & Case Studies | Krat.OS Software Solutions",
     description:
       "Real software with measurable business impact. High-converting SaaS, mobile apps, and smart automations.",
     url: "/work",
@@ -33,19 +33,19 @@ export default function WorkPage() {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Work",
-            item: "https://kratos.dev/work",
+            item: "https://krat-os.dev/work",
           },
         ],
       },
       {
         "@type": "ItemList",
-        name: "Case Studies by Kratos Software Solutions",
+        name: "Case Studies by Krat.OS Software Solutions",
         description: "Portfolio of delivered software applications and client results.",
         itemListElement: caseStudiesData.map((study, idx) => ({
           "@type": "ListItem",
@@ -54,7 +54,7 @@ export default function WorkPage() {
             "@type": "CreativeWork",
             name: study.title.replace("[PLACEHOLDER] ", ""),
             description: study.summary,
-            url: `https://kratos.dev/work/${study.slug}`,
+            url: `https://krat-os.dev/work/${study.slug}`,
           },
         })),
       },

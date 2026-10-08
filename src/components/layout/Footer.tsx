@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Github,
@@ -17,12 +16,13 @@ import { siteConfig } from "@/content/site";
 import { Button } from "@/components/ui/Button";
 import { Pill } from "@/components/ui/Pill";
 import { Squish } from "@/components/fx/Squish";
+import { Logo } from "@/components/ui/Logo";
 import { useLayoutModal } from "@/lib/modal-context";
 
 export function Footer() {
   const { openEstimator } = useLayoutModal();
   const prefersReducedMotion = useReducedMotion();
-  const kratosLetters = ["k", "r", "a", "t", "o", "s"];
+  const brandLetters = ["K", "r", "a", "t", ".", "O", "S"];
 
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {
@@ -57,17 +57,10 @@ export function Footer() {
           <div className="lg:col-span-5 space-y-6">
             <Link
               href="/"
-              className="inline-block focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange rounded-full"
-              aria-label="Kratos home"
+              className="inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text"
+              aria-label="Krat.OS home"
             >
-              <div className="relative h-10 w-32">
-                <Image
-                  src="/brand/logo-cream.svg"
-                  alt="Kratos"
-                  fill
-                  className="object-contain object-left"
-                />
-              </div>
+              <Logo variant="dark" height={36} />
             </Link>
 
             <div>
@@ -204,7 +197,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* GIANT Wordmark "kratos" with Individual Bouncing Letters */}
+        {/* GIANT Wordmark "krat.os" with Individual Bouncing Letters */}
         <div
           className="pt-6 sm:pt-10 overflow-hidden select-none"
           aria-hidden="true"
@@ -213,7 +206,7 @@ export function Footer() {
             className="flex justify-between items-baseline font-display font-bold text-orange text-[20vw] leading-[0.72] tracking-tighter cursor-default"
             aria-hidden="true"
           >
-            {kratosLetters.map((char, index) => (
+            {brandLetters.map((char, index) => (
               <motion.span
                 key={`${char}-${index}`}
                 tabIndex={-1}

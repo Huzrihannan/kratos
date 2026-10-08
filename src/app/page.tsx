@@ -6,7 +6,7 @@ const Process = dynamic(() => import("@/components/sections/Process").then((m) =
 const Work = dynamic(() => import("@/components/sections/Work").then((m) => m.Work));
 const Proof = dynamic(() => import("@/components/sections/Proof").then((m) => m.Proof));
 const StackMarquee = dynamic(() => import("@/components/sections/StackMarquee").then((m) => m.StackMarquee));
-const WhyKratos = dynamic(() => import("@/components/sections/WhyKratos").then((m) => m.WhyKratos));
+const Principles = dynamic(() => import("@/components/sections/Principles").then((m) => m.Principles));
 const Faq = dynamic(() => import("@/components/sections/Faq").then((m) => m.Faq));
 const FinalCta = dynamic(() => import("@/components/sections/FinalCta").then((m) => m.FinalCta));
 
@@ -31,8 +31,8 @@ export default function Home() {
       {/* 6. Technology Stack Marquee (Dual opposing ribbons) */}
       <StackMarquee />
 
-      {/* 7. Why Kratos (3 differentiators in bento grid) */}
-      <WhyKratos />
+      {/* 7. Principles (3 differentiators in bento grid) */}
+      <Principles />
 
       {/* 8. Frequently Asked Questions (Accordion + Schema.org JSON-LD) */}
       <Faq />

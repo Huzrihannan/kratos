@@ -18,14 +18,14 @@ import { servicesData, ServiceItem } from "@/content/services";
 import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 
 export const metadata: Metadata = {
-  title: "Services & Capabilities | Kratos Software Solutions",
+  title: "Services & Capabilities | Krat.OS Software Solutions",
   description:
     "Explore our core engineering capabilities: Web Apps & SaaS, Cross-Platform Mobile Apps, Headless E-Commerce, AI Workflows, and Custom Design Systems.",
   alternates: {
     canonical: "/services",
   },
   openGraph: {
-    title: "Services & Capabilities | Kratos Software Solutions",
+    title: "Services & Capabilities | Krat.OS Software Solutions",
     description:
       "Web apps, mobile apps, and pragmatic AI automations built strong underneath, friendly on top.",
     url: "/services",
@@ -61,19 +61,19 @@ export default function ServicesPage() {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://kratos.dev/services",
+            item: "https://krat-os.dev/services",
           },
         ],
       },
       {
         "@type": "ItemList",
-        name: "Services by Kratos Software Solutions",
+        name: "Services by Krat.OS Software Solutions",
         description: "Core software engineering and product design capabilities.",
         itemListElement: servicesData.map((s, idx) => ({
           "@type": "ListItem",
@@ -82,7 +82,7 @@ export default function ServicesPage() {
             "@type": "Service",
             name: s.title,
             description: s.shortPromise,
-            url: `https://kratos.dev/services/${s.slug}`,
+            url: `https://krat-os.dev/services/${s.slug}`,
           },
         })),
       },

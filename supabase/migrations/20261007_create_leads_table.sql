@@ -1,4 +1,4 @@
--- Supabase Migration: Create leads table for Kratos Software Solutions
+-- Supabase Migration: Create leads table for Krat.OS Software Solutions
 -- Generated for Prompt 5 Project Estimator & Contact Forms
 
 CREATE TABLE IF NOT EXISTS public.leads (

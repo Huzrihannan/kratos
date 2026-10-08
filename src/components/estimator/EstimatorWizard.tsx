@@ -57,7 +57,7 @@ const INITIAL_STATE: EstimatorState = {
   consent: true,
 };
 
-const STORAGE_KEY = "kratos_estimator_session";
+const STORAGE_KEY = "krat_os_estimator_session";
 
 interface EstimatorWizardProps {
   onClose?: () => void;
@@ -532,7 +532,7 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
                     required
                   />
                   <span className="text-xs text-ink-soft leading-relaxed font-body">
-                    I agree to receive my ballpark estimate and project communication from Kratos Software Solutions. (No spam, ever).
+                    I agree to receive my ballpark estimate and project communication from Krat.OS Software Solutions. (No spam, ever).
                   </span>
                 </label>
 

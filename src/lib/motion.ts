@@ -1,7 +1,7 @@
 import { Variants } from "framer-motion";
 
 /**
- * Standard spring presets for Kratos Software Solutions.
+ * Standard spring presets for Krat.OS Software Solutions.
  * Designed for tactile, playful, and cohesive physical feel.
  */
 export const springs = {

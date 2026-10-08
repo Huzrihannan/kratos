@@ -1,6 +1,34 @@
-# Changelog — Kratos Software Solutions
+# Changelog — Krat.OS
 
-All notable changes to the Kratos website project will be documented in this file.
+All notable changes to the Krat.OS website project will be documented in this file.
+
+## [R1: Rebrand Sweep — Name, Logo, Tokens, Fonts, Theme] - 2026-10-08
+
+### Added
+- **Vector Logo Suite (`public/brand/`):**
+  - Rebuilt brand lockups into precision mathematical vector SVGs from JetBrains Mono ExtraBold and Regular:
+    - `logo-dark.svg`: Cream `#EFE3CF` wordmark with signal red `#FD142B` caret bar and LED dot on transparent background.
+    - `logo-light.svg`: Charcoal `#292926` wordmark with signal red `#FD142B` caret bar and LED dot on transparent background.
+    - `mark.svg`: Standalone cream "K" + red LED dot icon.
+    - `favicon.svg` & `app-icon.svg`: Brand mark on charcoal `#212121` background with 4px border radius.
+  - Added unified `<Logo variant="dark|light|auto" showTagline={boolean} />` component in `src/components/ui/Logo.tsx`.
+- **v2 Design Token System (`src/styles/tokens.css` & `tailwind.config.ts`):**
+  - Theme-aware semantic color tokens:
+    - Dark mode (default): `bg #212121`, `surface #2B2B2B`, `fg #EFE3CF`, `fg-muted #A8A294`, `line #3A3A3A`, `line-strong #7A7A7A`, `red #FD142B`, `red-text #FF4A5C`, `ok #3DDC84`.
+    - Light mode: `bg #F6EFDD`, `surface #EBE3CD`, `fg #292926`, `fg-muted #6B665A`, `line #D6CDB5`, `line-strong #8A8473`, `red #FD142B`, `red-text #C8102E`, `ok #1E9E5A`.
+  - Geometric constraint enforcement: sharp radii 0 to 4px maximum (`--radius-none`, `--radius-sm`, `--radius-md`). Hairline 1px borders.
+  - Backward-compatibility bridge aliasing legacy color tokens (`--color-cream`, `--color-peach`, etc.) to semantic variables for seamless compilation across all existing components during the redesign transition.
+- **Typography Migration:**
+  - Loaded `JetBrains Mono` (display, headlines, numbers, code, labels) and `Geist` (body text) using `next/font/google`.
+  - Replaced legacy Google fonts `Fredoka` and `Outfit`.
+  - Styled selection highlight: pure signal red `#FD142B` with `#EFE3CF` cream text.
+  - Styled focus ring: `2px solid var(--red-text)` with `2px offset`.
+- **Theme Support (`next-themes`):**
+  - Integrated `ThemeProvider` with dark mode as default, light mode support, and section-level `data-theme` override capability for rhythm sections.
+- **Codebase Rebrand Audit & Sweep:**
+  - Published comprehensive `REDESIGN_AUDIT.md` cataloging 68 active codebase files across 4 migration axes.
+  - Conducted complete sweep replacing legacy name "Kratos" with **"Krat.OS"** across `site.ts`, metadata, JSON-LD, content schemas, email templates, routes, and `package.json` name (`krat-os-site`).
+  - Verified 0 remaining occurrences of "Kratos" in active source and asset files.
 
 ## [Prompt 9: SEO, Analytics, Performance, Accessibility & Cloudflare Release] - 2026-10-07
 

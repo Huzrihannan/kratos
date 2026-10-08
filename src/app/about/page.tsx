@@ -7,14 +7,14 @@ import { EstimatorButton } from "@/components/estimator/EstimatorButton";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "About Us | Kratos Software Solutions",
+  title: "About Us | Krat.OS Software Solutions",
   description:
     "Strong underneath. Friendly on top. Learn about our philosophy, engineering standards, and the team building joyful, high-performance software.",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
-    title: "About Kratos Software Solutions",
+    title: "About Krat.OS Software Solutions",
     description:
       "Software that feels like a friend, engineered like a tank. No jargon, no bloat, 100% code ownership.",
     url: "/about",
@@ -32,25 +32,25 @@ export default function AboutPage() {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "About Us",
-            item: "https://kratos.dev/about",
+            item: "https://krat-os.dev/about",
           },
         ],
       },
       {
         "@type": "AboutPage",
-        name: "About Kratos Software Solutions",
+        name: "About Krat.OS Software Solutions",
         description: aboutData.hero.subhead,
         mainEntity: {
           "@type": "Organization",
-          name: "Kratos Software Solutions",
+          name: "Krat.OS Software Solutions",
           slogan: siteConfig.positioning,
-          url: "https://kratos.dev",
+          url: "https://krat-os.dev",
           foundingDate: "2024",
           knowsAbout: [
             "Web Applications",

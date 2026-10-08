@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Shield, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Kratos Software Solutions",
-  description: "Privacy policy and data handling practices for Kratos Software Solutions.",
+  title: "Privacy Policy | Krat.OS Software Solutions",
+  description: "Privacy policy and data handling practices for Krat.OS Software Solutions.",
   alternates: {
     canonical: "/privacy",
   },
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
               1. Information We Collect
             </h2>
             <p>
-              When you interact with the Kratos website, Project Estimator, or contact forms, we may collect information you voluntarily provide, including:
+              When you interact with the Krat.OS website, Project Estimator, or contact forms, we may collect information you voluntarily provide, including:
             </p>
             <ul className="list-disc pl-5 mt-2 space-y-1 text-ink-soft">
               <li>Contact details: your name, business email address, and optional phone/WhatsApp number.</li>
@@ -98,8 +98,8 @@ export default function PrivacyPage() {
             </h2>
             <p>
               If you have any questions or wish to request data removal, please email us directly at{" "}
-              <a href="mailto:privacy@kratos.dev" className="text-orange-deep font-semibold underline">
-                privacy@kratos.dev
+              <a href="mailto:privacy@krat-os.dev" className="text-orange-deep font-semibold underline">
+                privacy@krat-os.dev
               </a>.
             </p>
           </section>

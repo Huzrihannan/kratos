@@ -37,7 +37,7 @@ export default function DesignSystemPage() {
             Design System • Component Catalog
           </Pill>
           <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight text-ink">
-            Kratos Design System
+            Krat.OS Design System
           </h1>
           <p className="font-body text-lg md:text-xl text-ink-soft max-w-2xl">
             &ldquo;Strong underneath. Friendly on top.&rdquo; A tactile, blobby, pill-shaped design system built for speed, accessibility, and high conversion.

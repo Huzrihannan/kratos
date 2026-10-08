@@ -5,29 +5,40 @@
 
 @layer base {
   html {
-    background-color: var(--color-cream);
-    color: var(--color-ink);
-    font-family: var(--font-outfit), sans-serif;
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans), sans-serif;
+    color-scheme: dark light;
   }
 
   body {
     min-height: 100vh;
-    background-color: var(--color-cream);
-    color: var(--color-ink);
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans), sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-mono), monospace;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+  }
+
+  code, pre, kbd, samp {
+    font-family: var(--font-mono), monospace;
+  }
+
   ::selection {
-    background-color: var(--color-orange);
-    color: var(--color-ink);
+    background-color: var(--red);
+    color: #EFE3CF;
   }
 
   :focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-    border-radius: inherit;
+    outline: 2px solid var(--red-text);
+    outline-offset: 2px;
   }
 }
 
@@ -58,6 +69,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .animate-marquee-left,
   .animate-marquee-right {
     animation: none !important;

@@ -80,7 +80,7 @@ export const caseStudiesData: CaseStudy[] = [
       "Full ISO-27001 compliant role-based authentication suite",
     ],
     clientQuote: {
-      text: "[PLACEHOLDER] Kratos delivered software that our institutional traders actually enjoy using. Complex settlement mechanics feel effortlessly simple.",
+      text: "[PLACEHOLDER] Krat.OS delivered software that our institutional traders actually enjoy using. Complex settlement mechanics feel effortlessly simple.",
       author: "[PLACEHOLDER] Marcus Vance",
       title: "Chief Operating Officer, NovaLedger Capital",
     },
@@ -133,7 +133,7 @@ export const caseStudiesData: CaseStudy[] = [
       "Push notification dispatch pipeline with localized reminders",
     ],
     clientQuote: {
-      text: "[PLACEHOLDER] For worried parents, Kratos turned an intimidating hospital process into an encouraging, warm pocket companion. The feedback has been overwhelmingly joyful.",
+      text: "[PLACEHOLDER] For worried parents, Krat.OS turned an intimidating hospital process into an encouraging, warm pocket companion. The feedback has been overwhelmingly joyful.",
       author: "[PLACEHOLDER] Dr. Elena Ramos",
       title: "Medical Director, BloomHealth Clinics",
     },
@@ -186,7 +186,7 @@ export const caseStudiesData: CaseStudy[] = [
       "Automated SMS & email dispatch notifications to freight drivers",
     ],
     clientQuote: {
-      text: "[PLACEHOLDER] PulseFlow runs faster, cleaner, and with zero chaos now. Kratos replaced hundreds of frantic spreadsheet rows with a system that just works.",
+      text: "[PLACEHOLDER] PulseFlow runs faster, cleaner, and with zero chaos now. Krat.OS replaced hundreds of frantic spreadsheet rows with a system that just works.",
       author: "[PLACEHOLDER] Tariq Mansoor",
       title: "VP of Logistics, PulseFlow Global",
     },

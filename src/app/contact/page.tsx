@@ -12,16 +12,16 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Contact & Start a Project | Kratos Software Solutions",
+  title: "Contact & Start a Project | Krat.OS Software Solutions",
   description:
     "Start a conversation with our engineering team. Guaranteed response within 4 business hours. Direct WhatsApp, 15-minute discovery call, or project inquiry form.",
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
-    title: "Contact Us | Kratos Software Solutions",
+    title: "Contact Us | Krat.OS Software Solutions",
     description:
-      "Get in touch with Kratos. No salespeople, no delays. Talk directly with senior engineers.",
+      "Get in touch with Krat.OS. No salespeople, no delays. Talk directly with senior engineers.",
     url: "/contact",
   },
 };
@@ -37,26 +37,26 @@ export default function ContactPage() {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://kratos.dev",
+            item: "https://krat-os.dev",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Contact Us",
-            item: "https://kratos.dev/contact",
+            item: "https://krat-os.dev/contact",
           },
         ],
       },
       {
         "@type": "ContactPage",
-        name: "Contact Kratos Software Solutions",
-        description: "Get in touch with Kratos via form, WhatsApp, or discovery call.",
+        name: "Contact Krat.OS Software Solutions",
+        description: "Get in touch with Krat.OS via form, WhatsApp, or discovery call.",
         mainEntity: {
           "@type": "Organization",
-          name: "Kratos Software Solutions",
+          name: "Krat.OS Software Solutions",
           email: siteConfig.contact.email,
           telephone: siteConfig.contact.phone,
-          url: "https://kratos.dev",
+          url: "https://krat-os.dev",
         },
       },
     ],

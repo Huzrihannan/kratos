@@ -5,7 +5,7 @@ import { caseStudiesData } from "@/content/work";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://kratos.dev";
+  const baseUrl = "https://krat-os.dev";
   const now = new Date();
 
   const coreRoutes: MetadataRoute.Sitemap = [

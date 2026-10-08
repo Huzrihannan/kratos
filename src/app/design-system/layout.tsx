@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Design System Preview | Kratos Software Solutions",
+  title: "Design System Preview | Krat.OS Software Solutions",
   robots: {
     index: false,
     follow: false,

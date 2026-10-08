@@ -39,3 +39,7 @@ next-env.d.ts
 
 # lighthouse reports
 lh-*.json
+
+# scripts temporary fonts and raw audit
+scripts/fonts/
+audit-raw.json

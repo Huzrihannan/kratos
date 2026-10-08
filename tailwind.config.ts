@@ -6,9 +6,28 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: ["class", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
+        // v2 Semantic Tokens
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        fg: {
+          DEFAULT: "var(--fg)",
+          muted: "var(--fg-muted)",
+        },
+        line: {
+          DEFAULT: "var(--line)",
+          strong: "var(--line-strong)",
+        },
+        red: {
+          DEFAULT: "var(--red)",
+          text: "var(--red-text)",
+        },
+        ok: "var(--ok)",
+
+        // Legacy compatibility bridge (mapped to semantic tokens in tokens.css)
         cream: "var(--color-cream)",
         peach: "var(--color-peach)",
         orange: {
@@ -23,11 +42,14 @@ const config: Config = {
         butter: "var(--color-butter)",
       },
       borderRadius: {
-        sm: "var(--radius-sm)",
-        md: "var(--radius-md)",
-        card: "var(--radius-card)",
-        bubble: "var(--radius-bubble)",
-        pill: "var(--radius-pill)",
+        none: "0px",
+        sm: "2px",
+        DEFAULT: "4px",
+        md: "4px",
+        lg: "4px",
+        card: "4px",
+        bubble: "4px",
+        pill: "4px",
       },
       boxShadow: {
         subtle: "var(--shadow-subtle)",
@@ -36,11 +58,16 @@ const config: Config = {
         float: "var(--shadow-float)",
       },
       fontFamily: {
-        display: ["var(--font-fredoka)", "sans-serif"],
-        body: ["var(--font-outfit)", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        // Compatibility aliases for previous display / body references
+        display: ["var(--font-mono)", "ui-monospace", "monospace"],
+        body: ["var(--font-sans)", "ui-sans-serif", "sans-serif"],
       },
       letterSpacing: {
-        tagline: "0.22em",
+        mono: "0.08em",
+        headline: "-0.04em",
+        tagline: "0.08em",
       },
       keyframes: {
         "marquee-left": {
@@ -53,8 +80,8 @@ const config: Config = {
         },
       },
       animation: {
-        "marquee-left": "marquee-left linear infinite",
-        "marquee-right": "marquee-right linear infinite",
+        "marquee-left": "marquee-left 25s linear infinite",
+        "marquee-right": "marquee-right 25s linear infinite",
       },
     },
   },

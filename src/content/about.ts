@@ -20,14 +20,14 @@ export const aboutData = {
     eyebrow: "// who we are",
     headline: "Software that feels like a friend, engineered like a tank.",
     subhead:
-      "Kratos means strength. But we don't believe enterprise strength has to look like cold, gray, robotic tech from 2005. We build soft, warm, joyful interfaces backed by unshakeable architectures.",
+      "Krat.OS means strength. But we don't believe enterprise strength has to look like cold, gray, robotic tech from 2005. We build soft, warm, joyful interfaces backed by unshakeable architectures.",
   },
 
   story: {
     title: "Why 'Strong underneath. Friendly on top.'?",
     paragraphs: [
       "Most software development companies force you to choose between two bad extremes: an agency that makes gorgeous designs that crumble under real user traffic, or an enterprise consultancy that builds robust backend code wrapped in an interface only an engineer could tolerate.",
-      "We started Kratos Software Solutions to prove that you don't have to choose. Great software should give users a warm, tactile, effortless smile on the surface-while running on strict TypeScript types, sub-second edge queries, and automated deployment pipelines underneath.",
+      "We started Krat.OS Software Solutions to prove that you don't have to choose. Great software should give users a warm, tactile, effortless smile on the surface-while running on strict TypeScript types, sub-second edge queries, and automated deployment pipelines underneath.",
       "We speak plain English. We don't hide behind acronyms or sell you bloat you don't need. When you partner with us, you work directly with the senior engineers designing and building your product.",
     ],
   },
