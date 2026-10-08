@@ -2,13 +2,17 @@
 
 import React, { useEffect } from "react";
 import Lenis from "lenis";
+import { wireLenisToScrollTrigger } from "@/lib/motion/gsap";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
 
 export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isOff } = useMotionLevel();
+
   useEffect(() => {
-    // Respect prefers-reduced-motion or touch devices (native momentum scroll is faster)
+    // Respect prefers-reduced-motion, motion level off, or touch devices (native momentum scroll is faster)
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    if (prefersReduced || isTouch) {
+    if (prefersReduced || isTouch || isOff) {
       return;
     }
 
@@ -21,20 +25,14 @@ export const SmoothScroll: React.FC<{ children: React.ReactNode }> = ({ children
       wheelMultiplier: 1,
     });
 
-    let animationFrameId: number;
-
-    function raf(time: number) {
-      lenis.raf(time);
-      animationFrameId = requestAnimationFrame(raf);
-    }
-
-    animationFrameId = requestAnimationFrame(raf);
+    // Synchronize Lenis with GSAP ScrollTrigger ticker and updates
+    const cleanupTicker = wireLenisToScrollTrigger(lenis);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      cleanupTicker?.();
       lenis.destroy();
     };
-  }, []);
+  }, [isOff]);
 
   return <>{children}</>;
 };

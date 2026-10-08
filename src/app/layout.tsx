@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
@@ -11,15 +10,8 @@ import { Footer } from "@/components/layout/Footer";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { siteConfig } from "@/content/site";
 
-import { Boot } from "@/components/fx/Boot";
-import { Crosshair } from "@/components/fx/Crosshair";
 import { SpotlightGrid } from "@/components/fx/SpotlightGrid";
-import { CommandPalette } from "@/components/layout/CommandPalette";
-import { ContactDock } from "@/components/layout/ContactDock";
-
-const EstimatorModal = dynamic(
-  () => import("@/components/estimator/EstimatorModal").then((mod) => mod.EstimatorModal)
-);
+import { AppOverlays } from "@/components/layout/AppOverlays";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -122,9 +114,7 @@ export default function RootLayout({
                 Skip to main content
               </a>
 
-              <Boot />
-              <Crosshair />
-              <CommandPalette />
+              <AppOverlays />
               <SpotlightGrid
                 gridSize={48}
                 spotlightRadius={320}
@@ -138,8 +128,6 @@ export default function RootLayout({
                   {children}
                 </main>
                 <Footer />
-                <ContactDock />
-                <EstimatorModal />
               </SmoothScroll>
             </LayoutProvider>
           </MotionProvider>

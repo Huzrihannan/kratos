@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import { cn } from "@/lib/utils";
 import { useMotionLevel } from "@/lib/motion/MotionContext";
 
 export interface DecodeProps {
@@ -112,10 +113,17 @@ export function Decode({
   return (
     <Component
       ref={elementRef as unknown as React.Ref<HTMLElement>}
-      className={className}
-      aria-label={text}
+      className={cn("relative inline-block overflow-hidden align-baseline", className)}
     >
-      <span aria-hidden="true">{displayText}</span>
+      <span className="sr-only">{text}</span>
+      {/* Invisible layout placeholder reserves exact bounding box and line breaks */}
+      <span className="invisible select-none pointer-events-none" aria-hidden="true">
+        {text}
+      </span>
+      {/* Absolute overlay renders animated scrambled text without affecting layout */}
+      <span className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {displayText}
+      </span>
     </Component>
   );
 }

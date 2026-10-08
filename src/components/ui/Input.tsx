@@ -29,11 +29,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </div>
         )}
         <div className="group relative w-full overflow-hidden rounded-[2px]">
-          {/* Animated red caret bar on focus along left edge */}
-          <span
-            className="absolute left-0 top-0 bottom-0 w-[3px] bg-red origin-top scale-y-0 peer-focus:scale-y-100 transition-transform duration-200 z-10 pointer-events-none"
-            aria-hidden="true"
-          />
           <input
             ref={ref}
             id={inputId}
@@ -46,6 +41,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className
             )}
             {...props}
+          />
+          {/* Animated red caret bar on focus along left edge */}
+          <span
+            className="absolute left-0 top-0 bottom-0 w-[3px] bg-red origin-top scale-y-0 peer-focus:scale-y-100 transition-transform duration-200 z-10 pointer-events-none"
+            aria-hidden="true"
           />
         </div>
         {error && (

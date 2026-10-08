@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import type Lenis from "lenis";
+
 // Ensure single registration in browser environment
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -12,10 +14,7 @@ if (typeof window !== "undefined") {
 /**
  * Connect Lenis smooth scroll into GSAP's ScrollTrigger system.
  */
-export function wireLenisToScrollTrigger(lenis: {
-  on: (event: string, cb: () => void) => void;
-  raf: (time: number) => void;
-}) {
+export function wireLenisToScrollTrigger(lenis: Lenis) {
   if (typeof window === "undefined" || !lenis) return;
 
   // Update ScrollTrigger when Lenis scrolls

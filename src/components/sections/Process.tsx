@@ -9,6 +9,7 @@ import { Wipe } from "@/components/fx/Wipe";
 import { Button } from "@/components/ui/Button";
 import { Decode } from "@/components/fx/Decode";
 import { useLayoutModal } from "@/lib/modal-context";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
 
 // Lazy-load desktop pinned GSAP track with no SSR to keep initial mobile bundle ultra-light
 const DesktopPipelineTrack = dynamic(
@@ -93,6 +94,48 @@ const PIPELINE_STEPS: PipelineStep[] = [
 
 export function Process() {
   const { openEstimator } = useLayoutModal();
+  const { isFull } = useMotionLevel();
+
+  const verticalTimeline = (
+    <div className="flex flex-col gap-6 py-6">
+      {PIPELINE_STEPS.map((step, idx) => (
+        <Wipe key={step.nodeKey} delay={idx * 0.08} direction="up">
+          <Window
+            title={step.nodeKey}
+            statusText={`[${step.number}]`}
+            cornerBrackets={true}
+            className="border-line bg-surface"
+            headerRight={
+              idx === PIPELINE_STEPS.length - 1 ? (
+                <span className="font-mono text-[10px] text-ok font-bold uppercase tracking-wider">
+                  [DEPLOYED]
+                </span>
+              ) : (
+                <span className="font-mono text-[10px] text-fg-muted uppercase tracking-wider">
+                  {step.timeframe}
+                </span>
+              )
+            }
+          >
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-mono text-base font-bold text-fg mb-1">
+                  {step.title}
+                </h3>
+                <p className="font-sans text-xs text-fg-muted leading-relaxed">
+                  {step.summary}
+                </p>
+              </div>
+
+              <div className="border border-line bg-bg/80 p-3 rounded-[2px]">
+                <TypeLines lines={step.terminalLines} loop={false} />
+              </div>
+            </div>
+          </Window>
+        </Wipe>
+      ))}
+    </div>
+  );
 
   return (
     <Section
@@ -111,48 +154,16 @@ export function Process() {
       }
       className="p-0 sm:py-0"
     >
-      {/* DESKTOP PINNED PIPELINE SCENE (Lazy chunked with ssr: false) */}
-      <DesktopPipelineTrack steps={PIPELINE_STEPS} />
-
-      {/* MOBILE / LITE / OFF MODE: Unpinned Vertical Timeline Stack */}
-      <div className="lg:hidden flex flex-col gap-6 py-6">
-        {PIPELINE_STEPS.map((step, idx) => (
-          <Wipe key={step.nodeKey} delay={idx * 0.08} direction="up">
-            <Window
-              title={step.nodeKey}
-              statusText={`[${step.number}]`}
-              cornerBrackets={true}
-              className="border-line bg-surface"
-              headerRight={
-                idx === PIPELINE_STEPS.length - 1 ? (
-                  <span className="font-mono text-[10px] text-ok font-bold uppercase tracking-wider">
-                    [DEPLOYED]
-                  </span>
-                ) : (
-                  <span className="font-mono text-[10px] text-fg-muted uppercase tracking-wider">
-                    {step.timeframe}
-                  </span>
-                )
-              }
-            >
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-mono text-base font-bold text-fg mb-1">
-                    {step.title}
-                  </h3>
-                  <p className="font-sans text-xs text-fg-muted leading-relaxed">
-                    {step.summary}
-                  </p>
-                </div>
-
-                <div className="border border-line bg-bg/80 p-3 rounded-[2px]">
-                  <TypeLines lines={step.terminalLines} loop={false} />
-                </div>
-              </div>
-            </Window>
-          </Wipe>
-        ))}
-      </div>
+      {/* FULL MOTION: Desktop pinned track + mobile vertical stack */}
+      {isFull ? (
+        <>
+          <DesktopPipelineTrack steps={PIPELINE_STEPS} />
+          <div className="lg:hidden">{verticalTimeline}</div>
+        </>
+      ) : (
+        /* LITE / OFF MOTION: Pure unpinned vertical stack for all screen sizes */
+        verticalTimeline
+      )}
 
       {/* Estimator Bridge Link */}
       <div className="mt-8 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">

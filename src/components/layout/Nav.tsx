@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Logo } from '@/components/ui/Logo';
 import { Decode } from '@/components/fx/Decode';
 import { Glitch } from '@/components/fx/Glitch';
+import { Magnetic } from '@/components/fx/Magnetic';
 
 const NAV_LINKS = [
   { href: '/services', label: 'Services', index: '01' },
@@ -83,11 +84,11 @@ export function Nav() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full border-b border-line bg-bg/90 backdrop-blur-md transition-all duration-200 select-none ${
-          isScrolled ? 'py-2.5 sm:py-3' : 'py-4 sm:py-5'
+        className={`sticky top-0 z-40 w-full h-14 sm:h-16 flex items-center border-b border-line bg-bg/90 backdrop-blur-md transition-colors duration-200 select-none ${
+          isScrolled ? 'shadow-sm' : ''
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between w-full px-4 sm:px-6 lg:px-8">
           {/* Left: Wordmark Logo with Hover Glitch */}
           <Link
             href="/"
@@ -116,9 +117,11 @@ export function Nav() {
                     /{link.index}
                   </span>
                   <span>{link.label}</span>
-                  {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-red" />
-                  )}
+                  <span
+                    className={`absolute -bottom-1 left-0 right-0 h-[2px] bg-red transition-transform duration-150 origin-left ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  />
                 </Link>
               );
             })}
@@ -139,7 +142,7 @@ export function Nav() {
             </button>
 
             {/* Theme Toggle */}
-            {mounted && (
+            {mounted ? (
               <button
                 type="button"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
@@ -150,13 +153,17 @@ export function Nav() {
               >
                 {theme === 'dark' ? '☼' : '☽'}
               </button>
+            ) : (
+              <div className="h-8 w-8" aria-hidden="true" />
             )}
 
             {/* Primary CTA Button */}
             <div className="hidden sm:block">
-              <Button variant="primary" size="sm" onClick={openEstimator}>
-                Estimate my project
-              </Button>
+              <Magnetic strength={6}>
+                <Button variant="primary" size="sm" onClick={openEstimator}>
+                  Estimate my project
+                </Button>
+              </Magnetic>
             </div>
 
             {/* Mobile Hamburger Button */}

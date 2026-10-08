@@ -54,7 +54,7 @@ export function Footer() {
 
           {/* Nav Links Column (2 cols) */}
           <div className="lg:col-span-2 flex flex-col gap-3 font-mono text-xs">
-            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+            <span className="text-[10px] text-red-text uppercase tracking-widest font-bold">
               /01 — NAVIGATION
             </span>
             <ul className="space-y-2 text-fg-muted">
@@ -75,7 +75,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/about" className="hover:text-fg transition-colors">
-                  About Us
+                  About
                 </Link>
               </li>
               <li>
@@ -88,7 +88,7 @@ export function Footer() {
 
           {/* Capabilities Column (3 cols) */}
           <div className="lg:col-span-3 flex flex-col gap-3 font-mono text-xs">
-            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+            <span className="text-[10px] text-red-text uppercase tracking-widest font-bold">
               /02 — ARCHITECTURE
             </span>
             <ul className="space-y-2 text-fg-muted">
@@ -117,7 +117,7 @@ export function Footer() {
 
           {/* Connect Column (2 cols) */}
           <div className="lg:col-span-2 flex flex-col gap-3 font-mono text-xs">
-            <span className="text-[10px] text-red uppercase tracking-widest font-semibold">
+            <span className="text-[10px] text-red-text uppercase tracking-widest font-bold">
               /03 — CONNECT
             </span>
             <ul className="space-y-2 text-fg-muted">
@@ -126,7 +126,7 @@ export function Footer() {
                   href={`mailto:${siteConfig.contact.email}`}
                   className="hover:text-fg transition-colors flex items-center gap-1.5"
                 >
-                  <Mail size={12} className="text-red" />
+                  <Mail size={12} className="text-red-text" />
                   <span>Email Team</span>
                 </a>
               </li>
@@ -207,12 +207,13 @@ export function Footer() {
                   key={m}
                   type="button"
                   onClick={() => setLevel(m)}
-                  className={`px-2 py-0.5 uppercase tracking-wider text-[10px] transition-colors ${
-                    level === m ? 'bg-red text-white font-bold' : 'text-fg-muted hover:text-fg'
+                  className={`px-2 py-0.5 uppercase tracking-wider text-[10px] transition-colors flex items-center gap-1 ${
+                    level === m ? 'bg-fg text-bg font-bold' : 'text-fg-muted hover:text-fg'
                   }`}
                   data-cursor="click"
                 >
-                  {m}
+                  {level === m && <span className="w-1.5 h-1.5 rounded-full bg-red inline-block" aria-hidden="true" />}
+                  <span>{m}</span>
                 </button>
               ))}
             </div>

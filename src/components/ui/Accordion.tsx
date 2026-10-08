@@ -62,7 +62,7 @@ export function Accordion({ items, defaultOpenId, className = "" }: AccordionPro
                 className="w-full text-left px-4 py-3.5 sm:px-5 sm:py-4 flex items-center justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-text"
               >
                 <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                  <span className="font-mono text-xs font-semibold text-red-text shrink-0 tracking-wider">
+                  <span className="font-mono text-xs font-bold text-red-text shrink-0 tracking-wider">
                     {indexStr}
                   </span>
                   <span className="font-mono text-xs sm:text-sm uppercase tracking-[0.04em] font-medium text-fg truncate">

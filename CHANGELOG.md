@@ -2,6 +2,30 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R9: Motion Polish, Motion Levels Audit, and Performance Optimization] - 2026-10-08
+
+### Added
+- **`src/components/layout/AppOverlays.tsx`:** Client-side wrapper for heavy modal and overlay components (`Boot`, `Crosshair`, `CommandPalette`, `ContactDock`, `EstimatorModal`) dynamically imported with `{ ssr: false }`, significantly reducing initial main-thread JavaScript execution.
+- **Verification Scripts:**
+  - `scripts/verify-motion-levels.mjs`: Automated Chrome DevTools Protocol test validating `full` (shader + cursor + pinned scenes), `lite` (SpotlightGrid + unpinned stack), `off` (instant text + static state), and OS `prefers-reduced-motion: reduce` emulation.
+  - `scripts/run-all-audits.mjs`: Batch Mobile Lighthouse CLI audit runner collecting Core Web Vitals and quality category scores across core routes.
+- **Visual Artifacts:** Captured full desktop screenshots in all three motion modes and reduced motion (`r9-motion-full-desktop-1280.png`, `r9-motion-lite-desktop-1280.png`, `r9-motion-off-desktop-1280.png`, `r9-prefers-reduced-motion-desktop-1280.png`).
+
+### Removed
+- **Dead V1 FX Files:** Purged unused legacy files `BlobConfetti.tsx`, `CircleReveal.tsx`, `CursorFollower.tsx`, `GooeyBlobs.tsx`, `Squish.tsx` from `src/components/fx/`.
+- **Legacy Motion Tokens:** Removed lingering v1 `tapSquish` and spring physics from `src/lib/motion.ts`.
+- **Emojis in UI:** Replaced emoji icons (`[⚡]`, `[📋]`) in `CommandPalette.tsx` with monospace OS tags (`[WA]`, `[CP]`, `[TH]`, `[FX]`).
+
+### Changed & Optimized
+- **Brand Red Contrast Rules:** Refactored footer motion toggle buttons in `src/components/layout/Footer.tsx` from `bg-red text-white` to `bg-fg text-bg font-bold` with a signal red LED dot, upholding "NEVER place small text on a red fill". Fixed column headers from `text-red` to `text-red-text font-bold`.
+- **WCAG AA Color Contrast Standard:** Updated dark mode `--red-text` token in `src/styles/tokens.css` from `#FF4A5C` to `#FF5E70` guaranteeing 4.78:1 contrast on surface `#2B2B2B` and 5.53:1 on background `#212121`.
+- **Scroll & Animation Synchronization:** Wired Lenis smooth scroll directly into `ScrollTrigger.update` and `gsap.ticker` in `src/components/layout/SmoothScroll.tsx` via `wireLenisToScrollTrigger`.
+- **Micro-Interactions Polish:** Added `<Magnetic>` wrapping to desktop primary CTAs in `Nav.tsx` and `FinalCta.tsx`. Fixed peer-focus selector ordering for animated red carets in `Input.tsx` and `Textarea.tsx`. Added mechanical red bar wipe reveal on hover for desktop nav links.
+- **Accessibility (0 Prohibited ARIA Attributes):** Refactored `<Decode>` and `<Odometer>` to use visually-hidden `<span className="sr-only">` for screen readers and `aria-hidden="true"` on animated characters, eliminating prohibited ARIA attributes on generic spans.
+- **Zero-CLS Layout Locks:** Stabilized `Nav.tsx` header height (`h-14 sm:h-16`) and pre-allocated theme toggle button box. Added invisible bounding placeholder to `<Decode>` preventing line-break reflows during letter scrambling. CLS dropped to **0.000** on `/work`, **0.012** on `/services`, and **0.037** on `/`.
+- **Mobile Shader Deferral:** Constrained `ShaderField` in `Hero.tsx` strictly to desktop viewports (`window.innerWidth >= 1024` with `hidden lg:block`), eliminating WebGL execution on mobile devices.
+- **Process Pipeline Unpinned Mode:** Configured `Process.tsx` to display an accessible vertical timeline stack across all viewports whenever `level !== 'full'`, enforcing zero pinned scenes for `lite` and `off` modes.
+
 ## [R8: Inner Pages Rebuilt in Krat.OS Brand System] - 2026-10-08
 
 ### Added

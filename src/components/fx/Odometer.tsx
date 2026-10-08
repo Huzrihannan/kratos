@@ -56,15 +56,17 @@ export function Odometer({
         "inline-flex items-baseline font-mono font-bold tracking-tight text-fg",
         className
       )}
-      aria-label={`${prefix}${stringValue}${suffix}`}
     >
-      {prefix && <span className="mr-0.5">{prefix}</span>}
-      <span className="inline-flex" aria-hidden="true">
-        {stringValue.split("").map((c, idx) => (
-          <OdometerDigit key={idx} char={c} isOff={isOff} />
-        ))}
+      <span className="sr-only">{`${prefix}${stringValue}${suffix}`}</span>
+      <span aria-hidden="true" className="inline-flex items-baseline">
+        {prefix && <span className="mr-0.5">{prefix}</span>}
+        <span className="inline-flex">
+          {stringValue.split("").map((c, idx) => (
+            <OdometerDigit key={idx} char={c} isOff={isOff} />
+          ))}
+        </span>
+        {suffix && <span className="ml-0.5">{suffix}</span>}
       </span>
-      {suffix && <span className="ml-0.5">{suffix}</span>}
     </span>
   );
 }

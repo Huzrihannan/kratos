@@ -29,9 +29,9 @@ export function Hero() {
   const [activeWindow, setActiveWindow] = useState<"terminal" | "code" | "signal">("terminal");
   const dragContainerRef = useRef<HTMLDivElement>(null);
 
-  // Defer ShaderField until after first paint via requestIdleCallback or timer
+  // Defer ShaderField until after first paint on desktop viewports
   useEffect(() => {
-    if (!isFull) return;
+    if (!isFull || (typeof window !== "undefined" && window.innerWidth < 1024)) return;
 
     const triggerMount = () => setShaderMounted(true);
 
@@ -45,7 +45,7 @@ export function Hero() {
   }, [isFull]);
 
   const handlePointerInteraction = () => {
-    if (!shaderMounted && isFull) {
+    if (!shaderMounted && isFull && typeof window !== "undefined" && window.innerWidth >= 1024) {
       setShaderMounted(true);
     }
   };
@@ -117,10 +117,10 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      {/* LAYER 3: WebGL ShaderField (Loaded deferred; lite/off keeps layer 1 only) */}
+      {/* LAYER 3: WebGL ShaderField (Loaded deferred on desktop; lite/off/mobile keeps layer 1 only) */}
       {shaderMounted && isFull && (
         <div
-          className="absolute inset-0 pointer-events-none z-0 opacity-80"
+          className="hidden lg:block absolute inset-0 pointer-events-none z-0 opacity-80"
           aria-hidden="true"
         >
           <ShaderField />

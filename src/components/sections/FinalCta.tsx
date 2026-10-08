@@ -88,7 +88,7 @@ export function FinalCta() {
 
           {/* 3 Action Triggers */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full max-w-md mb-8">
-            <Magnetic strength={0.22}>
+            <Magnetic strength={7}>
               <Button
                 variant="primary"
                 size="lg"

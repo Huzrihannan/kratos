@@ -161,33 +161,34 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
     let lastTime = performance.now();
 
     function render(time: number) {
-      if (!renderer) return;
+      if (!renderer || !isPlaying) return;
 
-      if (isPlaying) {
-        const delta = (time - lastTime) * 0.001;
-        lastTime = time;
+      const delta = (time - lastTime) * 0.001;
+      lastTime = time;
 
-        uniforms.uTime.value += delta;
+      uniforms.uTime.value += delta;
 
-        // If no user pointer movement, drift on an autonomous Lissajous curve
-        if (!hasPointerMoved) {
-          const t = uniforms.uTime.value;
-          targetMouseX = 0.5 + 0.28 * Math.sin(t * 0.55);
-          targetMouseY = 0.5 + 0.22 * Math.sin(t * 0.85 + 1.0);
-        }
-
-        // Smooth cursor interpolation (mechanical damping)
-        currentMouseX += (targetMouseX - currentMouseX) * 0.08;
-        currentMouseY += (targetMouseY - currentMouseY) * 0.08;
-        uniforms.uMouse.value = [currentMouseX, currentMouseY];
-
-        renderer.render({ scene: mesh });
+      // If no user pointer movement, drift on an autonomous Lissajous curve
+      if (!hasPointerMoved) {
+        const t = uniforms.uTime.value;
+        targetMouseX = 0.5 + 0.28 * Math.sin(t * 0.55);
+        targetMouseY = 0.5 + 0.22 * Math.sin(t * 0.85 + 1.0);
       }
+
+      // Smooth cursor interpolation (mechanical damping)
+      currentMouseX += (targetMouseX - currentMouseX) * 0.08;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.08;
+      uniforms.uMouse.value = [currentMouseX, currentMouseY];
+
+      renderer.render({ scene: mesh });
 
       animationFrameId = requestAnimationFrame(render);
     }
 
-    animationFrameId = requestAnimationFrame(render);
+    if (isPlaying) {
+      lastTime = performance.now();
+      animationFrameId = requestAnimationFrame(render);
+    }
 
     // Teardown & Context Destruction on unmount
     return () => {

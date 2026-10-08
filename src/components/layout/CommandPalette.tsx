@@ -146,7 +146,7 @@ export function CommandPalette() {
                 onSelect={() => runCommand(() => window.open(siteConfig.contact.whatsappUrl, '_blank'), 'whatsapp')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[⚡] Chat on WhatsApp</span>
+                <span>[WA] Chat on WhatsApp</span>
                 <span className="opacity-60 text-[10px]">[EXTERNAL]</span>
               </Command.Item>
 
@@ -164,7 +164,7 @@ export function CommandPalette() {
                 onSelect={handleCopyEmail}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[📋] {copied ? '[ COPIED TO CLIPBOARD! ]' : `Copy Email (${siteConfig.contact.email})`}</span>
+                <span>[CP] {copied ? '[ COPIED TO CLIPBOARD! ]' : `Copy Email (${siteConfig.contact.email})`}</span>
                 <span className="opacity-60 text-[10px]">[CLIPBOARD]</span>
               </Command.Item>
             </Command.Group>
@@ -206,7 +206,7 @@ export function CommandPalette() {
                 onSelect={() => runCommand(() => setTheme(theme === 'dark' ? 'light' : 'dark'), 'toggle_theme')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[☼/☽] Toggle Theme (Current: {theme?.toUpperCase()})</span>
+                <span>[TH] Toggle Theme (Current: {theme?.toUpperCase()})</span>
                 <span className="opacity-60 text-[10px]">[THEME]</span>
               </Command.Item>
 
@@ -215,7 +215,7 @@ export function CommandPalette() {
                 onSelect={() => runCommand(() => setLevel('full'), 'motion_full')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[⚙] Motion: Full {level === 'full' && '✓'}</span>
+                <span>[FX] Motion: Full {level === 'full' && '✓'}</span>
                 <span className="opacity-60 text-[10px]">[FULL]</span>
               </Command.Item>
 
@@ -224,7 +224,7 @@ export function CommandPalette() {
                 onSelect={() => runCommand(() => setLevel('lite'), 'motion_lite')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[⚙] Motion: Lite {level === 'lite' && '✓'}</span>
+                <span>[FX] Motion: Lite {level === 'lite' && '✓'}</span>
                 <span className="opacity-60 text-[10px]">[LITE]</span>
               </Command.Item>
 
@@ -233,7 +233,7 @@ export function CommandPalette() {
                 onSelect={() => runCommand(() => setLevel('off'), 'motion_off')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[⚙] Motion: Off (Reduced) {level === 'off' && '✓'}</span>
+                <span>[FX] Motion: Off (Reduced) {level === 'off' && '✓'}</span>
                 <span className="opacity-60 text-[10px]">[OFF]</span>
               </Command.Item>
             </Command.Group>

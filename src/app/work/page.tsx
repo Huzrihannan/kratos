@@ -78,7 +78,10 @@ export default function WorkPage() {
           </div>
 
           <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-fg leading-[1.1] mb-5 tracking-tight">
-            <Decode text="Real systems. Measurable impact." />
+            Real systems. Measurable{" "}
+            <span className="text-red font-mono inline-block">
+              <Decode text="impact." />
+            </span>
           </h1>
 
           <p className="font-sans text-fg-muted text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-6">
