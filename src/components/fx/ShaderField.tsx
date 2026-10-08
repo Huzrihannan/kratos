@@ -2,9 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Geometry } from "ogl";
+import { useTheme } from "next-themes";
 import { useMotionLevel } from "@/lib/motion/MotionContext";
 import { SpotlightGrid } from "./SpotlightGrid";
 import { useInViewPlayback } from "@/lib/motion/useInViewPlayback";
+import { cn } from "@/lib/utils";
 
 export interface ShaderFieldProps {
   className?: string;
@@ -22,7 +24,7 @@ const VERTEX_SHADER = /* glsl */ `
 `;
 
 const FRAGMENT_SHADER = /* glsl */ `
-  precision highp float;
+  precision mediump float;
   varying vec2 vUv;
   uniform float uTime;
   uniform vec2 uResolution;
@@ -30,12 +32,12 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uTheme; // 0.0 = dark (#212121), 1.0 = light (#F6EFDD)
 
   void main() {
-    vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
+    vec2 aspect = vec2(uResolution.x / max(uResolution.y, 1.0), 1.0);
     vec2 uv = vUv * aspect;
     vec2 mouse = uMouse * aspect;
 
-    // Dot grid pitch (50 dots horizontally)
-    float gridSize = 0.024;
+    // Dot grid pitch
+    float gridSize = 0.028;
     vec2 gridUv = fract(uv / gridSize) - 0.5;
     vec2 cellId = floor(uv / gridSize);
 
@@ -43,47 +45,50 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec2 cellCenter = (cellId + 0.5) * gridSize;
     float distToMouse = length(cellCenter - mouse);
 
-    // Cursor displacement / warp (subtle repulsion)
+    // Cursor displacement / magnetic warp
     float warp = smoothstep(0.35, 0.0, distToMouse) * 0.12;
     vec2 dir = normalize(cellCenter - mouse + 0.0001);
     vec2 warpedUv = gridUv - dir * warp;
 
-    // Dot radius: base 0.06, expands slightly near cursor
-    float dotRadius = 0.07 + smoothstep(0.25, 0.0, distToMouse) * 0.05;
+    // Dot radius
+    float dotRadius = 0.065 + smoothstep(0.25, 0.0, distToMouse) * 0.05;
     float dot = 1.0 - smoothstep(dotRadius - 0.02, dotRadius + 0.02, length(warpedUv));
 
-    // Base background colors
-    vec3 bgDark = vec3(0.129, 0.129, 0.129);  // #212121
-    vec3 bgLight = vec3(0.965, 0.937, 0.867); // #F6EFDD
-    vec3 bg = mix(bgDark, bgLight, uTheme);
-
-    // Dot base colors (hairline lines)
-    vec3 dotBaseDark = vec3(0.24, 0.24, 0.24);  // #3D3D3D
-    vec3 dotBaseLight = vec3(0.84, 0.80, 0.71); // #D6CDB5
+    // Base dot colors (hairline lines matching tokens)
+    vec3 dotBaseDark = vec3(0.48, 0.48, 0.48);  // line-strong
+    vec3 dotBaseLight = vec3(0.54, 0.52, 0.45);
     vec3 dotColor = mix(dotBaseDark, dotBaseLight, uTheme);
 
-    // Red signal light at cursor: #FD142B
+    // Red laser signal at cursor: #FD142B
     vec3 redSignal = vec3(0.992, 0.078, 0.169);
-    float redIntensity = smoothstep(0.38, 0.0, distToMouse);
+    float redIntensity = smoothstep(0.35, 0.0, distToMouse);
     dotColor = mix(dotColor, redSignal, redIntensity * 0.95);
 
-    // Composite final color
-    vec3 finalColor = mix(bg, dotColor, dot);
+    // Soft cursor ambient glow
+    float ambientGlow = smoothstep(0.42, 0.0, distToMouse) * 0.09;
 
-    // Subtle radial glow around cursor
-    float ambientGlow = smoothstep(0.45, 0.0, distToMouse) * 0.06;
-    finalColor += redSignal * ambientGlow;
+    // Alpha composition (transparent canvas so Layer 1 SVG grid & red glow show through)
+    float baseAlpha = dot * mix(0.35, 0.45, uTheme);
+    float totalAlpha = clamp(baseAlpha + ambientGlow, 0.0, 0.85);
 
-    gl_FragColor = vec4(finalColor, 1.0);
+    vec3 finalRgb = mix(dotColor, redSignal, ambientGlow / max(totalAlpha, 0.001));
+
+    gl_FragColor = vec4(finalRgb, totalAlpha);
   }
 `;
 
-export function ShaderField({ className = "", theme }: ShaderFieldProps) {
+export function ShaderField({ className = "", theme: themeProp }: ShaderFieldProps) {
   const { isFull } = useMotionLevel();
+  const { resolvedTheme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isPlaying = useInViewPlayback(containerRef);
+
+  const [isReady, setIsReady] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
+
+  // Active theme calculation (prop overrides context)
+  const currentTheme = themeProp || (resolvedTheme === "light" ? "light" : "dark");
 
   useEffect(() => {
     if (!isFull || webglFailed || !canvasRef.current) return;
@@ -91,13 +96,14 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
     const canvas = canvasRef.current;
     let renderer: Renderer | null = null;
     let animationFrameId: number | null = null;
+    let resizeObserver: ResizeObserver | null = null;
 
     try {
       renderer = new Renderer({
         canvas,
-        alpha: false,
+        alpha: true,
         antialias: false,
-        dpr: Math.min(window.devicePixelRatio, 1.5),
+        dpr: Math.min(window.devicePixelRatio || 1, 1.5),
         powerPreference: "high-performance",
       });
     } catch {
@@ -106,6 +112,20 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
     }
 
     const gl = renderer.gl;
+
+    // Intercept getShaderInfoLog to prevent spurious 'null' warnings in ogl
+    const origGetShaderInfoLog = gl.getShaderInfoLog.bind(gl);
+    gl.getShaderInfoLog = (shader: WebGLShader) => {
+      const log = origGetShaderInfoLog(shader);
+      return log === null ? "" : log;
+    };
+
+    // Handle context loss gracefully
+    const handleContextLost = (e: Event) => {
+      e.preventDefault();
+      setWebglFailed(true);
+    };
+    canvas.addEventListener("webglcontextlost", handleContextLost, false);
 
     // Fullscreen quad geometry
     const geometry = new Geometry(gl, {
@@ -117,16 +137,24 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
       uTime: { value: 0 },
       uResolution: { value: [canvas.width, canvas.height] },
       uMouse: { value: [0.5, 0.5] },
-      uTheme: { value: theme === "light" ? 1.0 : 0.0 },
+      uTheme: { value: currentTheme === "light" ? 1.0 : 0.0 },
     };
 
-    const program = new Program(gl, {
-      vertex: VERTEX_SHADER,
-      fragment: FRAGMENT_SHADER,
-      uniforms,
-    });
+    let program: Program;
+    let mesh: Mesh;
 
-    const mesh = new Mesh(gl, { geometry, program });
+    try {
+      program = new Program(gl, {
+        vertex: VERTEX_SHADER,
+        fragment: FRAGMENT_SHADER,
+        uniforms,
+        transparent: true,
+      });
+      mesh = new Mesh(gl, { geometry, program });
+    } catch {
+      setWebglFailed(true);
+      return;
+    }
 
     // Pointer tracking
     let targetMouseX = 0.5;
@@ -145,20 +173,33 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
-    // Resize handling
-    function resize() {
-      if (!containerRef.current || !renderer) return;
-      const width = containerRef.current.clientWidth;
-      const height = containerRef.current.clientHeight;
+    // Sizing via ResizeObserver
+    function handleResize(width: number, height: number) {
+      if (!renderer || width <= 0 || height <= 0) return;
       renderer.setSize(width, height);
-      uniforms.uResolution.value = [width, height];
+      uniforms.uResolution.value = [canvas.width, canvas.height];
     }
 
-    resize();
-    window.addEventListener("resize", resize, { passive: true });
+    if (typeof ResizeObserver !== "undefined" && containerRef.current) {
+      resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          handleResize(width, height);
+        }
+      });
+      resizeObserver.observe(containerRef.current);
+    } else if (containerRef.current) {
+      handleResize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+    }
+
+    // Initial sizing check
+    if (containerRef.current) {
+      handleResize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+    }
 
     // Render Loop
     let lastTime = performance.now();
+    let hasRenderedFirstFrame = false;
 
     function render(time: number) {
       if (!renderer || !isPlaying) return;
@@ -167,20 +208,35 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
       lastTime = time;
 
       uniforms.uTime.value += delta;
+      uniforms.uTheme.value = currentTheme === "light" ? 1.0 : 0.0;
 
-      // If no user pointer movement, drift on an autonomous Lissajous curve
+      // Autonomous Lissajous drift when cursor is idle
       if (!hasPointerMoved) {
         const t = uniforms.uTime.value;
         targetMouseX = 0.5 + 0.28 * Math.sin(t * 0.55);
         targetMouseY = 0.5 + 0.22 * Math.sin(t * 0.85 + 1.0);
       }
 
-      // Smooth cursor interpolation (mechanical damping)
+      // Smooth cursor interpolation
       currentMouseX += (targetMouseX - currentMouseX) * 0.08;
       currentMouseY += (targetMouseY - currentMouseY) * 0.08;
       uniforms.uMouse.value = [currentMouseX, currentMouseY];
 
-      renderer.render({ scene: mesh });
+      try {
+        renderer.render({ scene: mesh });
+
+        if (!hasRenderedFirstFrame) {
+          hasRenderedFirstFrame = true;
+          if (gl.getError() === gl.NO_ERROR) {
+            setIsReady(true);
+          } else {
+            setWebglFailed(true);
+          }
+        }
+      } catch {
+        setWebglFailed(true);
+        return;
+      }
 
       animationFrameId = requestAnimationFrame(render);
     }
@@ -192,8 +248,12 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
 
     // Teardown & Context Destruction on unmount
     return () => {
+      canvas.removeEventListener("webglcontextlost", handleContextLost);
       window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("resize", resize);
+
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
 
       if (animationFrameId !== null) {
         cancelAnimationFrame(animationFrameId);
@@ -205,12 +265,12 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
           loseContext.loseContext();
         }
       } catch {
-        // Ignore context loss errors during unmount
+        // Safe catch on cleanup
       }
     };
-  }, [isFull, isPlaying, theme, webglFailed]);
+  }, [isFull, isPlaying, currentTheme, webglFailed]);
 
-  // Fallback to SpotlightGrid if motion is lite/off or WebGL is unsupported
+  // Fallback to SpotlightGrid if motion is lite/off or WebGL fails
   if (!isFull || webglFailed) {
     return <SpotlightGrid className={className} />;
   }
@@ -218,7 +278,11 @@ export function ShaderField({ className = "", theme }: ShaderFieldProps) {
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full overflow-hidden select-none ${className}`}
+      className={cn(
+        "relative w-full h-full overflow-hidden select-none transition-opacity duration-700 ease-out",
+        isReady ? "opacity-100" : "opacity-0",
+        className
+      )}
     >
       <canvas ref={canvasRef} className="block w-full h-full" />
     </div>

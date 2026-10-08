@@ -16,6 +16,9 @@ import { TerminalWindow } from "./hero/TerminalWindow";
 import { CodeWindow } from "./hero/CodeWindow";
 import { SignalWindow } from "./hero/SignalWindow";
 
+import { caseStudiesData } from "@/content/work";
+import { isPublishable } from "@/lib/content-status";
+
 // Lazy-load ShaderField with no SSR so ogl never delays initial LCP paint
 const ShaderField = dynamic(
   () => import("@/components/fx/ShaderField").then((mod) => mod.ShaderField),
@@ -28,6 +31,7 @@ export function Hero() {
   const [shaderMounted, setShaderMounted] = useState(false);
   const [activeWindow, setActiveWindow] = useState<"terminal" | "code" | "signal">("terminal");
   const dragContainerRef = useRef<HTMLDivElement>(null);
+  const hasPublishedWork = caseStudiesData.some(isPublishable);
 
   // Defer ShaderField until after first paint on desktop viewports
   useEffect(() => {
@@ -50,13 +54,8 @@ export function Hero() {
     }
   };
 
-  const partnerLogos = [
-    "[PLACEHOLDER] NOVA LABS",
-    "[PLACEHOLDER] PULSEFLOW",
-    "[PLACEHOLDER] VERTEX SYSTEMS",
-    "[PLACEHOLDER] ORBIT CORE",
-    "[PLACEHOLDER] HYPERION AI",
-  ];
+  // Verified client logos only (empty until client permits display)
+  const partnerLogos: string[] = [];
 
   return (
     <section
@@ -108,6 +107,16 @@ export function Hero() {
         <rect width="100%" height="100%" fill="url(#hero-blueprint-pattern)" />
       </svg>
 
+      {/* Layer 1b: Soft Red Radial Glow (Server Painted) */}
+      <div
+        className="absolute inset-0 pointer-events-none select-none z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 65% 50% at 50% 30%, rgba(253, 20, 43, 0.08) 0%, rgba(253, 20, 43, 0.015) 50%, transparent 75%)",
+        }}
+        aria-hidden="true"
+      />
+
       {/* LAYER 2: Noise / Grain Overlay (3.5% mix-blend-overlay) */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.035] mix-blend-overlay select-none z-0"
@@ -117,10 +126,21 @@ export function Hero() {
         aria-hidden="true"
       />
 
+      {/* High-Contrast Readability Scrim Behind Typography & CTAs */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 30% 45%, var(--bg) 0%, transparent 80%)",
+          opacity: 0.7,
+        }}
+        aria-hidden="true"
+      />
+
       {/* LAYER 3: WebGL ShaderField (Loaded deferred on desktop; lite/off/mobile keeps layer 1 only) */}
       {shaderMounted && isFull && (
         <div
-          className="hidden lg:block absolute inset-0 pointer-events-none z-0 opacity-80"
+          className="hidden lg:block absolute inset-0 pointer-events-none z-0"
           aria-hidden="true"
         >
           <ShaderField />
@@ -216,25 +236,27 @@ export function Hero() {
             <Button
               variant="ghost"
               size="lg"
-              href="/work"
+              href={hasPublishedWork ? "/work" : "/services"}
             >
-              See our work
+              {hasPublishedWork ? "See our work" : "Explore modules"}
             </Button>
           </div>
 
-          {/* Trust Strip Tape */}
-          <div className="w-full max-w-xl">
-            <div className="text-[10px] font-mono text-fg-muted/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-2 select-none">
-              <span>TRUSTED ARCHITECTURE</span>
-              <span className="h-px bg-line/80 flex-1" />
+          {/* Trust Strip Tape (Rendered only when verified client logos exist) */}
+          {partnerLogos.length > 0 && (
+            <div className="w-full max-w-xl">
+              <div className="text-[10px] font-mono text-fg-muted/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-2 select-none">
+                <span>TRUSTED ARCHITECTURE</span>
+                <span className="h-px bg-line/80 flex-1" />
+              </div>
+              <Tape
+                items={partnerLogos}
+                separator="///"
+                speed={34}
+                className="border-line bg-surface/40"
+              />
             </div>
-            <Tape
-              items={partnerLogos}
-              separator="///"
-              speed={34}
-              className="border-line bg-surface/40"
-            />
-          </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN: Interactive OS Windows (5 cols desktop; Mobile shows Terminal only below CTAs) */}
