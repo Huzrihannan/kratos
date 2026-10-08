@@ -2,6 +2,49 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [R2: Design System v2 & Motion Engine] - 2026-10-08
+
+### Added
+- **Motion Engine Architecture (`src/lib/motion/`):**
+  - Mechanical duration and easing tokens (`expoOut`, `power4InOut`, `linear`, `micro`, `ui`, `section`, `hero`).
+  - `MotionContext.tsx` with 3-tier motion levels (`full`, `lite`, `off`), auto-detection (Save-Data, hardware concurrency, small screens), localStorage persistence (`krat_os_motion_level`), and export hook `useMotionLevel()`.
+  - `gsap.ts` with strict-mode safe `useGsapContext()`, GSAP ScrollTrigger registration, and Lenis ticker sync.
+  - `useInViewPlayback.ts` pausing rAF/WebGL/canvas loops when off-screen or tab is backgrounded.
+  - `useHotkey.ts` global hotkey listener with input/textarea/select focus suppression.
+  - Global `<MotionProvider>` mounted at root layout (`src/app/layout.tsx`).
+- **UI Components Suite (`src/components/ui/`):**
+  - `Button.tsx`: Sharp rectangle geometry (0-4px radius), primary cream fill with sliding red square arrow, secondary outline, ghost with red underline wipe, 1px press translate, loading red progress bar.
+  - `Tag.tsx`: Monospace bracketed labels `[ web app ]`.
+  - `StatusChip.tsx`: Monospace status badge with green LED dot (`#3DDC84`) or red pulse dot (`#FD142B`).
+  - `Window.tsx`: OS window container with title bar chrome (`module_01.sys`), 3 square control buttons, optional corner registration brackets, and optional inertial drag.
+  - `Card.tsx`: Bridged to sharp rectangular window styling.
+  - `Input.tsx`, `Textarea.tsx`, `Select.tsx`: 1px line-strong border, monospace labels, animated red caret indicator on focus.
+  - `KeyOption.tsx`: Monospace selector rows with `[ ]` and `[x]` markers, keyboard shortcut badges (`[1]`, `[2]`), active press translation.
+  - `Tape.tsx`: Monospace velocity ticker accelerating with scroll speed and pausing on hover.
+  - `Accordion.tsx`: Technical disclosures with indexed rows (`Q01`..`Qnn`), `+` to `−` toggle, clip-path height reveal, and blinking red caret.
+  - `Section.tsx`: Section rhythm wrapper with `/01 — LABEL` eyebrow, corner `+` registration marks, HUD slot, and `data-theme` override.
+  - Central barrel exports in `src/components/ui/index.ts`.
+- **Named FX Library (`src/components/fx/`):**
+  - `Decode.tsx`: Scrambles through `_ / \ # 0 1` settling left-to-right with real DOM text preserved.
+  - `Caret.tsx`: Blinking signal-red square-wave bar.
+  - `TypeLines.tsx`: Terminal sequence typewriter with terminal prompts and progress bars.
+  - `SpotlightGrid.tsx`: Blueprint dot grid with `+` marks, cursor radial glow, and fine grain overlay.
+  - `ShaderField.tsx`: WebGL dot matrix canvas using `ogl`, warped by pointer with red light source, clean context destruction on unmount.
+  - `Pipeline.tsx`: SVG circuit path with active illuminated nodes and traveling packet.
+  - `Odometer.tsx`: Rolling monospace digit columns for numbers, ranges, currency.
+  - `Wipe.tsx`: Red-bar sweep with precision clip-path reveals.
+  - `Tilt.tsx`: 3D perspective tilt (max 6deg) with faint glare.
+  - `Magnetic.tsx`: 6-8px cursor pull for desktop full mode.
+  - `Crosshair.tsx`: Technical precision cursor with contextual status tags (`[open]`, `[drag]`, `[view]`), disabled in lite/off.
+  - `HUD.tsx`: Micro-type heads-up display with coordinates, section indexes, and live Colombo clock.
+  - `Glitch.tsx`: 1-2 frame RGB displacement split on hover, capped to < 3Hz.
+  - Central barrel exports in `src/components/fx/index.ts`.
+- **Preview Route (`/design-system`):**
+  - Rebuilt `/design-system` as a noindex interactive laboratory showcasing every component and effect on dark and light surfaces, with live theme switcher and 3-tier motion toggles.
+  - Verified bundle size: Home First Load JS 193 kB (well below the 220 kB budget).
+  - Production build passed (26/26 routes).
+  - Zero TypeScript errors (`tsc --noEmit`), zero ESLint warnings (`next lint`).
+
 ## [R1: Rebrand Sweep — Name, Logo, Tokens, Fonts, Theme] - 2026-10-08
 
 ### Added

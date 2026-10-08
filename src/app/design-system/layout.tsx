@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Design System Preview | Krat.OS Software Solutions",
+  title: 'Krat.OS — Design System v2 & Motion Lab',
+  description: 'Interactive test bench for the Krat.OS v2 design system, component catalog, and mechanical motion engine.',
   robots: {
     index: false,
     follow: false,

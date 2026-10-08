@@ -1,60 +1,70 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { springs, physics } from "@/lib/motion";
+import React, { useRef, useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
+import { useMotionLevel } from "@/lib/motion/MotionContext";
 
-interface MagneticProps {
+export interface MagneticProps {
   children: React.ReactNode;
-  className?: string;
+  maxDistance?: number; // 6-8px per brief
+  distance?: number;
   strength?: number;
+  className?: string;
   disabled?: boolean;
 }
 
 export function Magnetic({
   children,
+  maxDistance,
+  distance,
+  strength,
   className = "",
-  strength = physics.magneticStrength,
   disabled = false,
 }: MagneticProps) {
+  const effectiveMax = maxDistance ?? distance ?? strength ?? 7;
+  const { isFull } = useMotionLevel();
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const prefersReducedMotion = useReducedMotion();
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  if (prefersReducedMotion || disabled) {
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isFull || disabled || e.pointerType !== "mouse" || !ref.current) return;
+
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      // Distance from center, clamped strictly to maxDistance (6-8px)
+      const rawX = (e.clientX - centerX) * 0.25;
+      const rawY = (e.clientY - centerY) * 0.25;
+
+      const clampedX = Math.max(-effectiveMax, Math.min(effectiveMax, rawX));
+      const clampedY = Math.max(-effectiveMax, Math.min(effectiveMax, rawY));
+
+      setOffset({ x: clampedX, y: clampedY });
+    },
+    [isFull, disabled, effectiveMax]
+  );
+
+  const handlePointerLeave = useCallback(() => {
+    setOffset({ x: 0, y: 0 });
+  }, []);
+
+  if (!isFull || disabled) {
     return <div className={className}>{children}</div>;
   }
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    // Only apply magnetic pull on actual desktop pointer devices (mouse)
-    if (e.pointerType !== "mouse" || !ref.current) return;
-
-    const { clientX, clientY } = e;
-    const { top, left, width, height } = ref.current.getBoundingClientRect();
-
-    const centerX = left + width / 2;
-    const centerY = top + height / 2;
-
-    const deltaX = (clientX - centerX) * strength;
-    const deltaY = (clientY - centerY) * strength;
-
-    setPosition({ x: deltaX, y: deltaY });
-  };
-
-  const handlePointerLeave = () => {
-    setPosition({ x: 0, y: 0 });
-  };
-
   return (
-    <motion.div
+    <div
       ref={ref}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      animate={{ x: position.x, y: position.y }}
-      transition={springs.bouncy}
-      className={`inline-block origin-center ${className}`}
+      className={cn("inline-block transition-transform duration-150 ease-out will-change-transform", className)}
+      style={{
+        transform: `translate3d(${offset.x.toFixed(1)}px, ${offset.y.toFixed(1)}px, 0)`,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
