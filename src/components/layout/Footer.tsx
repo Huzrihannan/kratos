@@ -10,6 +10,7 @@ import { Decode } from '@/components/fx/Decode';
 import { HUDClock } from '@/components/fx/HUD';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { useLayoutModal } from '@/lib/modal-context';
+import { ThemeSwitcherFooter } from '@/themes/ThemeSwitcher';
 
 import { caseStudiesData } from '@/content/work';
 import { isPublishable } from '@/lib/content-status';
@@ -204,24 +205,28 @@ export function Footer() {
             <span className="hidden md:inline">KERNEL: V2.0</span>
           </div>
 
-          {/* Right: Motion Toggle */}
-          <div className="flex items-center gap-2">
-            <span>MOTION:</span>
-            <div className="flex items-center border border-line bg-bg p-0.5">
-              {(['full', 'lite', 'off'] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setLevel(m)}
-                  className={`px-2 py-0.5 uppercase tracking-wider text-[10px] transition-colors flex items-center gap-1 ${
-                    level === m ? 'bg-fg text-bg font-bold' : 'text-fg-muted hover:text-fg'
-                  }`}
-                  data-cursor="click"
-                >
-                  {level === m && <span className="w-1.5 h-1.5 rounded-full bg-red inline-block" aria-hidden="true" />}
-                  <span>{m}</span>
-                </button>
-              ))}
+          {/* Right: Theme Switcher & Motion Toggle */}
+          <div className="flex flex-wrap items-center gap-4">
+            <ThemeSwitcherFooter />
+
+            <div className="flex items-center gap-2">
+              <span>MOTION:</span>
+              <div className="flex items-center border border-line bg-bg p-0.5 rounded-[2px]">
+                {(['full', 'lite', 'off'] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setLevel(m)}
+                    className={`px-2 py-0.5 uppercase tracking-wider text-[10px] transition-colors flex items-center gap-1 ${
+                      level === m ? 'bg-fg text-bg font-bold' : 'text-fg-muted hover:text-fg'
+                    }`}
+                    data-cursor="click"
+                  >
+                    {level === m && <span className="w-1.5 h-1.5 rounded-full bg-red inline-block" aria-hidden="true" />}
+                    <span>{m}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

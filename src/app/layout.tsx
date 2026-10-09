@@ -3,7 +3,8 @@ import { JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { LayoutProvider } from "@/lib/modal-context";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
+import { ThemeProvider, ThemeScript } from "@/components/theme/ThemeProvider";
+import { CloudWipeProvider } from "@/themes/CloudWipe";
 import { MotionProvider } from "@/lib/motion/MotionContext";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
@@ -97,6 +98,8 @@ export default function RootLayout({
       className={`${jetbrainsMono.variable} ${geist.variable}`}
     >
       <head>
+        <meta name="theme-color" content="#212121" />
+        <ThemeScript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
@@ -104,33 +107,35 @@ export default function RootLayout({
       </head>
       <body className="bg-bg text-fg font-sans selection:bg-red selection:text-fg antialiased min-h-screen flex flex-col">
         <ThemeProvider>
-          <MotionProvider>
-            <LayoutProvider>
-              {/* Accessible Skip Link */}
-              <a
-                href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99] focus:px-4 focus:py-2 focus:bg-surface focus:text-fg focus:border focus:border-red-text focus:outline-none focus:ring-2 focus:ring-red-text"
-              >
-                Skip to main content
-              </a>
+          <CloudWipeProvider>
+            <MotionProvider>
+              <LayoutProvider>
+                {/* Accessible Skip Link */}
+                <a
+                  href="#main-content"
+                  className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99] focus:px-4 focus:py-2 focus:bg-surface focus:text-fg focus:border focus:border-red-text focus:outline-none focus:ring-2 focus:ring-red-text"
+                >
+                  Skip to main content
+                </a>
 
-              <AppOverlays />
-              <SpotlightGrid
-                gridSize={48}
-                spotlightRadius={320}
-                className="fixed inset-0 -z-10 pointer-events-none opacity-30"
-              />
+                <AppOverlays />
+                <SpotlightGrid
+                  gridSize={48}
+                  spotlightRadius={320}
+                  className="fixed inset-0 -z-10 pointer-events-none opacity-30"
+                />
 
-              <SmoothScroll>
-                <PageTransition />
-                <Nav />
-                <main id="main-content" className="flex-1">
-                  {children}
-                </main>
-                <Footer />
-              </SmoothScroll>
-            </LayoutProvider>
-          </MotionProvider>
+                <SmoothScroll>
+                  <PageTransition />
+                  <Nav />
+                  <main id="main-content" className="flex-1">
+                    {children}
+                  </main>
+                  <Footer />
+                </SmoothScroll>
+              </LayoutProvider>
+            </MotionProvider>
+          </CloudWipeProvider>
         </ThemeProvider>
       </body>
     </html>

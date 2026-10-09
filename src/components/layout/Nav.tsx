@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/themes/ThemeProvider';
+import { ThemeSwitcherNav, ThemeSwitcherMobile } from '@/themes/ThemeSwitcher';
 import { useLayoutModal } from '@/lib/modal-context';
 import { Button } from '@/components/ui/Button';
 import { Logo } from '@/components/ui/Logo';
@@ -25,7 +26,7 @@ const NAV_LINKS = [
 
 export function Nav() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const { isMobileNavOpen, setMobileNavOpen, openEstimator, toggleCommandPalette } = useLayoutModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -146,20 +147,11 @@ export function Nav() {
               <span className="text-red font-semibold">{isMac ? '⌘K' : '^K'}</span>
             </button>
 
-            {/* Theme Toggle */}
+            {/* Multi-Theme Segmented Switcher */}
             {mounted ? (
-              <button
-                type="button"
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] border border-line bg-surface hover:border-line-strong text-fg font-mono text-xs sm:text-[11px] transition-colors rounded-[2px]"
-                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
-                aria-label="Toggle Theme"
-                data-cursor="click"
-              >
-                {theme === 'dark' ? '☼' : '☽'}
-              </button>
+              <ThemeSwitcherNav />
             ) : (
-              <div className="min-h-[44px] min-w-[44px]" aria-hidden="true" />
+              <div className="min-h-[36px] min-w-[120px]" aria-hidden="true" />
             )}
 
             {/* Primary CTA Button */}
@@ -252,17 +244,14 @@ export function Nav() {
               Estimate my project
             </Button>
 
+            {/* Mobile Theme Switcher Cards */}
+            {mounted && (
+              <ThemeSwitcherMobile onSelect={() => setMobileNavOpen(false)} />
+            )}
+
             <div className="flex items-center justify-between font-mono text-[11px] text-fg-muted pt-2">
               <span>{'// KRAT.OS_SYS_V2'}</span>
-              {mounted && (
-                <button
-                  type="button"
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                  className="underline hover:text-fg"
-                >
-                  THEME: {theme?.toUpperCase()}
-                </button>
-              )}
+              <span>{theme?.toUpperCase()}</span>
             </div>
           </div>
         </div>

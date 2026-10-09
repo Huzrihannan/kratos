@@ -2,7 +2,36 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
-## [R12: Audit Remediation — Content Purge, Hide-When-Missing Architecture, Hero WebGL Overhaul, and Guardrails] - 2026-10-08
+## [Dream Theme: D0 & D1 — Theme Architecture, Three-Way Switcher, and Guardrails] - 2026-10-09
+
+### Added
+- **Theme Architecture & Registry (`src/themes/registry.tsx`):**
+  - Centralized theme metadata registry supporting `dark`, `light`, and `dream` with display labels, icons (Moon, Sun, custom SVG Cloud-Flower), meta theme colors, and color-scheme mappings.
+  - Strict typing via `ThemeId` and runtime validator `isValidTheme()`.
+- **Zero-Flash Theme Provider (`src/themes/ThemeProvider.tsx`):**
+  - Synchronous `<head>` blocking script (`ThemeScript`) evaluating `?theme=` query param, `krat-theme` cookie, `localStorage`, and OS color scheme before first render, eliminating theme flash.
+  - Bidirectional persistence across `localStorage` and 1-year `krat-theme` cookie.
+  - Cross-tab synchronization via `window.addEventListener('storage')`.
+  - First-time Dream discovery tracking with `krat-dream-tried`.
+- **Cloud Wipe Screen Transition (`src/themes/CloudWipe.tsx`):**
+  - 900ms SVG cloud sweep transition triggered when entering or leaving Dream theme (at 450ms apex theme state swaps; at 900ms wipe clears). Bypassed seamlessly when `prefers-reduced-motion` is active.
+- **Three-Way Theme Switchers (`src/themes/ThemeSwitcher.tsx`):**
+  - **Desktop Nav Segmented Radiogroup:** Full WAI-ARIA `radiogroup` compliance with keyboard arrow cycling (`ArrowLeft`, `ArrowRight`, `Home`, `End`), pulsing red "New" dot indicator on Dream until clicked, and Dream dial popover stub.
+  - **Mobile Menu Preview Cards:** Rich visual switcher inside mobile drawer with mini theme canvas previews.
+  - **Footer Switcher:** Subtle inline theme toggle in footer metadata zone.
+- **Decorative Component Slots & Flair Architecture:**
+  - `<ThemedSlot>` (`src/themes/ThemedSlot.tsx`): Aspect-ratio reserved container mounting theme-specific decorative scenes after hydration without layout shifts.
+  - `<Flair>` (`src/themes/Flair.tsx`): Server-rendered component outputting dark, light, and dream decorative strings (≤12 words) while CSS hides inactive themes.
+  - Guardrail script (`scripts/check-flair.mjs`): Automated scanner enforcing word count, required props, and zero placeholder tokens across `<Flair>` instances, wired into `npm run check`.
+  - Motion tokens (`src/themes/useThemeMotion.ts`): Theme-aware motion tokens adapting between mechanical precision (Dark/Light) and organic breathing (Dream).
+- **Automated Verification Script (`scripts/verify-d1.mjs`):**
+  - Automated CDP suite verifying clean initial load, 3x3 theme switching, persistence across reload, keyboard navigation, `?theme=` URL parameters, mobile drawer switching, and zero console errors.
+
+### Changed
+- Scoped mechanical rules in `PROJECT_BRIEF.md` and `AGENTS.md` strictly to Dark and Light themes.
+- Updated Command Palette (`src/components/layout/CommandPalette.tsx`) with three explicit theme commands: `Theme: Dark`, `Theme: Light`, `Theme: Dream`.
+- Updated analytics tracking (`src/lib/analytics.ts`) to attach `theme` to all tracked events and dispatch `trackThemeChange(from, to, source)`.
+
 
 ### Added
 - **Content Status Architecture (`src/lib/content-status.ts`):**

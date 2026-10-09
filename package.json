@@ -9,7 +9,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "check:content": "node scripts/check-content.mjs",
-    "check": "npm run lint && npm run typecheck && npm run check:content"
+    "check:flair": "node scripts/check-flair.mjs",
+    "check": "npm run lint && npm run typecheck && npm run check:flair && npm run check:content"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

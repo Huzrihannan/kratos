@@ -1,9 +1,12 @@
-/* Krat.OS Design Tokens (v2) */
+/* Krat.OS Design Tokens (Multi-Theme System: Dark, Light, Dream) */
 
+/* =========================================================================
+   1. DARK THEME (Default Technical Operating System)
+   ========================================================================= */
 :root,
 [data-theme="dark"],
 .dark {
-  /* Semantic Tokens (Dark Theme - Default) */
+  /* Semantic Color Tokens */
   --bg: #212121;
   --surface: #2B2B2B;
   --fg: #EFE3CF;
@@ -14,7 +17,7 @@
   --red-text: #FF5E70;
   --ok: #3DDC84;
 
-  /* Backward compatibility bridge for v1 components undergoing migration */
+  /* Backward compatibility bridge */
   --color-cream: var(--bg);
   --color-peach: var(--surface);
   --color-orange: var(--red);
@@ -24,11 +27,42 @@
   --color-cocoa: var(--surface);
   --color-butter: var(--red);
   --focus-ring: 0 0 0 2px var(--red-text);
+
+  /* Border Radii: Sharp technical rectangles (0 to 4px max) */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius: 4px;
+  --radius-card: 4px;
+  --radius-bubble: 4px;
+  --radius-pill: 4px;
+
+  /* Shadows - Minimal technical elevation */
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 4px 12px 0 rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 20px -2px rgba(253, 20, 43, 0.25);
+  --shadow-float: 0 12px 28px -4px rgba(0, 0, 0, 0.35);
+
+  /* Fonts */
+  --font-headline: var(--font-mono);
+  --font-body: var(--font-sans);
+
+  /* Motion Easings & Durations: Mechanical precision */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-wipe: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-mechanical: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-micro: 150ms;
+  --duration-ui: 300ms;
+  --duration-section: 700ms;
+  --duration-hero: 1200ms;
 }
 
+/* =========================================================================
+   2. LIGHT THEME (Technical Blueprint / Cream Surface)
+   ========================================================================= */
 [data-theme="light"],
 .light {
-  /* Semantic Tokens (Light Theme) */
+  /* Semantic Color Tokens */
   --bg: #F6EFDD;
   --surface: #EBE3CD;
   --fg: #292926;
@@ -39,7 +73,7 @@
   --red-text: #C8102E;
   --ok: #1E9E5A;
 
-  /* Backward compatibility bridge for v1 components in light mode */
+  /* Backward compatibility bridge */
   --color-cream: var(--bg);
   --color-peach: var(--surface);
   --color-orange: var(--red);
@@ -49,10 +83,8 @@
   --color-cocoa: var(--surface);
   --color-butter: var(--red);
   --focus-ring: 0 0 0 2px var(--red-text);
-}
 
-:root {
-  /* Border Radii: Sharp rectangles (0 to 4px maximum) */
+  /* Border Radii: Sharp technical rectangles (0 to 4px max) */
   --radius-none: 0px;
   --radius-sm: 2px;
   --radius-md: 4px;
@@ -61,14 +93,89 @@
   --radius-bubble: 4px;
   --radius-pill: 4px;
 
+  /* Shadows - Minimal technical elevation */
+  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 12px 0 rgba(41, 41, 38, 0.1);
+  --shadow-glow: 0 0 20px -2px rgba(200, 16, 46, 0.2);
+  --shadow-float: 0 12px 28px -4px rgba(41, 41, 38, 0.15);
+
+  /* Fonts */
+  --font-headline: var(--font-mono);
+  --font-body: var(--font-sans);
+
+  /* Motion Easings & Durations: Mechanical precision */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-wipe: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-mechanical: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-micro: 150ms;
+  --duration-ui: 300ms;
+  --duration-section: 700ms;
+  --duration-hero: 1200ms;
+}
+
+/* =========================================================================
+   3. DREAM THEME (Storybook Meadow & Living Sky - D1 Stub / D2 Full)
+   ========================================================================= */
+[data-theme="dream"],
+.dream {
+  /* Palette Tokens */
+  --bg: #6DB6F0; /* Default Day Sky Top */
+  --surface: #FFFAF0; /* Paper card surface */
+  --surface-secondary: #FFF1DC; /* Paper-2 */
+  --fg: #2B2A52; /* Indigo Ink */
+  --fg-muted: #55537A; /* Ink-soft */
+  --line: rgba(43, 42, 82, 0.12);
+  --line-strong: rgba(43, 42, 82, 0.28);
+  --red: #FD142B; /* Brand Poppy */
+  --red-text: #C8102E; /* Poppy-text */
+  --ok: #3E8C5A; /* Grass-near */
+
+  /* Backward compatibility bridge */
+  --color-cream: var(--surface);
+  --color-peach: var(--surface-secondary);
+  --color-orange: var(--red);
+  --color-orange-deep: var(--red-text);
+  --color-ink: var(--fg);
+  --color-ink-soft: var(--fg-muted);
+  --color-cocoa: #1B1E4B;
+  --color-butter: #FFC83D;
+  --focus-ring: 0 0 0 2px #FFFAF0, 0 0 0 5px #3B3AA0;
+
+  /* Border Radii: Soft pebbles, clouds, and petals (20 to 40px) */
+  --radius-none: 0px;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius: 24px;
+  --radius-card: 28px;
+  --radius-bubble: 36px;
+  --radius-pill: 9999px;
+
+  /* Shadows: Soft colored elevation */
+  --shadow-subtle: 0 2px 8px -2px rgba(43, 42, 82, 0.08);
+  --shadow-card: 0 8px 24px -4px rgba(43, 42, 82, 0.12);
+  --shadow-glow: 0 0 24px -2px rgba(253, 20, 43, 0.2);
+  --shadow-float: 0 16px 36px -6px rgba(43, 42, 82, 0.18);
+
+  /* Fonts */
+  --font-headline: var(--font-fraunces, var(--font-sans));
+  --font-body: var(--font-figtree, var(--font-sans));
+
+  /* Motion Easings & Durations: Slow, organic, floaty */
+  --ease-reveal: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-wipe: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-mechanical: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-micro: 200ms;
+  --duration-ui: 450ms;
+  --duration-section: 900ms;
+  --duration-hero: 1400ms;
+}
+
+/* =========================================================================
+   4. SHARED CONSTANTS & TYPOGRAPHY CLAMPS
+   ========================================================================= */
+:root {
   /* Hairline Border Widths */
   --border-hairline: 1px;
-
-  /* Shadows - Minimal technical elevation */
-  --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  --shadow-card: 0 4px 12px 0 rgba(0, 0, 0, 0.25);
-  --shadow-glow: 0 0 20px -2px rgba(253, 20, 43, 0.25);
-  --shadow-float: 0 12px 28px -4px rgba(0, 0, 0, 0.35);
 
   /* Fluid Typography Scale (using clamp) */
   --font-size-display-2xl: clamp(3.2rem, 7vw + 1rem, 7.5rem);
@@ -85,4 +192,24 @@
   /* Letter Spacing */
   --tracking-tight-display: -0.04em;
   --tracking-mono-label: 0.08em;
+}
+
+/* =========================================================================
+   5. FLAIR SYSTEM VISIBILITY (Ensures exactly one string is visible & accessible)
+   ========================================================================= */
+[data-theme="dark"] .flair-light,
+[data-theme="dark"] .flair-dream,
+:root:not([data-theme]) .flair-light,
+:root:not([data-theme]) .flair-dream {
+  display: none !important;
+}
+
+[data-theme="light"] .flair-dark,
+[data-theme="light"] .flair-dream {
+  display: none !important;
+}
+
+[data-theme="dream"] .flair-dark,
+[data-theme="dream"] .flair-light {
+  display: none !important;
 }

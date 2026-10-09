@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/themes/ThemeProvider';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { useLayoutModal } from '@/lib/modal-context';
 import { trackEvent } from '@/lib/analytics';
@@ -210,12 +210,30 @@ export function CommandPalette() {
               className="text-[10px] text-red-text uppercase tracking-widest px-2 py-1 font-semibold"
             >
               <Command.Item
-                value="toggle theme switch dark light mode"
-                onSelect={() => runCommand(() => setTheme(theme === 'dark' ? 'light' : 'dark'), 'toggle_theme')}
+                value="theme dark terminal operating system mode"
+                onSelect={() => runCommand(() => setTheme('dark', 'palette'), 'theme_dark')}
                 className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
               >
-                <span>[TH] Toggle Theme (Current: {theme?.toUpperCase()})</span>
-                <span className="opacity-60 text-[10px]">[THEME]</span>
+                <span>[TH] Theme: Dark (Terminal OS) {theme === 'dark' && '✓'}</span>
+                <span className="opacity-60 text-[10px]">[DARK]</span>
+              </Command.Item>
+
+              <Command.Item
+                value="theme light blueprint daylight mode"
+                onSelect={() => runCommand(() => setTheme('light', 'palette'), 'theme_light')}
+                className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
+              >
+                <span>[TH] Theme: Light (Blueprint) {theme === 'light' && '✓'}</span>
+                <span className="opacity-60 text-[10px]">[LIGHT]</span>
+              </Command.Item>
+
+              <Command.Item
+                value="theme dream storybook meadow sky mode"
+                onSelect={() => runCommand(() => setTheme('dream', 'palette'), 'theme_dream')}
+                className="flex items-center justify-between px-3 py-2 text-fg hover:bg-surface/80 aria-selected:bg-fg aria-selected:text-bg cursor-pointer rounded-[1px] transition-colors"
+              >
+                <span>[TH] Theme: Dream (Storybook Meadow) {theme === 'dream' && '✓'}</span>
+                <span className="opacity-60 text-[10px]">[DREAM]</span>
               </Command.Item>
 
               <Command.Item
