@@ -2,7 +2,37 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
-## [Dream Theme: D0 & D1 — Theme Architecture, Three-Way Switcher, and Guardrails] - 2026-10-09
+## [Dream Theme: D2 — Design Language Tokens, Type, Primitives, and Preview Bench] - 2026-10-09
+
+### Added
+- **Design Tokens & Theme Architecture (`src/styles/tokens.css` & `tailwind.config.ts`):**
+  - Full Dream palette: `paper` (`#FFFAF0`), `paper-2` (`#FFF1DC`), `night-paper` (`#1B1E4B`), `ink` (`#2B2A52`), `ink-soft` (`#55537A`), `link` (`#3B3AA0`), `poppy` (`#FD142B`), `poppy-text` (`#C8102E`), meadow layers (`grass-far`, `grass-mid`, `grass-near`, `grass-deep`, `sage`), and floral accents (`daisy yolk`, `sunflower`, `lavender`, `cherry`).
+  - Pebble and cloud border radii (20px to 40px), soft colored shadows (`--shadow-paper`, `--shadow-floating`, `--shadow-poppy`).
+  - Double focus ring (3px indigo `#3B3AA0` + 2px paper `#FFFAF0`), organic vine growing underlines, and cherry selection highlights.
+- **Paper Grain Texture (`public/textures/paper-grain.webp` & `scripts/generate-paper-grain.mjs`):**
+  - Lightweight 256x256 seamless paper-grain WebP texture (2.1 KB) overlaid via `.paper-grain` at 4% opacity with `pointer-events: none`.
+- **Google Fonts Integration (`src/app/layout.tsx`):**
+  - Integrated `Fraunces` (variable: `opsz`, `SOFT`, `WONK`) and `Figtree` via `next/font/google` configured with `preload: false` and `adjustFontFallback: true`.
+  - Zero font download network overhead for Dark and Light theme visitors.
+- **Storybook Component Skins & Primitives (`src/styles/dream-skins.css`):**
+  - Scoped Dream CSS skins under `[data-theme="dream"]` for Buttons (soft pill, ink fill, paper text, poppy bloom accent, active sink + petal puff), Tag pebbles (hidden brackets), Card/Window (deckled edge, hidden HUD brackets), Inputs/Textarea (20px radius, double focus ring), and Accordions.
+  - `<PaperCard>` (`src/components/ui/PaperCard.tsx`): Deckled edge and cloud scallop paper cards with soft shadows.
+  - `<SeedOption>` (`src/components/ui/SeedOption.tsx`): Interactive configurator cards featuring dormant seed / active sprout SVG graphics.
+  - `<Jargon>` (`src/components/ui/Jargon.tsx`): Non-technical interactive glossary tooltip with category badge and plain-English explanation.
+  - Non-technical glossary dictionary (`src/content/glossary.ts`) defining 13 common software development terms in clear, friendly language.
+- **Automated Contrast Audit (`scripts/contrast-report.mjs`):**
+  - Mathematical WCAG 2.1 AA audit testing 19 Dark, Light, and Dream color pairs and all 5 Sky headline states against relative luminance formulas.
+  - Wired into `package.json` as `"check:contrast"` and integrated into `"npm run check"`.
+- **Interactive Preview Bench (`src/app/design-system/dream/page.tsx`):**
+  - Dedicated design system testbench at `/design-system/dream` with Sky State Dial (Dawn, Day, Golden, Dusk, Night), Calm motion toggle, color swatch matrix, typography scale, buttons, pebbles, cards, seed options, FAQ accordion, portaled sheet dialog, and leaf toast.
+- **Automated CDP Verification (`scripts/verify-d2.mjs`):**
+  - Headless CDP test validating desktop (1440), mobile (360), sky dial transitions, sheet dialog accessibility, and clean console logs.
+
+### Changed
+- Refactored `Tag.tsx` brackets from template strings to discrete `<span className="tag-bracket">` elements to prevent `[object Object]` coercion and allow clean CSS suppression in Dream.
+- Re-exported new primitives (`PaperCard`, `SeedOption`, `Jargon`) through `src/components/ui/index.ts`.
+
+
 
 ### Added
 - **Theme Architecture & Registry (`src/themes/registry.tsx`):**

@@ -114,14 +114,21 @@
 }
 
 /* =========================================================================
-   3. DREAM THEME (Storybook Meadow & Living Sky - D1 Stub / D2 Full)
+   3. DREAM THEME (Storybook Meadow & Living Sky)
    ========================================================================= */
 [data-theme="dream"],
 .dream {
-  /* Palette Tokens */
+  /* Surfaces & Paper */
+  --paper: #FFFAF0;
+  --paper-2: #FFF1DC;
+  --night-paper: #1B1E4B;
+  --surface-glass: rgba(255, 250, 240, 0.78);
+  --surface-glass-border: rgba(43, 42, 82, 0.08);
+
+  /* Semantic Color Mapping */
   --bg: #6DB6F0; /* Default Day Sky Top */
   --surface: #FFFAF0; /* Paper card surface */
-  --surface-secondary: #FFF1DC; /* Paper-2 */
+  --surface-subtle: #FFF1DC; /* Paper-2 */
   --fg: #2B2A52; /* Indigo Ink */
   --fg-muted: #55537A; /* Ink-soft */
   --line: rgba(43, 42, 82, 0.12);
@@ -130,37 +137,66 @@
   --red-text: #C8102E; /* Poppy-text */
   --ok: #3E8C5A; /* Grass-near */
 
+  /* Text & Inks */
+  --ink: #2B2A52;
+  --ink-soft: #55537A;
+  --link: #3B3AA0;
+  --cream: #FFF6E5;
+  --cream-soft: #CFCBEA;
+
+  /* Brand Signals */
+  --poppy: #FD142B;
+  --poppy-text: #C8102E;
+
+  /* Meadow Depth Layers */
+  --grass-far: #A8D5A2;
+  --grass-mid: #6FB07A;
+  --grass-near: #3E8C5A;
+  --grass-deep: #2A6B48;
+  --sage: #5E9B6A; /* stems/decoration only */
+
+  /* Flower Accents */
+  --daisy-yolk: #FFC83D;
+  --sunflower: #FFB400;
+  --lavender: #9B8CE0;
+  --cherry: #FFB7D1;
+
   /* Backward compatibility bridge */
   --color-cream: var(--surface);
-  --color-peach: var(--surface-secondary);
+  --color-peach: var(--paper-2);
   --color-orange: var(--red);
   --color-orange-deep: var(--red-text);
   --color-ink: var(--fg);
   --color-ink-soft: var(--fg-muted);
-  --color-cocoa: #1B1E4B;
-  --color-butter: #FFC83D;
+  --color-cocoa: var(--night-paper);
+  --color-butter: var(--daisy-yolk);
+
+  /* Focus Ring: 3px indigo ring + 2px paper inner ring */
   --focus-ring: 0 0 0 2px #FFFAF0, 0 0 0 5px #3B3AA0;
 
   /* Border Radii: Soft pebbles, clouds, and petals (20 to 40px) */
   --radius-none: 0px;
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius: 24px;
-  --radius-card: 28px;
-  --radius-bubble: 36px;
+  --radius-sm: 20px;
+  --radius-md: 28px;
+  --radius: 28px;
+  --radius-card: 32px;
+  --radius-bubble: 40px;
   --radius-pill: 9999px;
 
-  /* Shadows: Soft colored elevation */
+  /* Shadows: Soft colored elevation (never gray) */
   --shadow-subtle: 0 2px 8px -2px rgba(43, 42, 82, 0.08);
-  --shadow-card: 0 8px 24px -4px rgba(43, 42, 82, 0.12);
+  --shadow-card: 0 8px 24px -4px rgba(43, 42, 82, 0.08), 0 2px 6px -1px rgba(43, 42, 82, 0.04);
+  --shadow-paper: 0 8px 24px -4px rgba(43, 42, 82, 0.08), 0 2px 6px -1px rgba(43, 42, 82, 0.04);
+  --shadow-floating: 0 20px 40px -8px rgba(43, 42, 82, 0.12), 0 4px 12px -2px rgba(43, 42, 82, 0.06);
+  --shadow-poppy: 0 8px 20px -2px rgba(253, 20, 43, 0.25);
   --shadow-glow: 0 0 24px -2px rgba(253, 20, 43, 0.2);
-  --shadow-float: 0 16px 36px -6px rgba(43, 42, 82, 0.18);
+  --shadow-float: 0 20px 40px -8px rgba(43, 42, 82, 0.12);
 
   /* Fonts */
-  --font-headline: var(--font-fraunces, var(--font-sans));
-  --font-body: var(--font-figtree, var(--font-sans));
+  --font-headline: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-figtree), system-ui, sans-serif;
 
-  /* Motion Easings & Durations: Slow, organic, floaty */
+  /* Motion Easings & Durations: Slow, organic, floaty (sine & quart) */
   --ease-reveal: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-wipe: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-mechanical: cubic-bezier(0.25, 1, 0.5, 1);
@@ -168,6 +204,67 @@
   --duration-ui: 450ms;
   --duration-section: 900ms;
   --duration-hero: 1400ms;
+}
+
+/* Dream Global Typography & Surface Styling */
+[data-theme="dream"] body {
+  font-family: var(--font-figtree), system-ui, sans-serif;
+  font-size: 1.125rem; /* 18px base text */
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+[data-theme="dream"] h1,
+[data-theme="dream"] h2,
+[data-theme="dream"] h3,
+[data-theme="dream"] h4,
+[data-theme="dream"] .font-mono-headline {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-feature-settings: "opsz" 1, "SOFT" 100, "WONK" 0;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="dream"] ::selection {
+  background-color: var(--cherry);
+  color: var(--ink);
+}
+
+/* Growing vine-like underline for text links in Dream */
+[data-theme="dream"] a:not([class*="bg-"]):not([role="button"]):not([role="radio"]):not([class*="no-underline"]) {
+  text-decoration: underline;
+  text-decoration-color: var(--grass-mid);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 200ms ease, text-underline-offset 200ms ease;
+}
+
+[data-theme="dream"] a:not([class*="bg-"]):not([role="button"]):not([role="radio"]):not([class*="no-underline"]):hover {
+  text-decoration-color: var(--poppy-text);
+  text-underline-offset: 6px;
+}
+
+/* Paper grain overlay class for Dream surfaces */
+[data-theme="dream"] .paper-grain {
+  position: relative;
+}
+
+[data-theme="dream"] .paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/textures/paper-grain.webp");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  opacity: 0.04;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* Dream double focus ring utility */
+[data-theme="dream"] *:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #FFFAF0, 0 0 0 5px #3B3AA0 !important;
 }
 
 /* =========================================================================

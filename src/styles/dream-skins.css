@@ -1,0 +1,192 @@
+/* =========================================================================
+   DREAM THEME COMPONENT SKINS (Scoped strictly to [data-theme="dream"])
+   Zero regression on Dark and Light themes.
+   ========================================================================= */
+
+/* 1. BUTTON SKINS */
+[data-theme="dream"] button[class*="min-h-"],
+[data-theme="dream"] a[class*="min-h-"],
+[data-theme="dream"] .btn {
+  border-radius: 9999px !important;
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 600 !important;
+  min-height: 48px !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease !important;
+}
+
+/* Primary Button in Dream: Ink fill with paper text and poppy accent */
+[data-theme="dream"] button[class*="bg-[#EFE3CF]"],
+[data-theme="dream"] a[class*="bg-[#EFE3CF]"] {
+  background-color: var(--ink) !important;
+  color: var(--paper) !important;
+  border-color: var(--ink) !important;
+  box-shadow: var(--shadow-paper) !important;
+}
+
+[data-theme="dream"] button[class*="bg-[#EFE3CF]"]:hover,
+[data-theme="dream"] a[class*="bg-[#EFE3CF]"]:hover {
+  background-color: #38376B !important;
+  box-shadow: var(--shadow-floating) !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="dream"] button[class*="bg-[#EFE3CF]"]:active,
+[data-theme="dream"] a[class*="bg-[#EFE3CF]"]:active {
+  transform: translateY(1px) scale(0.98) !important;
+}
+
+/* Primary Button Red Arrow container becomes a rounded poppy bloom accent */
+[data-theme="dream"] button[class*="bg-[#EFE3CF]"] span[class*="bg-red"],
+[data-theme="dream"] a[class*="bg-[#EFE3CF]"] span[class*="bg-red"] {
+  border-radius: 9999px !important;
+  background-color: var(--poppy) !important;
+  color: var(--paper) !important;
+  box-shadow: var(--shadow-poppy) !important;
+  transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+[data-theme="dream"] button[class*="bg-[#EFE3CF]"]:hover span[class*="bg-red"],
+[data-theme="dream"] a[class*="bg-[#EFE3CF]"]:hover span[class*="bg-red"] {
+  transform: rotate(45deg) scale(1.1) !important;
+}
+
+/* Secondary Button in Dream: Paper fill with ink text and colored border */
+[data-theme="dream"] button[class*="bg-transparent"][class*="border-line-strong"],
+[data-theme="dream"] a[class*="bg-transparent"][class*="border-line-strong"] {
+  background-color: var(--paper) !important;
+  color: var(--ink) !important;
+  border-color: var(--line-strong) !important;
+  box-shadow: var(--shadow-subtle) !important;
+}
+
+[data-theme="dream"] button[class*="bg-transparent"][class*="border-line-strong"]:hover,
+[data-theme="dream"] a[class*="bg-transparent"][class*="border-line-strong"]:hover {
+  background-color: var(--paper-2) !important;
+  border-color: var(--link) !important;
+  color: var(--link) !important;
+  box-shadow: var(--shadow-paper) !important;
+}
+
+/* 2. TAG / PEBBLE SKINS */
+[data-theme="dream"] .tag-bracket {
+  display: none !important;
+}
+
+[data-theme="dream"] span[class*="rounded-[2px]"][class*="font-mono"][class*="text-[11px]"] {
+  border-radius: 9999px !important;
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 500 !important;
+  padding: 4px 12px !important;
+  background-color: var(--paper-2) !important;
+  color: var(--ink-soft) !important;
+  border-color: var(--line) !important;
+}
+
+/* 3. CARD & WINDOW SKINS */
+[data-theme="dream"] .group[class*="rounded-[2px]"][class*="border-line"] {
+  border-radius: 28px !important;
+  background-color: var(--paper) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow-paper) !important;
+  border-color: var(--line) !important;
+}
+
+/* Hide technical corner brackets and registration marks under Dream */
+[data-theme="dream"] span[class*="border-t-2"][class*="border-red-text"],
+[data-theme="dream"] span[class*="border-b-2"][class*="border-red-text"] {
+  display: none !important;
+}
+
+/* Hide 3 tiny technical squares on title bar in Dream */
+[data-theme="dream"] div[class*="flex items-center gap-1.5"] span[class*="h-2 w-2"] {
+  display: none !important;
+}
+
+/* Window title bar becomes soft paper header */
+[data-theme="dream"] div[class*="border-b border-line"][class*="bg-surface"] {
+  border-top-left-radius: 28px !important;
+  border-top-right-radius: 28px !important;
+  background-color: var(--paper) !important;
+}
+
+/* 4. FORM INPUT, TEXTAREA, AND SELECT SKINS */
+[data-theme="dream"] input:not([type="checkbox"]):not([type="radio"]),
+[data-theme="dream"] textarea,
+[data-theme="dream"] select {
+  border-radius: 20px !important;
+  background-color: var(--paper) !important;
+  color: var(--ink) !important;
+  border-color: var(--line-strong) !important;
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
+  box-shadow: var(--shadow-subtle) !important;
+  min-height: 48px !important;
+}
+
+[data-theme="dream"] input:focus,
+[data-theme="dream"] textarea:focus,
+[data-theme="dream"] select:focus {
+  background-color: var(--paper) !important;
+  border-color: var(--link) !important;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 5px var(--link) !important;
+}
+
+/* Hide technical red caret bar on focus in Dream */
+[data-theme="dream"] span[class*="w-[3px] bg-red"] {
+  display: none !important;
+}
+
+/* Form labels in Dream */
+[data-theme="dream"] label {
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  font-size: 0.95rem !important;
+}
+
+/* 5. ACCORDION SKINS */
+[data-theme="dream"] div[class*="rounded-[2px]"][class*="border"][class*="overflow-hidden"] {
+  border-radius: 20px !important;
+  background-color: var(--paper) !important;
+  border-color: var(--line) !important;
+  box-shadow: var(--shadow-subtle) !important;
+}
+
+[data-theme="dream"] div[class*="rounded-[2px]"][class*="border"][class*="overflow-hidden"]:hover {
+  box-shadow: var(--shadow-paper) !important;
+  border-color: var(--line-strong) !important;
+}
+
+[data-theme="dream"] div[class*="rounded-[2px]"][class*="border"][class*="overflow-hidden"] button {
+  min-height: 52px !important;
+}
+
+/* Accordion index in Dream (softer, non-monospace) */
+[data-theme="dream"] span[class*="text-red-text"][class*="font-mono"] {
+  font-family: var(--font-figtree), system-ui, sans-serif !important;
+  letter-spacing: normal !important;
+}
+
+/* 6. TOAST SKINS */
+[data-theme="dream"] .toast-container,
+[data-theme="dream"] [role="alert"][class*="rounded"] {
+  border-radius: 28px 6px 28px 28px !important;
+  background-color: var(--paper) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow-floating) !important;
+  border: 1px solid var(--line-strong) !important;
+}
+
+/* 7. DIALOG / MODAL SKINS */
+[data-theme="dream"] [role="dialog"][class*="bg-bg"],
+[data-theme="dream"] [role="dialog"][class*="bg-surface"] {
+  border-radius: 32px !important;
+  background-color: var(--paper) !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow-floating) !important;
+}

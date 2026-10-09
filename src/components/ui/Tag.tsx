@@ -28,7 +28,15 @@ export function Tag({
         className
       )}
     >
-      {withBrackets ? `[ ${children} ]` : children}
+      {withBrackets ? (
+        <>
+          <span className="tag-bracket mr-1" aria-hidden="true">[</span>
+          {children}
+          <span className="tag-bracket ml-1" aria-hidden="true">]</span>
+        </>
+      ) : (
+        children
+      )}
     </span>
   );
 }

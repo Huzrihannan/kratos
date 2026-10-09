@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Geist } from "next/font/google";
+import { JetBrains_Mono, Geist, Fraunces, Figtree } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { LayoutProvider } from "@/lib/modal-context";
@@ -26,6 +26,23 @@ const geist = Geist({
   weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  preload: false,
+  adjustFontFallback: true,
+  axes: ["SOFT", "WONK", "opsz"],
+});
+
+const figtree = Figtree({
+  subsets: ["latin"],
+  variable: "--font-figtree",
+  display: "swap",
+  preload: false,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -95,7 +112,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${jetbrainsMono.variable} ${geist.variable}`}
+      className={`${jetbrainsMono.variable} ${geist.variable} ${fraunces.variable} ${figtree.variable}`}
     >
       <head>
         <meta name="theme-color" content="#212121" />

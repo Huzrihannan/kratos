@@ -62,6 +62,7 @@ const routes = [
   { slug: "privacy", path: "/privacy" },
   { slug: "terms", path: "/terms" },
   { slug: "design-system", path: "/design-system" },
+  { slug: "design-system-dream", path: "/design-system/dream" },
 ];
 
 const FORBIDDEN_TEXT_PATTERNS = [

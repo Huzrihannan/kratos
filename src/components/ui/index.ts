@@ -39,3 +39,12 @@ export type { LogoProps } from './Logo';
 
 export { Pill } from './Pill';
 export type { PillProps } from './Pill';
+
+export { PaperCard } from './PaperCard';
+export type { PaperCardProps } from './PaperCard';
+
+export { SeedOption } from './SeedOption';
+export type { SeedOptionProps } from './SeedOption';
+
+export { Jargon } from './Jargon';
+export type { JargonProps } from './Jargon';

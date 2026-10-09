@@ -40,6 +40,29 @@ const config: Config = {
         },
         cocoa: "var(--color-cocoa)",
         butter: "var(--color-butter)",
+
+        // Dream Theme Specific Tokens
+        paper: "var(--paper)",
+        "paper-2": "var(--paper-2)",
+        "night-paper": "var(--night-paper)",
+        link: "var(--link)",
+        poppy: {
+          DEFAULT: "var(--poppy)",
+          text: "var(--poppy-text)",
+        },
+        grass: {
+          far: "var(--grass-far)",
+          mid: "var(--grass-mid)",
+          near: "var(--grass-near)",
+          deep: "var(--grass-deep)",
+        },
+        sage: "var(--sage)",
+        flower: {
+          daisy: "var(--daisy-yolk)",
+          sunflower: "var(--sunflower)",
+          lavender: "var(--lavender)",
+          cherry: "var(--cherry)",
+        },
       },
       borderRadius: {
         none: "0px",
@@ -56,6 +79,9 @@ const config: Config = {
         card: "var(--shadow-card)",
         glow: "var(--shadow-glow)",
         float: "var(--shadow-float)",
+        paper: "var(--shadow-paper)",
+        floating: "var(--shadow-floating)",
+        poppy: "var(--shadow-poppy)",
       },
       fontFamily: {
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
@@ -63,6 +89,9 @@ const config: Config = {
         // Compatibility aliases for previous display / body references
         display: ["var(--font-mono)", "ui-monospace", "monospace"],
         body: ["var(--font-sans)", "ui-sans-serif", "sans-serif"],
+        // Dream dedicated font families
+        fraunces: ["var(--font-fraunces)", "Georgia", "serif"],
+        figtree: ["var(--font-figtree)", "ui-sans-serif", "sans-serif"],
       },
       letterSpacing: {
         mono: "0.08em",
