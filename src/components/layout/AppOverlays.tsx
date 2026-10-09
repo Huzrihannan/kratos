@@ -38,11 +38,23 @@ const DreamCursor = dynamic(
   { ssr: false }
 );
 
+const DawnIntro = dynamic(
+  () => import('@/themes/dream/scenes/DawnIntro').then((mod) => mod.DawnIntro),
+  { ssr: false }
+);
+
+const DreamBackToTop = dynamic(
+  () => import('@/themes/dream/scenes/DreamBackToTop').then((mod) => mod.DreamBackToTop),
+  { ssr: false }
+);
+
 export function AppOverlays() {
   return (
     <>
       <DreamSkyWorld />
       <DreamCursor />
+      <DawnIntro />
+      <DreamBackToTop />
       <Boot />
       <Crosshair />
       <CommandPalette />
@@ -51,4 +63,3 @@ export function AppOverlays() {
     </>
   );
 }
-

@@ -2,15 +2,19 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { MessageCircle, Calendar, Mail, X } from 'lucide-react';
+import { MessageCircle, Calendar, Mail, X, Send } from 'lucide-react';
 import { siteConfig } from '@/content/site';
 import { useLayoutModal } from '@/lib/modal-context';
+import { useTheme } from '@/themes/ThemeProvider';
 import { trackEvent } from '@/lib/analytics';
 
 export function ContactDock() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
   const { isEstimatorOpen, isMobileNavOpen, isCommandPaletteOpen } = useLayoutModal();
+
+  const isDream = theme === 'dream';
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -79,6 +83,92 @@ export function ContactDock() {
     },
   ];
 
+  // --- 1. DREAM THEME PAPER-PLANE CONTACT DOCK ---
+  if (isDream) {
+    return (
+      <div
+        ref={containerRef}
+        className="fixed bottom-5 right-5 z-40 flex flex-col items-end select-none font-sans"
+      >
+        {/* Unfolded Paper Panel */}
+        {isOpen && (
+          <div
+            className="mb-3 w-72 rounded-2xl border border-[var(--dream-paper-2,#FFF1DC)] bg-[var(--dream-paper,#FFFAF0)] text-[var(--dream-ink,#2B2A52)] shadow-2xl p-4 animate-in fade-in slide-in-from-bottom-3 duration-200"
+            role="dialog"
+            aria-label="Direct Communication Channels"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 mb-2 border-b border-[var(--dream-ink,#2B2A52)]/10 text-xs">
+              <span className="flex items-center gap-2 font-serif font-bold text-[var(--dream-ink,#2B2A52)]">
+                <span className="w-2 h-2 rounded-full bg-[var(--dream-poppy,#FD142B)] animate-pulse" />
+                <span>Get in Touch</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[var(--dream-ink-soft,#55537A)] hover:text-[var(--dream-ink,#2B2A52)] hover:bg-[var(--dream-paper-2,#FFF1DC)] transition-colors"
+                aria-label="Close"
+              >
+                <X size={14} />
+              </button>
+            </div>
+
+            {/* Channels */}
+            <div className="flex flex-col gap-2">
+              {channels.map((ch) => {
+                const Icon = ch.icon;
+                return (
+                  <Link
+                    key={ch.id}
+                    href={ch.href}
+                    target={ch.external ? '_blank' : undefined}
+                    rel={ch.external ? 'noopener noreferrer' : undefined}
+                    onClick={() => {
+                      ch.onClick();
+                      setIsOpen(false);
+                    }}
+                    className="flex items-center gap-3 p-2.5 rounded-xl border border-[var(--dream-ink,#2B2A52)]/10 bg-white/70 hover:bg-white hover:border-[var(--dream-ink,#2B2A52)]/20 text-[var(--dream-ink,#2B2A52)] transition-all shadow-xs group"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[var(--dream-paper-2,#FFF1DC)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Icon size={15} className="text-[var(--dream-poppy,#FD142B)]" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-semibold text-[var(--dream-ink,#2B2A52)] group-hover:text-[var(--dream-poppy-text,#C8102E)] transition-colors truncate">
+                        {ch.label}
+                      </span>
+                      <span className="text-[10px] text-[var(--dream-ink-soft,#55537A)] truncate">
+                        {ch.sublabel}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Paper-Plane Floating Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-label={isOpen ? 'Close contact menu' : 'Open contact channels'}
+          className="flex items-center justify-center w-12 h-12 rounded-full border border-[var(--dream-paper-2,#FFF1DC)] bg-[var(--dream-paper,#FFFAF0)] text-[var(--dream-ink,#2B2A52)] shadow-xl hover:scale-105 active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dream-link,#3B3AA0)] group"
+          data-cursor="click"
+          title="Send a note / Direct channels"
+        >
+          <Send
+            size={18}
+            className={`text-[var(--dream-poppy,#FD142B)] transition-transform duration-300 ${
+              isOpen ? 'rotate-90' : 'group-hover:-translate-y-0.5 group-hover:translate-x-0.5'
+            }`}
+          />
+        </button>
+      </div>
+    );
+  }
+
+  // --- 2. DARK & LIGHT THEMES TECHNICAL CONTACT DOCK ---
   return (
     <div
       ref={containerRef}

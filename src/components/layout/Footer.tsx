@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ArrowUpRight, Github, Linkedin, Twitter, Mail } from 'lucide-react';
 import { siteConfig } from '@/content/site';
 import { Button } from '@/components/ui/Button';
@@ -10,16 +11,27 @@ import { Decode } from '@/components/fx/Decode';
 import { HUDClock } from '@/components/fx/HUD';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { useLayoutModal } from '@/lib/modal-context';
+import { useTheme } from '@/themes/ThemeProvider';
 import { ThemeSwitcherFooter } from '@/themes/ThemeSwitcher';
 
 import { caseStudiesData } from '@/content/work';
 import { isPublishable } from '@/lib/content-status';
 
+const DynamicDreamFooter = dynamic(
+  () => import('@/themes/dream/scenes/DreamFooter').then((mod) => mod.DreamFooter),
+  { ssr: false }
+);
+
 export function Footer() {
+  const { theme } = useTheme();
   const { openEstimator } = useLayoutModal();
   const { level, setLevel } = useMotionLevel();
   const [wordmarkHoverKey, setWordmarkHoverKey] = useState(0);
   const hasPublishedWork = caseStudiesData.some(isPublishable);
+
+  if (theme === 'dream') {
+    return <DynamicDreamFooter />;
+  }
 
   const getSocialIcon = (platform: string) => {
     switch (platform.toLowerCase()) {

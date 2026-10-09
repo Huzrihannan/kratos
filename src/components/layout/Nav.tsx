@@ -2,10 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
+import { Feather, Menu } from 'lucide-react';
 import { useTheme } from '@/themes/ThemeProvider';
 import { ThemeSwitcherNav, ThemeSwitcherMobile } from '@/themes/ThemeSwitcher';
 import { useLayoutModal } from '@/lib/modal-context';
+import { useMotionLevel } from '@/lib/motion/MotionContext';
 import { Button } from '@/components/ui/Button';
 import { Logo } from '@/components/ui/Logo';
 import { Decode } from '@/components/fx/Decode';
@@ -14,6 +17,16 @@ import { Magnetic } from '@/components/fx/Magnetic';
 
 import { caseStudiesData } from '@/content/work';
 import { isPublishable } from '@/lib/content-status';
+
+const DynamicDreamLogo = dynamic(
+  () => import('@/themes/dream/logo/DreamLogo').then((mod) => mod.DreamLogo),
+  { ssr: false }
+);
+
+const DynamicDreamMobileMenu = dynamic(
+  () => import('@/themes/dream/scenes/DreamMobileMenu').then((mod) => mod.DreamMobileMenu),
+  { ssr: false }
+);
 
 const hasPublishedWork = caseStudiesData.some(isPublishable);
 
@@ -28,6 +41,7 @@ export function Nav() {
   const pathname = usePathname();
   const { theme } = useTheme();
   const { isMobileNavOpen, setMobileNavOpen, openEstimator, toggleCommandPalette } = useLayoutModal();
+  const { level, setLevel } = useMotionLevel();
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMac, setIsMac] = useState(false);
@@ -35,6 +49,8 @@ export function Nav() {
 
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null);
+
+  const isDream = theme === 'dream';
 
   useEffect(() => {
     setMounted(true);
@@ -60,9 +76,9 @@ export function Nav() {
     setMobileNavOpen(false);
   }, [pathname, setMobileNavOpen]);
 
-  // Trap focus and Escape on mobile menu
+  // Trap focus and Escape on mobile menu (for standard drawer)
   useEffect(() => {
-    if (!isMobileNavOpen) return;
+    if (!isMobileNavOpen || isDream) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -85,8 +101,129 @@ export function Nav() {
       clearTimeout(timeout);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isMobileNavOpen, setMobileNavOpen]);
+  }, [isMobileNavOpen, isDream, setMobileNavOpen]);
 
+  // --- 1. DREAM THEME NAVBAR ---
+  if (isDream) {
+    return (
+      <>
+        <header
+          className={`sticky top-0 z-40 w-full px-3 sm:px-6 pointer-events-none transition-all duration-300 ${
+            isScrolled ? 'pt-2' : 'pt-3 sm:pt-4'
+          }`}
+        >
+          <div
+            className={`mx-auto flex max-w-5xl items-center justify-between pointer-events-auto rounded-full border border-[var(--dream-paper-2,#FFF1DC)] bg-[var(--dream-paper,#FFFAF0)]/90 backdrop-blur-md px-4 sm:px-6 transition-all duration-300 ${
+              isScrolled
+                ? 'h-13 sm:h-14 shadow-[0_12px_36px_rgba(43,42,82,0.12)] scale-[0.99]'
+                : 'h-14 sm:h-16 shadow-[0_8px_30px_rgba(43,42,82,0.07)]'
+            }`}
+          >
+            {/* Left: Dream Logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dream-link,#3B3AA0)] rounded-full"
+              data-cursor="home"
+            >
+              {mounted ? (
+                <DynamicDreamLogo size={32} showTagline={false} />
+              ) : (
+                <div className="h-6 w-24 bg-[var(--dream-paper-2,#FFF1DC)] animate-pulse rounded-full" />
+              )}
+            </Link>
+
+            {/* Center: Plain Figtree Navigation Links */}
+            <nav className="hidden md:flex items-center gap-6 lg:gap-8 font-sans text-sm font-medium text-[var(--dream-ink-soft,#55537A)]">
+              {NAV_LINKS.map((link) => {
+                const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`relative py-1 transition-colors ${
+                      isActive
+                        ? 'text-[var(--dream-ink,#2B2A52)] font-semibold'
+                        : 'hover:text-[var(--dream-ink,#2B2A52)]'
+                    }`}
+                    data-cursor="view"
+                  >
+                    <span>{link.label}</span>
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[var(--dream-poppy,#FD142B)] rounded-full" />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Right: Calm Switch, Theme Switcher, CTA */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Calm Toggle Button */}
+              <button
+                type="button"
+                onClick={() => setLevel(level === 'off' ? 'full' : 'off')}
+                aria-label={level === 'off' ? 'Disable calm motion' : 'Enable calm motion'}
+                aria-pressed={level === 'off'}
+                className={`hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                  level === 'off'
+                    ? 'bg-[var(--dream-poppy,#FD142B)] text-white shadow-xs'
+                    : 'bg-[var(--dream-paper-2,#FFF1DC)] text-[var(--dream-ink,#2B2A52)] hover:bg-[var(--dream-ink,#2B2A52)]/10'
+                }`}
+                title="Calm Motion: slows drift and turns off heavy shaders"
+                data-cursor="click"
+              >
+                <Feather className="w-3.5 h-3.5" />
+                <span>Calm</span>
+              </button>
+
+              {/* Theme Switcher */}
+              {mounted ? (
+                <ThemeSwitcherNav />
+              ) : (
+                <div className="min-h-[36px] min-w-[120px]" aria-hidden="true" />
+              )}
+
+              {/* Primary CTA */}
+              <div className="hidden sm:block">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="rounded-full shadow-sm text-xs px-4"
+                  onClick={openEstimator}
+                >
+                  Estimate my project
+                </Button>
+              </div>
+
+              {/* Mobile Menu Hamburger */}
+              <button
+                ref={hamburgerButtonRef}
+                type="button"
+                onClick={() => setMobileNavOpen(true)}
+                className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-[var(--dream-paper-2,#FFF1DC)] text-[var(--dream-ink,#2B2A52)] hover:bg-white transition-colors"
+                aria-label="Open mobile menu"
+                aria-expanded={isMobileNavOpen}
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Dream Mobile Menu Cloud Sheet */}
+        {mounted && (
+          <DynamicDreamMobileMenu
+            isOpen={isMobileNavOpen}
+            onClose={() => setMobileNavOpen(false)}
+            links={NAV_LINKS}
+            onOpenEstimator={openEstimator}
+          />
+        )}
+      </>
+    );
+  }
+
+  // --- 2. DARK & LIGHT THEMES NAVBAR (ORIGINAL TECHNICAL SHELL) ---
   return (
     <>
       <header

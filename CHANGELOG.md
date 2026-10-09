@@ -2,6 +2,42 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D6 — The Shell (Nav, Footer, Menus & Transitions)] - 2026-10-09
+
+### Added
+- **Floating Pill Paper Navbar (`src/components/layout/Nav.tsx`):**
+  - Pill-shaped container (`rounded-full border border-paper-2 bg-paper/90 backdrop-blur-md shadow-md`), size 5xl max-width.
+  - Houses `DynamicDreamLogo` (32px), plain Figtree links (`Services`, `Work`, `About`, `Contact` without numeric `/01` prefixes), visible Calm motion button (`Feather` icon), and `ThemeSwitcherNav`.
+  - Dynamically shrinks on scroll (`h-16` $\to$ `h-14`, scale 0.99 with enhanced elevation shadow).
+  - Preserves 100% of dark and light technical monospace nav with zero regressions.
+- **Mobile Cloud Sheet Drawer (`src/themes/dream/scenes/DreamMobileMenu.tsx`):**
+  - Full-screen sliding drawer with organic cloud-crested paper container (`rounded-b-[40px] shadow-2xl`).
+  - Warm Fraunces typography for section navigation, interactive theme preview cards, and full-bleed Calm toggle.
+  - Complete accessible focus trapping (`closeButtonRef`), body scroll lock, and Escape key dismissal with focus returned to trigger.
+- **Dawn Intro Sequence (`src/themes/dream/scenes/DawnIntro.tsx`):**
+  - Session-guarded sunrise animation (`krat_os_dream_intro_played`) transitioning deep night indigo (`#0F1438`) through warm morning rays to clear day sky (`#6DB6F0`).
+  - Center blooming `DreamLogo` smoothly floats up and nests directly into the navbar pill.
+  - Auto-skipped in Calm/lite/off modes or on secondary page loads, and instantly dismissed on any click or keypress with zero LCP impact.
+- **Dusk & Night Footer (`src/themes/dream/scenes/DreamFooter.tsx`, `Cottage.tsx`):**
+  - Starlit dusk-to-night gradient (`#1B1E4B` $\to$ `#0A0C22`) featuring a glowing crescent moon, 28 twinkling stars, and floating bioluminescent fireflies.
+  - **Availability-Reactive Cottage (`Cottage.tsx`):** Hand-crafted vector cottage perched on an emerald hill ridge (`#2A6B48`) with animated chimney smoke puffs. Window glows warm amber (`#FFD47A` with drop-shadow) when `availability.status === 'available'`, and dims to peaceful deep indigo (`#33346F`) when resting.
+  - Giant "Krat.OS" wordmark blooming a vibrant `Poppy` as the period when scrolled into view via `IntersectionObserver`.
+  - Night-paper cards (`#1B1E4B`) with AAA contrast (Cream on night-paper: 14.67:1, Cream-soft: 10.03:1), live Colombo Sri Lanka time clock, and Calm/sound switches.
+- **Paper-Plane Contact Dock (`src/components/layout/ContactDock.tsx`):**
+  - Floating circular paper action button (`rounded-full bg-paper border border-paper-2 shadow-xl`) with dynamic poppy send icon (`Send`).
+  - Unfolds upward into direct human channels (WhatsApp, 15-min founder booking call, email).
+  - Preserves technical terminal dock in Dark and Light themes.
+- **Hot-Air Balloon Back to Top (`src/themes/dream/scenes/DreamBackToTop.tsx`):**
+  - Hand-crafted vector hot-air balloon with poppy and golden stripe envelope and woven wicker basket.
+  - Appears after 2 viewports of scroll (`scrollY > innerHeight * 2`), gently floating on wind physics, smooth-scrolling to top on tap.
+- **Two-Phase Vector Cloud Wipe (`src/themes/CloudWipe.tsx`, `PageTransition.tsx`):**
+  - 3-layer fluffy vector cloud silhouette wiping across the viewport over 700ms (covering 0–340ms, apex callback at 340ms, uncovering 340–700ms) on theme changes and route navigation in Dream.
+  - Dark/Light routes preserve the technical red caret sweep (`~/[route]`).
+- **Interactive Shell Studio Workbench (`src/app/design-system/dream/shell/page.tsx`):**
+  - Preview studio for the floating nav pill, cloud sheet drawer, cottage availability states, dawn intro trigger, and dusk footer.
+- **Automated Verification Suite (`scripts/verify-d6.mjs`):**
+  - 10-test automated headless Chrome suite validating Shell Studio, availability reactivity, mobile drawer, floating navbar at 1440 & 360, balloon back-to-top, contact dock unfolding, footer night scene, dark theme parity, and 0 console errors (100% passed).
+
 ## [Dream Theme: D5 — Meadow, Wind, Flowers & Living Things] - 2026-10-09
 
 ### Added
