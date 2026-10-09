@@ -14,3 +14,6 @@ export * from './life';
 
 // Organic Dream Cursor
 export * from './cursor/DreamCursor';
+
+// Decorative Art
+export * from './VineUnderline';

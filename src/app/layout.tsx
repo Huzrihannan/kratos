@@ -3,7 +3,7 @@ import { JetBrains_Mono, Geist, Fraunces, Figtree } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { LayoutProvider } from "@/lib/modal-context";
-import { ThemeProvider, ThemeScript } from "@/components/theme/ThemeProvider";
+import { ThemeProvider, ThemeScript } from "@/themes/ThemeProvider";
 import { CloudWipeProvider } from "@/themes/CloudWipe";
 import { MotionProvider } from "@/lib/motion/MotionContext";
 import { Nav } from "@/components/layout/Nav";

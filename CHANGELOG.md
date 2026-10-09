@@ -2,6 +2,35 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D7 — The Hero (The Signature Moment)] - 2026-10-09
+
+### Added
+- **Cinematic Multi-Layer Dream Hero Scene (`src/themes/dream/scenes/DreamHeroScene.tsx`):**
+  - High sky layer featuring a drifting vector hot-air balloon with poppy insignia stripes (`#FD142B`), woven wicker basket, and soaring flock silhouettes.
+  - Foreground emerald meadow hill crest (`#6FB07A`, `#3E8C5A`, `#2A6B48`) adorned with wild poppies, daisies, and a hillside cottage with glowing availability window.
+  - Seam-parting Cloud Descent (`CloudDescent.tsx`) linked to scroll, softly transitioning from sky into the meadow garden.
+- **Floating Decorative Cloud Cards with 3D Tilt Physics (`src/themes/dream/scenes/CloudCards.tsx`):**
+  - Three paper cards carrying abstract sketches:
+    1. App wireframe with status pills and UI blocks.
+    2. Warm team dialogue bubble sketch.
+    3. Plant growing from an upward progress curve with blooming poppy flower.
+  - High-performance pointer tilt powered by `gsap.quickTo` (`rotateX`, `rotateY`, `x`, `y`) with fluid spring dampening.
+  - Hidden on mobile viewports (`hidden lg:block`) to prevent visual clutter and keep 360px mobile width lightweight.
+- **Hand-Crafted Vine Underline with Blooming Poppy Terminus (`src/themes/dream/art/VineUnderline.tsx`):**
+  - Organic SVG stem curve beneath `"runs"` that sprouts leaves and blossoms a miniature vibrant Poppy mark (`#FD142B`, `#2A1B2E`, `#FFC83D`).
+  - Animates via pure CSS keyframes (`growVine`, `sproutLeaf`, `bloomTinyPoppy` in `dream-skins.css`) with zero layout shift.
+- **Shared Accessible Typography with Living Sky Contrast Adaptation (`src/components/sections/Hero.tsx`):**
+  - Shared exact copy: `"We build the software your business runs on."` rendered in Fraunces Soft 600 (`clamp(2.35rem, 5.8vw, 5.5rem)`).
+  - Pure CSS reveal (no initial `opacity: 0` blocking paint) guaranteeing immediate first-paint LCP ($\le 2.5\text{s}$).
+  - SkyContrast compliance across all 5 sky keyframes: automatically adapts between ink (`#2B2A52`) for dawn/day/golden and cream (`#FFF6E5`) for dusk/night with an adaptive radial scrim ($> 9.3:1$ to $13.3:1$ AAA contrast).
+  - Availability pill chip with pulsing green LED: `"We're open for new projects"`.
+  - Decorative flair: `"Plant an idea. Watch it bloom."` in warm Fraunces italic.
+  - Pill CTA buttons: paper primary button with Poppy bloom icon and link with sprouting underline.
+- **Hero Studio Workbench (`src/app/design-system/dream/hero/page.tsx`):**
+  - Interactive workbench featuring real-time controls for all 5 sky presets (Dawn, Day, Golden, Dusk, Night), quality tiers (T3, T2, T1, T0), mobile (360px) and desktop (1440px) viewport frames, and Calm motion toggle.
+- **Automated Verification Suite (`scripts/verify-d7.mjs`):**
+  - 10-test automated headless Chrome suite covering hydration, typography, vine SVG, instant CSS LCP, 3D tilt, 5 sky states at 1440 & 360, quality tiers (T3/T1/T0), scroll descent, dark shell parity, and clean console audit (100% passing).
+
 ## [Dream Theme: D6 — The Shell (Nav, Footer, Menus & Transitions)] - 2026-10-09
 
 ### Added

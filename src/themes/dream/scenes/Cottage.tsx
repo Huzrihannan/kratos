@@ -4,10 +4,11 @@ import React from 'react';
 
 export interface CottageProps {
   isAvailable: boolean;
+  showBadge?: boolean;
   className?: string;
 }
 
-export function Cottage({ isAvailable, className = '' }: CottageProps) {
+export function Cottage({ isAvailable, showBadge = true, className = '' }: CottageProps) {
   return (
     <div className={`relative flex flex-col items-center select-none ${className}`}>
       {/* Cottage SVG Artwork */}
@@ -115,17 +116,19 @@ export function Cottage({ isAvailable, className = '' }: CottageProps) {
         </defs>
       </svg>
 
-      {/* Status Pill Badge */}
-      <div className="mt-2 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1B1E4B]/90 border border-[#54478C]/40 text-xs shadow-md backdrop-blur-xs">
-        <span
-          className={`w-2 h-2 rounded-full ${
-            isAvailable ? 'bg-[#FFD47A] shadow-[0_0_8px_#FFD47A] animate-pulse' : 'bg-[#55537A]'
-          }`}
-        />
-        <span className="font-serif text-[#FFF6E5] text-xs">
-          {isAvailable ? "We're open for new projects" : "We're resting. Leave us a note."}
-        </span>
-      </div>
+      {/* Status Pill Badge (Footer only) */}
+      {showBadge && (
+        <div className="mt-2 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1B1E4B]/90 border border-[#54478C]/40 text-xs shadow-md backdrop-blur-xs">
+          <span
+            className={`w-2 h-2 rounded-full ${
+              isAvailable ? 'bg-[#FFD47A] shadow-[0_0_8px_#FFD47A] animate-pulse' : 'bg-[#55537A]'
+            }`}
+          />
+          <span className="font-serif text-[#FFF6E5] text-xs">
+            {isAvailable ? "We're open for new projects" : "We're resting. Leave us a note."}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
