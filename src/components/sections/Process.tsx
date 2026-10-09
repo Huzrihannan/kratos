@@ -92,9 +92,16 @@ const PIPELINE_STEPS: PipelineStep[] = [
   },
 ];
 
+import { useTheme } from "@/themes/ThemeProvider";
+import { PathSection } from "@/themes/dream/scenes/PathSection";
+import { Poppy } from "@/themes/dream/art/flowers/Poppy";
+
 export function Process() {
+  const { theme } = useTheme();
   const { openEstimator } = useLayoutModal();
   const { isFull } = useMotionLevel();
+
+  const isDream = theme === "dream";
 
   const verticalTimeline = (
     <div className="flex flex-col gap-6 py-6">
@@ -140,40 +147,69 @@ export function Process() {
   return (
     <Section
       id="process"
-      eyebrow="/02 — PIPELINE"
+      eyebrow={isDream ? "The Path" : "/02 — PIPELINE"}
       headline={
-        <span>
-          How we <Decode text="work" speed={40} delay={200} />
-        </span>
+        isDream ? (
+          <span className="font-serif font-semibold text-[var(--dream-ink,#2B2A52)]">
+            How we work
+          </span>
+        ) : (
+          <span>
+            How we <Decode text="work" speed={40} delay={200} />
+          </span>
+        )
       }
       description="Predictable CI/CD engineering pipeline. Real progress lines, transparent staging environments, and zero guesswork."
       hud={
-        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
-          MODE: LINEAR_PIPELINE
-        </span>
+        isDream ? (
+          <span className="font-serif italic text-xs text-[var(--dream-ink-soft,#55537A)]">
+            Five stations on the meadow path
+          </span>
+        ) : (
+          <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+            MODE: LINEAR_PIPELINE
+          </span>
+        )
       }
-      className="p-0 sm:py-0"
+      className={isDream ? "" : "p-0 sm:py-0"}
     >
-      {/* FULL MOTION: Desktop pinned track + mobile vertical stack */}
-      {isFull ? (
+      {isDream ? (
+        <PathSection />
+      ) : isFull ? (
         <>
           <DesktopPipelineTrack steps={PIPELINE_STEPS} />
           <div className="lg:hidden">{verticalTimeline}</div>
         </>
       ) : (
-        /* LITE / OFF MOTION: Pure unpinned vertical stack for all screen sizes */
         verticalTimeline
       )}
 
       {/* Estimator Bridge Link */}
-      <div className="mt-8 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className="font-mono text-xs text-fg-muted">
-          Ready to run your project through our pipeline?
-        </span>
-        <Button variant="secondary" size="sm" onClick={openEstimator}>
-          Estimate your timeline
-        </Button>
-      </div>
+      {isDream ? (
+        <div className="mt-8 pt-8 border-t border-[var(--dream-paper-2,#FFF1DC)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="font-serif text-sm text-[var(--dream-ink-soft,#55537A)]">
+            Ready to walk your project along the path?
+          </span>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={openEstimator}
+            className="rounded-full px-5 py-2 text-xs font-semibold flex items-center gap-2 bg-[var(--dream-paper,#FFFAF0)] text-[var(--dream-ink,#2B2A52)] border border-[var(--dream-paper-2,#FFF1DC)] shadow-xs hover:bg-[var(--dream-paper-2,#FFF1DC)] transition-all"
+          >
+            <Poppy state="bloom" size={14} />
+            <span>Estimate your timeline</span>
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-8 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="font-mono text-xs text-fg-muted">
+            Ready to run your project through our pipeline?
+          </span>
+          <Button variant="secondary" size="sm" onClick={openEstimator}>
+            Estimate your timeline
+          </Button>
+        </div>
+      )}
     </Section>
   );
 }

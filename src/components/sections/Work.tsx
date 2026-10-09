@@ -27,9 +27,16 @@ const WORK_STATUSES: Record<string, string> = {
   "logistics-automation": "[ACTIVE_DISPATCH]",
 };
 
+import { useTheme } from "@/themes/ThemeProvider";
+import { PostcardsScene } from "@/themes/dream/scenes/PostcardsScene";
+import { Poppy } from "@/themes/dream/art/flowers/Poppy";
+
 export function Work() {
+  const { theme } = useTheme();
   const { openEstimator } = useLayoutModal();
   const publishableStudies = caseStudiesData.filter(isPublishable);
+
+  const isDream = theme === "dream";
 
   const projectTapeNames = publishableStudies.map(
     (s) => `${s.title.toUpperCase()} // ${s.industry.toUpperCase()}`
@@ -38,33 +45,50 @@ export function Work() {
   return (
     <Section
       id="work"
-      eyebrow="/03 — SELECTED WORK"
+      eyebrow={isDream ? "Postcards on a line" : "/03 — SELECTED WORK"}
       headline={
-        <span>
-          Things we&apos;re <Decode text="proud of" speed={40} delay={200} />
-        </span>
+        isDream ? (
+          <span className="font-serif font-semibold text-[var(--dream-ink,#2B2A52)]">
+            Things we&apos;re proud of
+          </span>
+        ) : (
+          <span>
+            Things we&apos;re <Decode text="proud of" speed={40} delay={200} />
+          </span>
+        )
       }
       description="Production systems engineered for measurable business outcomes. Real architecture, strict security audits, and zero bloat."
       hud={
-        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
-          ARCHIVE: 03_FLAGSHIP
-        </span>
+        isDream ? (
+          <span className="font-serif italic text-xs text-[var(--dream-ink-soft,#55537A)]">
+            Dispatches from client gardens
+          </span>
+        ) : (
+          <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+            ARCHIVE: 03_FLAGSHIP
+          </span>
+        )
       }
     >
-      {/* Ticker Tape of Flagship Projects */}
-      {projectTapeNames.length > 0 && (
-        <div className="mb-8">
-          <Tape
-            items={projectTapeNames}
-            separator="///"
-            speed={30}
-            className="border-line bg-surface/30"
-          />
-        </div>
-      )}
+      {/* DREAM THEME: Postcards hanging on a line */}
+      {isDream ? (
+        <PostcardsScene studies={publishableStudies} />
+      ) : (
+        <>
+          {/* Ticker Tape of Flagship Projects */}
+          {projectTapeNames.length > 0 && (
+            <div className="mb-8">
+              <Tape
+                items={projectTapeNames}
+                separator="///"
+                speed={30}
+                className="border-line bg-surface/30"
+              />
+            </div>
+          )}
 
-      {/* Case Studies Grid (Desktop 3-col grid; Mobile scrollable carousel) */}
-      <div className="flex overflow-x-auto pb-6 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 snap-x snap-mandatory">
+          {/* Case Studies Grid (Desktop 3-col grid; Mobile scrollable carousel) */}
+          <div className="flex overflow-x-auto pb-6 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 snap-x snap-mandatory">
         {publishableStudies.map((study, idx) => {
           const windowTitle = WORK_TITLES[study.id] || `project_0${idx + 1}.sys`;
           const statusText = WORK_STATUSES[study.id] || "[VERIFIED]";
@@ -169,22 +193,47 @@ export function Work() {
           );
         })}
       </div>
+        </>
+      )}
 
       {/* Estimator Bridge Footer */}
-      <div className="mt-12 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="space-y-0.5 text-center sm:text-left">
-          <div className="font-mono text-xs font-bold text-fg">
-            Have a project with similar technical complexity?
+      {isDream ? (
+        <div className="mt-12 pt-8 border-t border-[var(--dream-paper-2,#FFF1DC)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="font-serif text-base font-bold text-[var(--dream-ink,#2B2A52)]">
+              Have an idea you want to plant with us?
+            </div>
+            <div className="font-sans text-xs sm:text-sm text-[var(--dream-ink-soft,#55537A)]">
+              We&apos;ll review your requirements and provide an honest, clear milestone estimate.
+            </div>
           </div>
-          <div className="font-sans text-xs text-fg-muted">
-            We will review your architecture and provide an honest scope estimate.
-          </div>
-        </div>
 
-        <Button variant="primary" size="md" onClick={openEstimator}>
-          Estimate my project
-        </Button>
-      </div>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={openEstimator}
+            className="rounded-full px-6 py-2.5 text-xs font-semibold flex items-center gap-2 bg-[var(--dream-ink,#2B2A52)] text-[var(--dream-paper,#FFFAF0)] hover:bg-[#38376B] transition-all"
+          >
+            <Poppy state="bloom" size={16} />
+            <span>Estimate my project</span>
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-12 pt-8 border-t border-line/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-0.5 text-center sm:text-left">
+            <div className="font-mono text-xs font-bold text-fg">
+              Have a project with similar technical complexity?
+            </div>
+            <div className="font-sans text-xs text-fg-muted">
+              We will review your architecture and provide an honest scope estimate.
+            </div>
+          </div>
+
+          <Button variant="primary" size="md" onClick={openEstimator}>
+            Estimate my project
+          </Button>
+        </div>
+      )}
     </Section>
   );
 }

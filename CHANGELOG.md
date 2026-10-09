@@ -2,6 +2,43 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D8 — Home Sections A (Garden, Path, Postcards, Golden Hour)] - 2026-10-09
+
+### Added
+- **The Garden (`Services.tsx` & `ServiceFlowerCard.tsx`):**
+  - Six core engineering service offerings mapped to 6 distinct botanically crafted blooming flower species:
+    1. Web Applications $\to$ Daisy (`#FFC83D` yolk, crisp white radial petals)
+    2. Mobile Applications $\to$ Tulip (`#E23A52` cup, graceful curved leaves)
+    3. E-Commerce Platforms $\to$ Sunflower (`#FFB400` ray florets, rich seeded center)
+    4. AI & Automation Systems $\to$ Dandelion (`#FFD43F` floating parachute seeds)
+    5. UI/UX Design Systems $\to$ Cherry Blossom (`#FFB7D1` five notched soft petals)
+    6. Cloud & Maintenance $\to$ Four-Leaf Clover (`#3E8C5A` emerald rounded leaflets)
+  - Interactive visiting creatures (`VisitingCreature.tsx`): animated SVG bees and fluttering butterflies swoop in on card hover or keyboard focus.
+  - Connected to the central wind engine (`registerSway`) with natural, phase-offset stem oscillations.
+  - Whole-card accessible links with $\ge 48\text{px}$ touch targets, warm paper styling (`#FFFAF0`), and soft elevation shadows.
+  - Estimator bridge banner styled as a warm garden planning card with green status indicator.
+- **The Path (`Process.tsx` & `PathSection.tsx`):**
+  - Meadow trail through 5 botanical developmental stations: Seed (Discover), Sprout (Design), Grow (Build), Bloom (Launch), and Flourish (Support).
+  - Wooden signposts with carved stage markers, paper note cards detailing deliverables, and climbing ivy vines.
+  - Concrete client commitment requirement added to each station (`clientAction: "What you'll need to do"`) in `src/content/process.ts`.
+  - Scrubbed pinned desktop progression ($\le 250\text{vh}$, zero wheel hijacking) with smooth GSAP ScrollTrigger timeline.
+  - Clean vertical station fallback stack for mobile viewports, lite motion tier, and Calm (`off`) mode.
+- **Postcards on a Line (`Work.tsx` & `PostcardsScene.tsx`):**
+  - Case studies presented as weathered paper postcards hanging on a hemp washing line between two leafy trees.
+  - Held with wooden clothespins, adorned with postage stamps, cancel marks, and project photographs.
+  - Interactive hover and focus physics: cards gently lift, straighten out, and elevate into prominence.
+  - Mobile horizontal touch snap-scroll carousel with peek margins.
+  - Strict Content Rule adherence: automatically hidden on the live home page when case studies have status `"needs-input"`.
+- **Golden Hour (`Proof.tsx` & `GoldenHourScene.tsx`):**
+  - Warm late-afternoon sunlight atmosphere (`#F6C79A` / `#FFFAF0`).
+  - Company metrics styled as tree growth rings (`GrowthRing.tsx`) and wooden forest trail markers.
+  - Client testimonial quotes folded as parchment letters carried by origami paper planes with soft fluttering animations.
+  - Strict Content Rule adherence: automatically hidden on the live home page when metrics/testimonials have status `"needs-input"`.
+- **Home Sections A Studio Workbench (`src/app/design-system/dream/home-a/page.tsx`):**
+  - Interactive design testbed featuring Sky preset switcher, Quality tier selector, Sample data toggle (to inspect both populated and hide-when-missing states), 1440px / 360px viewport switcher, and Calm motion toggle.
+- **Automated Verification Suite (`scripts/verify-d8.mjs`):**
+  - 10-test automated headless Chrome test suite covering all 4 sections, 6 flower species, visiting creatures, client commitments, washing line physics, golden hour stats, mobile 360px zero horizontal overflow, content guardrails, and clean console audit (10/10 tests passing).
+
 ## [Dream Theme: D7 — The Hero (The Signature Moment)] - 2026-10-09
 
 ### Added
