@@ -185,3 +185,67 @@ void main() {
   gl_FragColor = texture2D(tMap, vUv);
 }
 `;
+
+// =========================================================================
+// INSTANCED MEADOW GRASS SHADERS
+// =========================================================================
+export const GRASS_VERTEX_SHADER = /* glsl */ `
+attribute vec2 position;
+attribute vec2 aOffset;
+attribute vec2 aScale;
+attribute float aTilt;
+attribute float aPhase;
+
+uniform float uTime;
+uniform float uWind;
+uniform vec2 uCursor;
+
+varying float vHeight;
+varying float vPhase;
+
+void main() {
+  vHeight = position.y;
+  vPhase = aPhase;
+
+  // Blade tip bends quadratically with height (root stays firmly grounded)
+  float h2 = position.y * position.y;
+  float naturalSway = sin(uTime * 2.2 + aPhase) * 0.12;
+  float windBend = uWind * 0.42;
+  float totalLean = aTilt + naturalSway + windBend;
+
+  // Cursor repulsion: push grass blades aside locally
+  vec2 bladeRoot = aOffset;
+  vec2 toCursor = bladeRoot - uCursor;
+  float cursorDist = length(toCursor);
+  float repulsion = smoothstep(0.32, 0.0, cursorDist) * sign(toCursor.x) * 0.22 * h2;
+
+  // Final vertex position in clip space
+  vec2 transformed = vec2(
+    aOffset.x + (position.x * aScale.x) + (totalLean * h2 * aScale.y) + repulsion,
+    aOffset.y + (position.y * aScale.y)
+  );
+
+  gl_Position = vec4(transformed, 0.0, 1.0);
+}
+`;
+
+export const GRASS_FRAGMENT_SHADER = /* glsl */ `
+precision highp float;
+
+uniform vec3 uGrassBase;
+uniform vec3 uGrassTip;
+
+varying float vHeight;
+varying float vPhase;
+
+void main() {
+  // Color gradient from root to sunlit tip
+  vec3 color = mix(uGrassBase, uGrassTip, vHeight);
+
+  // Subtle tip sun-glow highlight
+  float sunGlow = smoothstep(0.68, 1.0, vHeight) * 0.15;
+  color += vec3(0.12, 0.15, 0.05) * sunGlow;
+
+  gl_FragColor = vec4(color, 1.0);
+}
+`;

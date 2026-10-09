@@ -2,7 +2,46 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
-## [Dream Theme: D4 — The Living Sky and Clouds] - 2026-10-09
+## [Dream Theme: D5 — Meadow, Wind, Flowers & Living Things] - 2026-10-09
+
+### Added
+- **Unified Wind Physics Engine (`src/themes/dream/world/wind.ts`):**
+  - Single centralized physics model integrating cursor velocity (decaying smoothly at 0.92), scroll delta Y (decaying at 0.90), and periodic ambient noise gusts every 6–12 seconds.
+  - High-performance `registerSway(el, options)` powered by `gsap.quickSetter` (rotation, skewX, or x displacement without garbage-collection allocations).
+  - Enforced ceiling of $\le 60$ active registrants with `IntersectionObserver` auto-pausing sway for off-screen elements.
+  - Connected the `DreamLogo` (sprout, leaves, bud, and poppy head) to the unified wind engine, replacing standalone sine loops.
+- **Instanced WebGL Meadow Grass & SVG Fallbacks (`WorldCanvas.tsx`, `GrassMeadow.tsx`, `shaders.ts`):**
+  - **WebGL Instanced Blades:** 8,000 blades on desktop (Tier T3) / 2,500 on mobile/T2 rendered inside `WorldCanvas` via `ogl`. Vertex shader calculates wind bending from noise harmonics, cursor repulsion pushing blades aside within 0.32 clip space, and color gradient from deep base (`#2A6B48`) to sunlit tip (`--grass-tint` `#6FB07A`).
+  - Rendered in offscreen half-resolution `RenderTarget` and upscaled in a single blit pass with zero extra canvas contexts.
+  - **Layer 1 SVG Meadow Fallback (`GrassMeadow.tsx`):** Three undulating vector grass strips at far (`#A8D5A2`), mid (`#6FB07A`), and near (`#3E8C5A`) depths with staggered CSS sway animations. Active in T2/T1, and static in T0 / Calm.
+- **Hand-Crafted Flower Kit Suite (`src/themes/dream/art/flowers/`):**
+  - 8 distinct inline SVG species, each strictly under 6 KB with unified upper-left sunlight direction and named `<g>` parts (`#stem`, `#leaf-l`, `#leaf-r`, `#head`, `#petals`, `#centre`):
+    1. **Poppy (`Poppy.tsx`):** Brand flower & primary action CTA (strictly reserved). Velvety red petals (`#A80A1C` to `#FD142B`), dark seed capsule (`#2A1B2E`), delicate stamens.
+    2. **Daisy (`Daisy.tsx`):** Web applications. Clean radiating white petals (`#FFFAF0`) around a golden yolk disc (`#FFC83D`).
+    3. **Tulip (`Tulip.tsx`):** Mobile applications. Graceful cup-shaped coral/rose petals (`#FF6B81` / `#FA8072`) with broad wrapping leaves.
+    4. **Sunflower (`Sunflower.tsx`):** E-commerce. Radiant golden petals (`#FFB400`) and textured dark honeycomb seed disc (`#4A2E18`).
+    5. **Dandelion (`Dandelion.tsx`):** AI & automation. Supports dual sub-states: yellow ray flower head and gossamer white seed-puff globe with flying seed parachutes that disperse on click or tap.
+    6. **Cherry Blossom (`CherryBlossom.tsx`):** UI/UX design. 5-petal blossom in delicate pinks (`#FFB7D1`) with cleft tips on a woody branch.
+    7. **Clover (`Clover.tsx`):** Maintenance & support. Emerald heart-shaped leaflets with white chevrons, paired with an easter egg toggle for a 4-leaf lucky clover (`isLucky`).
+    8. **Lavender (`Lavender.tsx`):** Wildflower accent. Upright spire of layered violet florets (`#9B8CE0`).
+    9. **Wildflower Mix (`WildflowerMix.tsx`):** Staggered meadow cluster assembling Poppy, Daisy, Lavender, and Clover.
+  - Reusable `useFlowerBloom.ts` hook managing lifecycle transitions (`seed` $\to$ `sprout` $\to$ `bloom`), overshoot easing, idle wind sway, and interactive hover reactions with micro pollen bursts.
+- **Diurnal Meadow Life & Atmospheric Particles (`src/themes/dream/art/life/`):**
+  - **Shared 2D Particle Canvas (`LifeCanvas.tsx`):** Single canvas with sprite batching driving up to 25 falling petals, up to 60 depth-layered pollen motes, and up to 40 bioluminescent fireflies (dusk and night, slow breathing pulse $< 1$ Hz, gentle attraction toward cursor).
+  - **Butterflies (`Butterflies.tsx`):** Diurnal winged creatures active during Day and Golden hour (5 in T3, 2 in T2) featuring 3D perspective wing flapping (`rotateY`), curved wandering flight paths, and cursor evasion.
+  - **Bees (`Bees.tsx`):** Chubby bumblebees buzzing with high-frequency wing vibration during bright midday sun.
+  - Master orchestrator `MeadowLife.tsx` automatically transitions diurnal creatures based on `SkyState` and scales counts per `QualityTier`.
+- **Organic Dream Cursor (`src/themes/dream/art/cursor/DreamCursor.tsx`):**
+  - Soft glowing golden pollen orb with short trailing particles on desktop full motion.
+  - Smoothly transforms into a blooming mini poppy glyph over clickable elements (`a`, `button`, inputs).
+  - Emits a 4-petal puff burst on click, and an expanding ripple on touch taps.
+  - Automatically suppresses technical OS crosshair in Dream theme; completely disabled in Calm mode or reduced motion.
+- **Master Art Registry (`src/themes/dream/art/index.ts`):**
+  - Modular barrel exports for all flowers, creatures, and cursor, allowing custom design assets to swap cleanly.
+- **Meadow & Flower Kit Studio (`src/app/design-system/dream/meadow/page.tsx`):**
+  - Interactive workbench featuring live FPS meter, Quality Governor tier overrides (T3-T0), real-time wind speed gauge with gust trigger, diurnal sky state picker, and flower gallery with individual and global lifecycle state controls.
+- **Automated Verification & Tests (`scripts/verify-d5.mjs`):**
+  - 10-step CDP test suite validating flower SVG structures, lifecycle switching, wind gust mechanics, dandelion puff dispersion, clover lucky state, governor tier stepping, day/night creature shifts, zero mobile overflow, and clean console (100% passed).
 
 ### Added
 - **OKLab Color Engine & Atmospheric State Machine (`src/themes/dream/world/sky.ts`):**

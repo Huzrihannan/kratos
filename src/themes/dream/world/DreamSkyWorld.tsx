@@ -16,6 +16,8 @@ import { WorldCanvas } from './WorldCanvas';
 import { GodRays } from './extras/GodRays';
 import { Birds } from './extras/Birds';
 import { ShootingStar } from './extras/ShootingStar';
+import { GrassMeadow } from './GrassMeadow';
+import { MeadowLife } from '../art/life/MeadowLife';
 
 export function DreamSkyWorld({ className = '' }: { className?: string }) {
   const { theme } = useTheme();
@@ -33,11 +35,17 @@ export function DreamSkyWorld({ className = '' }: { className?: string }) {
       {/* Layer 0: CSS Gradient + SVG Hills */}
       <Layer0Sky />
 
-      {/* Layer 2: WebGL World Canvas (half-res upscaled with ogl) */}
+      {/* Layer 2: WebGL World Canvas (half-res upscaled with ogl: sky + instanced grass blades) */}
       <WorldCanvas />
 
       {/* Layer 1: Parallax DOM Sprite Clouds with CSS mask-image */}
       <Layer1Clouds />
+
+      {/* Layer 1: Meadow Grass Fallback (multi-layer SVG strips with organic CSS sway) */}
+      <GrassMeadow />
+
+      {/* Atmospheric Life: Petals, Pollen Motes, Butterflies, Bees, Fireflies */}
+      <MeadowLife />
 
       {/* Extras: God Rays, Birds Flock, Shooting Star */}
       <GodRays />

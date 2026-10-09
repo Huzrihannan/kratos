@@ -33,10 +33,16 @@ const DreamSkyWorld = dynamic(
   { ssr: false }
 );
 
+const DreamCursor = dynamic(
+  () => import('@/themes/dream/art/cursor/DreamCursor').then((mod) => mod.DreamCursor),
+  { ssr: false }
+);
+
 export function AppOverlays() {
   return (
     <>
       <DreamSkyWorld />
+      <DreamCursor />
       <Boot />
       <Crosshair />
       <CommandPalette />

@@ -169,6 +169,26 @@ export default function DreamDesignSystemPage() {
             Built for non-technical founders: 18px base text, 48px tap targets, soft colored
             shadows, organic pebble radii, and zero jargon without instant clarity.
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <Link
+              href="/design-system/dream/logo"
+              className="px-4 py-2 rounded-full bg-paper border border-line text-xs font-sans font-semibold text-ink hover:border-link transition-colors shadow-xs"
+            >
+              🌸 Logo Studio
+            </Link>
+            <Link
+              href="/design-system/dream/sky"
+              className="px-4 py-2 rounded-full bg-paper border border-line text-xs font-sans font-semibold text-ink hover:border-link transition-colors shadow-xs"
+            >
+              ☀️ Living Sky Studio
+            </Link>
+            <Link
+              href="/design-system/dream/meadow"
+              className="px-4 py-2 rounded-full bg-paper border border-line text-xs font-sans font-semibold text-ink hover:border-link transition-colors shadow-xs"
+            >
+              🌿 Meadow & Flower Kit Studio
+            </Link>
+          </div>
         </div>
 
         {/* 1. PALETTE TOKENS */}

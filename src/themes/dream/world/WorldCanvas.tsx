@@ -13,15 +13,18 @@
  */
 
 import React, { useRef, useEffect, useState } from 'react';
-import { Renderer, Program, Mesh, Triangle, RenderTarget } from 'ogl';
+import { Renderer, Program, Mesh, Triangle, RenderTarget, Geometry } from 'ogl';
 import { useQuality, QualityTier } from './governor';
 import { useSky } from './SkyContext';
 import { hexToRgb } from './sky';
+import { windEngine } from './wind';
 import {
   SKY_VERTEX_SHADER,
   SKY_FRAGMENT_SHADER,
   UPSCALE_VERTEX_SHADER,
   UPSCALE_FRAGMENT_SHADER,
+  GRASS_VERTEX_SHADER,
+  GRASS_FRAGMENT_SHADER,
 } from './shaders';
 
 let activeWorldContextCount = 0;
@@ -120,7 +123,51 @@ export function WorldCanvas({
 
     const skyMesh = new Mesh(gl, { geometry, program: skyProgram });
 
-    // 2. Blit / Upscale Pass Program
+    // 2. Instanced Meadow Grass Blades (8,000 desktop / 2,500 mobile)
+    const bladeCount = activeTier === 'T3' ? (window.innerWidth < 768 ? 2500 : 8000) : 2500;
+    const offsetData = new Float32Array(bladeCount * 2);
+    const scaleData = new Float32Array(bladeCount * 2);
+    const tiltData = new Float32Array(bladeCount);
+    const phaseData = new Float32Array(bladeCount);
+
+    for (let i = 0; i < bladeCount; i++) {
+      const x = Math.random() * 2.2 - 1.1;
+      const hillH = -0.52 + Math.sin(x * 1.8) * 0.12 - Math.random() * 0.45;
+      offsetData[i * 2] = x;
+      offsetData[i * 2 + 1] = Math.max(-1.05, Math.min(-0.35, hillH));
+
+      scaleData[i * 2] = 0.007 + Math.random() * 0.008;
+      scaleData[i * 2 + 1] = 0.15 + Math.random() * 0.22;
+
+      tiltData[i] = (Math.random() - 0.5) * 0.28;
+      phaseData[i] = Math.random() * Math.PI * 2;
+    }
+
+    const grassGeometry = new Geometry(gl, {
+      position: { size: 2, data: new Float32Array([-0.4, 0.0, 0.4, 0.0, 0.0, 1.0]) },
+      aOffset: { instanced: 1, size: 2, data: offsetData },
+      aScale: { instanced: 1, size: 2, data: scaleData },
+      aTilt: { instanced: 1, size: 1, data: tiltData },
+      aPhase: { instanced: 1, size: 1, data: phaseData },
+    });
+
+    const grassProgram = new Program(gl, {
+      vertex: GRASS_VERTEX_SHADER,
+      fragment: GRASS_FRAGMENT_SHADER,
+      uniforms: {
+        uTime: { value: 0.0 },
+        uWind: { value: 0.0 },
+        uCursor: { value: [0.0, -2.0] },
+        uGrassBase: { value: [0.165, 0.42, 0.28] },
+        uGrassTip: { value: [0.435, 0.69, 0.48] },
+      },
+      depthTest: false,
+      depthWrite: false,
+    });
+
+    const grassMesh = new Mesh(gl, { geometry: grassGeometry, program: grassProgram });
+
+    // 3. Blit / Upscale Pass Program
     const upscaleProgram = new Program(gl, {
       vertex: UPSCALE_VERTEX_SHADER,
       fragment: UPSCALE_FRAGMENT_SHADER,
@@ -133,16 +180,24 @@ export function WorldCanvas({
 
     const upscaleMesh = new Mesh(gl, { geometry, program: upscaleProgram });
 
-    // Pacing state
+    // Pacing state & cursor tracking
     let lastInteractionTime = performance.now();
     let lastFrameTime = performance.now();
+    let mouseNormX = 0;
+    let mouseNormY = -2;
 
     const markInteraction = () => {
       lastInteractionTime = performance.now();
     };
 
+    const onMouseMove = (e: MouseEvent) => {
+      markInteraction();
+      mouseNormX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNormY = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+
     window.addEventListener('scroll', markInteraction, { passive: true });
-    window.addEventListener('mousemove', markInteraction, { passive: true });
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
     window.addEventListener('touchstart', markInteraction, { passive: true });
 
     // Handle context loss
@@ -204,6 +259,7 @@ export function WorldCanvas({
         const midRgb = hexToRgb(skyState.mid);
         const horizRgb = hexToRgb(skyState.horizon);
         const cloudRgb = hexToRgb(skyState.cloudTint);
+        const grassRgb = hexToRgb(skyState.grassTint || '#3E8C5A');
 
         skyProgram.uniforms.uSkyTop.value = [topRgb.r, topRgb.g, topRgb.b];
         skyProgram.uniforms.uSkyMid.value = [midRgb.r, midRgb.g, midRgb.b];
@@ -217,8 +273,17 @@ export function WorldCanvas({
         skyProgram.uniforms.uAmbient.value = skyState.ambient;
         skyProgram.uniforms.uTime.value = time * 0.001;
 
-        // Pass 1: Render sky into offscreen target (at half/third resolution)
+        // Update grass uniforms
+        grassProgram.uniforms.uTime.value = time * 0.001;
+        grassProgram.uniforms.uWind.value = windEngine.smoothedWind;
+        grassProgram.uniforms.uCursor.value = [mouseNormX, mouseNormY];
+        grassProgram.uniforms.uGrassTip.value = [grassRgb.r, grassRgb.g, grassRgb.b];
+
+        // Pass 1a: Render sky into offscreen target (at half/third resolution)
         renderer.render({ scene: skyMesh, target: renderTarget });
+
+        // Pass 1b: Render instanced grass blades over sky
+        renderer.render({ scene: grassMesh, target: renderTarget, clear: false });
 
         // Pass 2: Blit offscreen target to canvas screen
         upscaleProgram.uniforms.tMap.value = renderTarget.texture;

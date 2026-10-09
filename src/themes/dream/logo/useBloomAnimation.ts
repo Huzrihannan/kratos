@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import gsap from 'gsap';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
+import { registerSway } from '../world/wind';
 
 export interface UseBloomAnimationOptions {
   animated?: boolean;
@@ -20,56 +21,63 @@ export function useBloomAnimation(
   const [isBlooming, setIsBlooming] = useState(false);
   const idleTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const mainTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  const unregisterSwayRef = useRef<(() => void)[]>([]);
 
-  // Idle Sway Timeline (slow gentle sine wave & breathing)
+  // Idle Sway Timeline & Wind registration
   const startIdle = useCallback(() => {
     const svg = svgRef.current;
     if (!svg || isOff || !animated) return;
 
-    const ctx = gsap.context(() => {
-      const leafL = svg.querySelector('#leaf-l');
-      const leafR = svg.querySelector('#leaf-r');
-      const bud = svg.querySelector('#bud');
-      const poppyHead = svg.querySelector('#poppy-head');
+    // Clean any prior sway registrants
+    unregisterSwayRef.current.forEach((unreg) => unreg());
+    unregisterSwayRef.current = [];
 
+    const ctx = gsap.context(() => {
+      const leafL = svg.querySelector<SVGElement>('#leaf-l');
+      const leafR = svg.querySelector<SVGElement>('#leaf-r');
+      const bud = svg.querySelector<SVGElement>('#bud');
+      const poppyHead = svg.querySelector<SVGElement>('#poppy-head');
+
+      // 1. Unified Wind System registration
+      if (poppyHead) {
+        unregisterSwayRef.current.push(
+          registerSway(poppyHead, { strength: 0.9, maxAngle: 3.5, transformOrigin: 'center bottom' })
+        );
+      }
+      if (leafL) {
+        unregisterSwayRef.current.push(
+          registerSway(leafL, { strength: 1.3, phase: 0.8, maxAngle: 4.5, transformOrigin: 'right bottom' })
+        );
+      }
+      if (leafR) {
+        unregisterSwayRef.current.push(
+          registerSway(leafR, { strength: 1.2, phase: 1.4, maxAngle: 4.5, transformOrigin: 'left bottom' })
+        );
+      }
+      if (bud) {
+        unregisterSwayRef.current.push(
+          registerSway(bud, { strength: 1.0, phase: 0.4, maxAngle: 3.0, transformOrigin: 'center bottom' })
+        );
+      }
+
+      // 2. Gentle organic breath (1-2% scale breathing)
       const idle = gsap.timeline({ repeat: -1, yoyo: true });
       idleTimelineRef.current = idle;
 
-      // Slow organic breath (1-2% scale, 2.8s period)
       if (poppyHead) {
         idle.to(poppyHead, {
-          scale: 1.025,
-          rotation: 1.5,
-          duration: 2.4,
+          scale: 1.02,
+          duration: 2.8,
           ease: 'sine.inOut',
         }, 0);
       }
-
-      // Leaf sway
-      if (leafL) {
-        idle.to(leafL, {
-          rotation: -2.5,
-          duration: 2.1,
-          ease: 'sine.inOut',
-        }, 0.2);
-      }
-      if (leafR) {
-        idle.to(leafR, {
-          rotation: 3,
-          duration: 2.3,
-          ease: 'sine.inOut',
-        }, 0.4);
-      }
-      if (bud) {
-        idle.to(bud, {
-          rotation: 1.8,
-          duration: 2.5,
-          ease: 'sine.inOut',
-        }, 0.1);
-      }
     }, svg);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      unregisterSwayRef.current.forEach((unreg) => unreg());
+      unregisterSwayRef.current = [];
+    };
   }, [animated, isOff, svgRef]);
 
   const runBloom = useCallback(() => {
@@ -269,6 +277,8 @@ export function useBloomAnimation(
     return () => {
       mainTimelineRef.current?.kill();
       idleTimelineRef.current?.kill();
+      unregisterSwayRef.current.forEach((unreg) => unreg());
+      unregisterSwayRef.current = [];
     };
   }, [forcePlay, runBloom, startIdle, svgRef]);
 

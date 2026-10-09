@@ -14,3 +14,5 @@ export * from './SkyDial';
 export * from './extras/GodRays';
 export * from './extras/Birds';
 export * from './extras/ShootingStar';
+export * from './wind';
+export * from './GrassMeadow';

@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useMotionLevel } from '@/lib/motion/MotionContext';
+import { useTheme } from '@/themes/ThemeProvider';
 
 export interface CrosshairProps {
   className?: string;
 }
 
 export function Crosshair({ className = '' }: CrosshairProps) {
+  const { theme } = useTheme();
   const { isLite, isOff } = useMotionLevel();
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const [label, setLabel] = useState<string | null>(null);
@@ -66,7 +68,7 @@ export function Crosshair({ className = '' }: CrosshairProps) {
     };
   }, [isLite, isOff]);
 
-  if (isLite || isOff || !isVisible || !pos) {
+  if (theme === 'dream' || isLite || isOff || !isVisible || !pos) {
     return null;
   }
 
