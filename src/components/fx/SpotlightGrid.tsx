@@ -45,6 +45,7 @@ export function SpotlightGrid({
       ref={containerRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      data-fx="spotlight-grid"
       className={cn("relative w-full h-full overflow-hidden select-none", className)}
     >
       {/* Blueprint Dot Grid Background */}

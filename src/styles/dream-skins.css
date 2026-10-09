@@ -190,3 +190,9 @@
   color: var(--ink) !important;
   box-shadow: var(--shadow-floating) !important;
 }
+
+/* 8. TECHNICAL METAPHOR SUPPRESSIONS */
+[data-theme="dream"] [data-fx="spotlight-grid"] {
+  display: none !important;
+}
+

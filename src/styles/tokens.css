@@ -127,6 +127,16 @@
 
   /* Semantic Color Mapping */
   --bg: #6DB6F0; /* Default Day Sky Top */
+  --sky-top: #6DB6F0;
+  --sky-mid: #B4DDF7;
+  --sky-horizon: #FFF0D4;
+  --cloud-tint: #FFFFFF;
+  --sun-x: 0.500;
+  --sun-y: 0.220;
+  --ambient: 1.000;
+  --star-alpha: 0.000;
+  --grass-tint: #3E8C5A;
+  --hero-fg: #2B2A52;
   --surface: #FFFAF0; /* Paper card surface */
   --surface-subtle: #FFF1DC; /* Paper-2 */
   --fg: #2B2A52; /* Indigo Ink */

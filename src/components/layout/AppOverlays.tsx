@@ -28,9 +28,15 @@ const ContactDock = dynamic(
   { ssr: false }
 );
 
+const DreamSkyWorld = dynamic(
+  () => import('@/themes/dream/world/DreamSkyWorld').then((mod) => mod.DreamSkyWorld),
+  { ssr: false }
+);
+
 export function AppOverlays() {
   return (
     <>
+      <DreamSkyWorld />
       <Boot />
       <Crosshair />
       <CommandPalette />
@@ -39,3 +45,4 @@ export function AppOverlays() {
     </>
   );
 }
+

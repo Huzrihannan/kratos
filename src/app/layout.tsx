@@ -13,6 +13,8 @@ import { siteConfig } from "@/content/site";
 
 import { SpotlightGrid } from "@/components/fx/SpotlightGrid";
 import { AppOverlays } from "@/components/layout/AppOverlays";
+import { SkyProvider } from "@/themes/dream/world/SkyContext";
+
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -124,35 +126,37 @@ export default function RootLayout({
       </head>
       <body className="bg-bg text-fg font-sans selection:bg-red selection:text-fg antialiased min-h-screen flex flex-col">
         <ThemeProvider>
-          <CloudWipeProvider>
-            <MotionProvider>
-              <LayoutProvider>
-                {/* Accessible Skip Link */}
-                <a
-                  href="#main-content"
-                  className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99] focus:px-4 focus:py-2 focus:bg-surface focus:text-fg focus:border focus:border-red-text focus:outline-none focus:ring-2 focus:ring-red-text"
-                >
-                  Skip to main content
-                </a>
+          <SkyProvider>
+            <CloudWipeProvider>
+              <MotionProvider>
+                <LayoutProvider>
+                  {/* Accessible Skip Link */}
+                  <a
+                    href="#main-content"
+                    className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99] focus:px-4 focus:py-2 focus:bg-surface focus:text-fg focus:border focus:border-red-text focus:outline-none focus:ring-2 focus:ring-red-text"
+                  >
+                    Skip to main content
+                  </a>
 
-                <AppOverlays />
-                <SpotlightGrid
-                  gridSize={48}
-                  spotlightRadius={320}
-                  className="fixed inset-0 -z-10 pointer-events-none opacity-30"
-                />
+                  <AppOverlays />
+                  <SpotlightGrid
+                    gridSize={48}
+                    spotlightRadius={320}
+                    className="fixed inset-0 -z-10 pointer-events-none opacity-30"
+                  />
 
-                <SmoothScroll>
-                  <PageTransition />
-                  <Nav />
-                  <main id="main-content" className="flex-1">
-                    {children}
-                  </main>
-                  <Footer />
-                </SmoothScroll>
-              </LayoutProvider>
-            </MotionProvider>
-          </CloudWipeProvider>
+                  <SmoothScroll>
+                    <PageTransition />
+                    <Nav />
+                    <main id="main-content" className="flex-1">
+                      {children}
+                    </main>
+                    <Footer />
+                  </SmoothScroll>
+                </LayoutProvider>
+              </MotionProvider>
+            </CloudWipeProvider>
+          </SkyProvider>
         </ThemeProvider>
       </body>
     </html>

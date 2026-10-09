@@ -1,10 +1,15 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { useTheme } from "./ThemeProvider";
 import { THEMES, THEME_IDS, ThemeId, ThemeIcon } from "./registry";
 import { useCloudWipe } from "./CloudWipe";
-import { useMotionLevel } from "@/lib/motion/MotionContext";
+
+const DynamicSkyDial = dynamic(
+  () => import("./dream/world/SkyDial").then((m) => m.SkyDial),
+  { ssr: false }
+);
 
 /**
  * 1. Desktop Nav Segmented Radiogroup
@@ -12,7 +17,6 @@ import { useMotionLevel } from "@/lib/motion/MotionContext";
 export function ThemeSwitcherNav({ className = "" }: { className?: string }) {
   const { theme, setTheme, isDreamTried } = useTheme();
   const { triggerWipe } = useCloudWipe();
-  const { level, setLevel } = useMotionLevel();
   const [showDreamOptions, setShowDreamOptions] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -110,46 +114,16 @@ export function ThemeSwitcherNav({ className = "" }: { className?: string }) {
         })}
       </div>
 
-      {/* Dream sky dial & calm placeholder popover when Dream is active */}
+      {/* Dream sky dial & calm popover when Dream is active */}
       {theme === "dream" && showDreamOptions && (
-        <div
-          role="dialog"
-          aria-label="Dream environment controls"
-          className="absolute top-full right-0 mt-2 p-3 w-64 bg-surface border border-line rounded-lg shadow-lg z-50 text-xs font-mono"
-        >
-          <div className="flex items-center justify-between pb-2 border-b border-line text-fg font-bold">
-            <span>DREAM DIAL</span>
-            <button
-              type="button"
-              onClick={() => setShowDreamOptions(false)}
-              className="text-fg-muted hover:text-fg"
-            >
-              ✕
-            </button>
-          </div>
-          <div className="py-2.5 space-y-2 text-fg-muted">
-            <div className="flex justify-between items-center">
-              <span>Sky Mode:</span>
-              <span className="text-fg font-semibold">Journey (D4)</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>Calm Mode:</span>
-              <button
-                type="button"
-                onClick={() => setLevel(level === "off" ? "full" : "off")}
-                className={`px-2 py-0.5 border rounded text-[10px] ${
-                  level === "off" ? "bg-red text-white border-red" : "border-line text-fg"
-                }`}
-              >
-                {level === "off" ? "CALM ACTIVE" : "CALM OFF"}
-              </button>
-            </div>
-          </div>
+        <div className="absolute top-full right-0 mt-2 z-50">
+          <DynamicSkyDial onClose={() => setShowDreamOptions(false)} className="w-72" />
         </div>
       )}
     </div>
   );
 }
+
 
 /**
  * 2. Mobile Menu Preview Cards Switcher

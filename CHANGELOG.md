@@ -2,6 +2,38 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D4 — The Living Sky and Clouds] - 2026-10-09
+
+### Added
+- **OKLab Color Engine & Atmospheric State Machine (`src/themes/dream/world/sky.ts`):**
+  - Full perceptually uniform color space pipeline: $s\text{RGB} \leftrightarrow \text{Linear} \leftrightarrow \text{LMS} \leftrightarrow \text{OKLab}$ with smooth OKLab gradient interpolation preventing muddy desaturated middle tones.
+  - 5 canonical keyframes: `dawn` (`#8FA6E0` $\to$ `#F2B8CF` $\to$ `#FFE0B5`), `day` (`#6DB6F0` $\to$ `#B4DDF7` $\to$ `#FFF0D4`), `golden` (`#7FA6E6` $\to$ `#F6C79A` $\to$ `#FFD47A`), `dusk` (`#2C3868` $\to$ `#7A4A8C` $\to$ `#E89078` with 45% radial scrim), and `night` (`#12132D` $\to$ `#252A66` $\to$ `#3A3F7A`).
+  - Journey mode (continuous scroll-linked descent from day at 0% to night at 100%), Live mode (local time clock interpolation), and Fixed preset modes.
+- **Quality Governor & Frame-Rate Watchdog (`src/themes/dream/world/governor.ts`):**
+  - 4 quality tiers: `T3` (Ultra: 60fps WebGL + God Rays + all sprites), `T2` (Standard: 30fps WebGL + half-res buffer), `T1` (Fallback: CSS gradient + DOM sprite clouds), `T0` (Calm / Static: Layer 0 CSS gradient only, zero ticker loops).
+  - Active frame watchdog automatically steps down quality tier if rendering drops below 40fps for 2 consecutive seconds.
+  - Bidirectionally synchronized with `MotionContext` (`off` $\to$ T0, `lite` $\to$ T1, `full` $\to$ T3).
+- **SkyDriver & Throttled CSS State Engine (`src/themes/dream/world/SkyDriver.ts`, `SkyContext.tsx`):**
+  - Centralized singleton driving 10 document CSS variables (`--sky-top`, `--sky-mid`, `--sky-horizon`, `--cloud-tint`, etc.) throttled to $\le 30$ Hz and only writing when color signatures change.
+  - Persists selected mode and fixed preset across sessions in `localStorage`.
+- **Three-Layer Decoupled Fail-Safe Rendering Architecture:**
+  - **Layer 0 (`Layer0Sky.tsx`):** Server-rendered CSS gradient with 3 multi-depth SVG hill ridges. Displays instantly on first paint with 0ms flash and zero JS overhead.
+  - **Layer 1 (`Layer1Clouds.tsx` & `scripts/generate-clouds.mjs`):** 8 procedurally generated noise WebP cloud alpha-masks (< 25 KB each) in `public/textures/clouds/` rendered with CSS `mask-image` and `background-color: var(--cloud-tint)`. Tints dynamically with the sky with zero image re-downloads.
+  - **Layer 2 (`WorldCanvas.tsx` & `shaders.ts`):** Lightweight `ogl` WebGL single full-screen triangle. Features half-resolution offscreen `RenderTarget` with bilinear upscaling, procedural sun with bloom, moon with glow, hash-based twinkle stars (< 1 Hz), silver-lined FBM cloud rims, and automatic context loss / restoration recovery. Frame pacing: 60fps active, 30fps idle, 15fps after 20s, 0fps when tab is hidden.
+- **Atmospheric Extras & Scroll Transitions (`extras/`, `CloudDescent.tsx`):**
+  - Conic sunbeam god rays active during Day and Golden Hour (`extras/GodRays.tsx`).
+  - V-formation flock of birds crossing the sky every 30–45s (`extras/Birds.tsx`).
+  - Night shooting star streaks (`extras/ShootingStar.tsx`).
+  - Cloud bank scroll descent (`CloudDescent.tsx`) transitioning between hero sky and services meadow.
+- **Interactive Sky Dial Popover (`src/themes/dream/world/SkyDial.tsx`):**
+  - Embedded in top theme navigation switcher and available across all pages when Dream theme is active.
+  - Allows visitors to toggle between Journey, Live Clock, and Fixed modes, pick any of the 5 sky palettes, and toggle Calm mode with one click.
+- **Living Sky Studio & Testbench (`src/app/design-system/dream/sky/page.tsx`):**
+  - Dedicated interactive workbench at `/design-system/dream/sky` featuring live time scrubber, mode toggles, 5 preset buttons, quality governor tier overrides, context loss simulation, live atmospheric telemetry, and WCAG AA headline contrast card.
+- **Automated Verification & Audits (`scripts/verify-skycontrast.mjs`, `scripts/verify-d4.mjs`):**
+  - Mathematical WCAG 2.1 AA audit validating all 5 sky states against hero display zones and paper cards (16/16 checks passed, wired into `npm run check`).
+  - Chrome DevTools Protocol automated suite verifying all 5 states at 1440 and 360 viewports, governor tier stepping, zero mobile overflow, and navigation popover interactivity.
+
 ## [Dream Theme: D3 — The Dream Logo in Bloom] - 2026-10-09
 
 ### Added
