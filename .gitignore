@@ -44,3 +44,4 @@ lh-*.json
 scripts/fonts/
 audit-raw.json
 audit/**/*.png
+.chrome-verify*/

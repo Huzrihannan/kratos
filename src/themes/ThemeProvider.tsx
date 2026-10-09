@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { ThemeId, THEMES, THEME_IDS, isValidTheme } from "./registry";
 import { trackThemeChange } from "@/lib/analytics";
+import { useFaviconSync } from "./useFaviconSync";
 
 export type ThemeChangeSource = "nav" | "menu" | "footer" | "palette" | "url" | "system";
 
@@ -62,6 +63,9 @@ function applyDomTheme(t: ThemeId) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>("dark");
   const [isDreamTried, setIsDreamTried] = useState<boolean>(false);
+
+  // Sync favicon and apple touch icon dynamically
+  useFaviconSync(theme);
 
   useEffect(() => {
     // 1. Check dream tried status

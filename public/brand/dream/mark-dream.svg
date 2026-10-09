@@ -1,0 +1,159 @@
+<!-- Krat.OS Dream Theme Mark (Day) -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 92 74"
+  width="92"
+  height="74"
+  role="img"
+  aria-label="Krat.OS"
+>
+  
+    <g id="dream-sprout">
+      <!-- Main Stem: drawn with stroke for organic GSAP drawSVG unfurl -->
+      <path
+        id="stem"
+        d="M 21.5 68 C 21.5 54, 19.5 40, 21.5 28 C 22.2 23.5, 23.5 19, 23.8 15"
+        fill="none"
+        stroke="#5E9B6A"
+        stroke-width="3.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <!-- Left Leaf: emerges at y=46, unfurls outward left -->
+      <path
+        id="leaf-l"
+        d="M 20.5 47 C 14.5 45.5, 10 39.5, 9.2 36 C 8.5 39.8, 12.5 48.5, 20.8 50.2 Z"
+        fill="#7BB77F"
+        style="transform-origin: 20.5px 47px;"
+      />
+      <!-- Right Leaf: emerges at y=33, unfurls outward right -->
+      <path
+        id="leaf-r"
+        d="M 22.2 34 C 27.5 31.5, 31.8 25.5, 33 22 C 32.5 26.2, 28.5 34.5, 22.8 37 Z"
+        fill="#7BB77F"
+        style="transform-origin: 22.2px 34px;"
+      />
+      <!-- Bud Base / Calyx: sits at tip of stem -->
+      <path
+        id="bud"
+        d="M 21.2 17.5 C 19.8 15, 20.5 10.5, 23.8 8.5 C 27 10.5, 27.8 15, 26.4 17.5 C 25 19.5, 22.5 19.5, 21.2 17.5 Z"
+        fill="#3F7D55"
+        style="transform-origin: 23.8px 14px;"
+      />
+      <!-- Bud Tip: glowing brand red accent -->
+      <path
+        id="bud-tip"
+        d="M 22.6 11 C 22 9.5, 23.5 6.8, 23.8 6.2 C 24.2 6.8, 25.6 9.5, 25 11 C 24.5 12, 23.1 12, 22.6 11 Z"
+        fill="#FD142B"
+        style="transform-origin: 23.8px 9px;"
+      />
+    </g>
+  
+  
+    <g id="dream-poppy">
+      <!-- Poppy Stem: short organic stem from baseline -->
+      <path
+        id="poppy-stem"
+        d="M 64 68 C 63.5 61, 64.5 55, 64 48"
+        fill="none"
+        stroke="#5E9B6A"
+        stroke-width="2.6"
+        stroke-linecap="round"
+      />
+      <!-- Baseline Leaves: small ground foliage -->
+      <path
+        id="poppy-leaf-l"
+        d="M 63 67 C 58 66, 54 62.5, 52.5 60.5 C 53.5 64, 58 68, 63.5 68 Z"
+        fill="#7BB77F"
+        style="transform-origin: 63px 67px;"
+      />
+      <path
+        id="poppy-leaf-r"
+        d="M 65 66.5 C 69.5 65.5, 73.5 61.5, 75 59.5 C 74 63.5, 70 67.5, 64.5 67.5 Z"
+        fill="#7BB77F"
+        style="transform-origin: 65px 66.5px;"
+      />
+      <!-- Poppy Flower Head (centered on cx, cy) -->
+      <g id="poppy-head" style="transform-origin: 64px 48px;">
+        <!-- Back Petals: deep rich crimson depth layer (#A80A1C) -->
+        <g id="petals-back">
+          <!-- Top back petal -->
+          <path d="M 55.5 46 C 54 38, 74 38, 72.5 46 C 67 49, 61 49, 55.5 46 Z" fill="#A80A1C" />
+          <!-- Left back petal -->
+          <path d="M 62 40 C 53 40, 53 54, 62 55 C 63 50, 63 45, 62 40 Z" fill="#990818" />
+          <!-- Right back petal -->
+          <path d="M 66 40 C 75 40, 75 54, 66 55 C 65 50, 65 45, 66 40 Z" fill="#990818" />
+          <!-- Bottom back petal -->
+          <path d="M 56.5 50 C 55 57.5, 73 57.5, 71.5 50 C 67 47, 61 47, 56.5 50 Z" fill="#A80A1C" />
+        </g>
+        <!-- Front Petals: radiant brand red (#FD142B) with organic ruffled contour -->
+        <g id="petals-front">
+          <!-- Main top petal -->
+          <path
+            d="M 57 47 C 56 39.5, 61 37.5, 64 37.2 C 67 37.5, 72 39.5, 71 47 C 67.5 49.5, 60.5 49.5, 57 47 Z"
+            fill="#FD142B"
+          />
+          <!-- Highlight curve on top petal -->
+          <path
+            d="M 59.5 41 C 62 39.2, 66 39.2, 68.5 41"
+            stroke="#FF4A5C"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            fill="none"
+            opacity="0.75"
+          />
+          <!-- Main bottom petal -->
+          <path
+            d="M 56 49 C 55 56, 61 59, 64 59.2 C 67 59, 73 56, 72 49 C 68 47, 60 47, 56 49 Z"
+            fill="#FD142B"
+          />
+          <!-- Highlight curve on bottom petal -->
+          <path
+            d="M 59 56 C 62 57.6, 66 57.6, 69 56"
+            stroke="#FF4A5C"
+            stroke-width="0.9"
+            stroke-linecap="round"
+            fill="none"
+            opacity="0.75"
+          />
+          <!-- Left overlapping petal -->
+          <path
+            d="M 63 41 C 56 40.5, 53 46, 53 50 C 53 54, 57 55.5, 63 54.5 C 62 49, 62 46, 63 41 Z"
+            fill="#E01126"
+          />
+          <!-- Right overlapping petal -->
+          <path
+            d="M 65 41 C 72 40.5, 75 46, 75 50 C 75 54, 71 55.5, 65 54.5 C 66 49, 66 46, 65 41 Z"
+            fill="#E01126"
+          />
+        </g>
+        <!-- Center core: dark plum button (#2A1B2E) -->
+        <circle id="centre" cx="64" cy="48" r="3.4" fill="#2A1B2E" />
+        <!-- Subtle inner seed star/creases -->
+        <path
+          d="M 62.2 48 L 65.8 48 M 64 46.2 L 64 49.8 M 62.8 46.8 L 65.2 49.2 M 62.8 49.2 L 65.2 46.8"
+          stroke="#422C47"
+          stroke-width="0.5"
+          stroke-linecap="round"
+        />
+        <!-- Stamens: 14 delicate golden pins -->
+        <g id="stamens">
+          <circle cx="69.60" cy="48.00" r="0.75" fill="#FFD47A" />
+          <circle cx="69.05" cy="50.43" r="0.75" fill="#FFD47A" />
+          <circle cx="67.49" cy="52.38" r="0.75" fill="#FFD47A" />
+          <circle cx="65.25" cy="53.46" r="0.75" fill="#FFD47A" />
+          <circle cx="62.75" cy="53.46" r="0.75" fill="#FFD47A" />
+          <circle cx="60.51" cy="52.38" r="0.75" fill="#FFD47A" />
+          <circle cx="58.95" cy="50.43" r="0.75" fill="#FFD47A" />
+          <circle cx="58.40" cy="48.00" r="0.75" fill="#FFD47A" />
+          <circle cx="58.95" cy="45.57" r="0.75" fill="#FFD47A" />
+          <circle cx="60.51" cy="43.62" r="0.75" fill="#FFD47A" />
+          <circle cx="62.75" cy="42.54" r="0.75" fill="#FFD47A" />
+          <circle cx="65.25" cy="42.54" r="0.75" fill="#FFD47A" />
+          <circle cx="67.49" cy="43.62" r="0.75" fill="#FFD47A" />
+          <circle cx="69.05" cy="45.57" r="0.75" fill="#FFD47A" />
+        </g>
+      </g>
+    </g>
+  
+</svg>

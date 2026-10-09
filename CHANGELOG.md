@@ -2,6 +2,36 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D3 — The Dream Logo in Bloom] - 2026-10-09
+
+### Added
+- **Botanical Outlines & Clean Vector Paths (`src/themes/dream/logo/logoPaths.ts` & `scripts/generate-dream-logo.mjs`):**
+  - Downloaded official variable fonts (`Fraunces` and `Figtree`) and compiled pure cubic bezier path outlines using `opentype.js` at `opsz: 96, weight: 620, SOFT: 100, WONK: 0` (Fraunces) and `weight: 560, tracking: 1.4` (Figtree).
+  - Clean SVG paths with zero client runtime font parsing: Sprout (`#stem`, `#leaf-l`, `#leaf-r`, `#bud`, `#bud-tip`), Poppy (`#poppy-stem`, `#poppy-leaf-l`, `#poppy-leaf-r`, `#petals-back`, `#petals-front`, `#centre`, 14 `#stamens`), Wordmark, and Tagline.
+  - Corrected sketch reference issues: Expanded breathing space between "t" and poppy stem to 18.6px, and balanced spacing between poppy and "OS" to 19px.
+- **Static Vector Brand Suite (`public/brand/dream/`):**
+  - `logo-dream-day.svg` (full lockup on paper `#FFFAF0` with ink `#2B2A52`)
+  - `logo-dream-night.svg` (full lockup on night-paper `#1B1E4B` with cream `#FFF6E5`)
+  - `mark-dream.svg` & `mark-dream-night.svg` (sprout + poppy brand mark)
+  - `mark-simple.svg` (flat red rounded bar + circle dot — original brand mark)
+  - `favicon-dream.svg` & `app-icon-dream.svg` (Dream browser favicons)
+- **GSAP Bloom & Sway Animation (`src/themes/dream/logo/useBloomAnimation.ts`):**
+  - 1.6s choreographic timeline: stem stroke draw (0–0.55s), 120ms staggered leaf unfurl, bud swell, poppy overshoot, and 6-dot radial pollen burst.
+  - Seamless organic idle sway (slow sine wave with 1–2% petal breathing).
+  - Interactive hover state: 8% poppy bloom swell and floating petal shed.
+  - Reduced-motion / Calm fallback: immediately mounts static bloomed state with zero ticker loops.
+  - Session persistence: plays once per session via `sessionStorage` with manual replay capability.
+- **Adaptive Size Ladder & Components (`src/themes/dream/logo/DreamLogo.tsx`):**
+  - $\ge$ 120px: Full lockup (Sprout + "Krat" + Poppy + "OS" + Tagline).
+  - 48–120px: Sprout and poppy mark (no tagline, no wordmark; prevents letter "I" confusion).
+  - 24–48px: `mark-simple` (flat red rounded bar + circle dot).
+  - $\le$ 24px and favicon: `mark-simple`.
+- **Dynamic Logo & Favicon Routing:**
+  - `<Logo variant="auto">` in `src/components/ui/Logo.tsx`: Automatically delegates to `<DreamLogo>` when Dream theme is active while remaining 100% byte-for-byte identical in Dark and Light themes.
+  - `useFaviconSync` in `src/themes/ThemeProvider.tsx`: Synchronizes `<link rel="icon">` and `<link rel="apple-touch-icon">` across theme switches.
+- **Interactive Preview Bench (`src/app/design-system/dream/logo/page.tsx`):**
+  - Dedicated studio bench at `/design-system/dream/logo` featuring replay bloom controls, Calm toggle, 5 Sky preset backgrounds, contrast cards, complete size ladder, and side-by-side / onion skin comparison against `concept-sheet.png`.
+
 ## [Dream Theme: D2 — Design Language Tokens, Type, Primitives, and Preview Bench] - 2026-10-09
 
 ### Added

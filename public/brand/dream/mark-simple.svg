@@ -1,0 +1,14 @@
+<!-- Krat.OS Brand Mark Simple (Original Bar + Dot) -->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+  role="img"
+  aria-label="Krat.OS"
+>
+  <!-- Flat red rounded bar / caret -->
+  <rect x="18" y="10" width="7" height="44" rx="2" fill="#FD142B" />
+  <!-- Flat red circle dot -->
+  <circle cx="42" cy="48" r="5.5" fill="#FD142B" />
+</svg>
