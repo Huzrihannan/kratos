@@ -1,0 +1,53 @@
+---
+import type { Content, Locale } from '../../content';
+import PageIntro from '../PageIntro.astro';
+import Artwork from '../Artwork.astro';
+import CTA from '../CTA.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<PageIntro
+  eyebrow={t.about.eyebrow}
+  title={t.about.title}
+  body={t.about.intro}
+/>
+<section class="section about-statement">
+  <div class="container split-section">
+    <div class="about-art">
+      <Artwork />
+    </div>
+    <div>
+      <span class="quote-mark" aria-hidden="true">
+        “
+      </span>
+      <h2>{t.about.statement}</h2>
+      <p>{t.about.body}</p>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">KRATOS / {t.nav[4]}</p>
+    <h2>{t.about.valuesTitle}</h2>
+    <div class="values-grid">
+      {t.about.values.map(([title, body], i) => (
+        <article>
+          <span class="step-number">0{i + 1}</span>
+          <h3>{title}</h3>
+          <p>{body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<section class="section fit-section">
+  <div class="container split-section">
+    <h2>{t.about.teamTitle}</h2>
+    <p class="large-body">{t.about.teamBody}</p>
+  </div>
+</section>
+<CTA t={t} lang={lang} />

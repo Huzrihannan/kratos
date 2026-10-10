@@ -1,0 +1,59 @@
+---
+import type { Content, Locale } from '../content';
+import { localizedPath } from '../lib/site.mjs';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+const slugs = [
+  '',
+  'solutions',
+  'case-studies',
+  'how-we-work',
+  'about',
+  'contact',
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a href={localizedPath(lang)} aria-label={`KratOS — ${t.nav[0]}`}>
+          <Logo inverse />
+        </a>
+        <p class="linebreak">{t.footer.line}</p>
+        <span class="location">
+          <span class="status-dot"></span>
+          {t.footer.location}
+        </span>
+      </div>
+      <div>
+        <p class="footer-label">{t.footer.navigate}</p>
+        <nav aria-label={t.footer.navigate}>
+          {t.nav.map((name, i) => (
+            <a href={localizedPath(lang, slugs[i])}>{name}</a>
+          ))}
+        </nav>
+      </div>
+      <div class="footer-connect">
+        <p class="footer-label">{t.footer.connect}</p>
+        <a class="footer-talk" href={localizedPath(lang, 'contact')}>
+          {t.common.quote}
+          <Icon name="diagonal" />
+        </a>
+        <p>{t.common.local}</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>
+        © {new Date().getFullYear()} {t.common.copyright}
+      </span>
+      <a href={localizedPath(lang, 'privacy')}>{t.common.privacy}</a>
+      <a href="#top">{t.footer.top} ↑</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,31 @@
+---
+import type { Content, Locale } from '../../content';
+import PageIntro from '../PageIntro.astro';
+import Steps from '../Steps.astro';
+import FAQ from '../FAQ.astro';
+import CTA from '../CTA.astro';
+import Icon from '../Icon.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<PageIntro
+  eyebrow={t.process.eyebrow}
+  title={t.process.pageTitle}
+  body={t.process.pageBody}
+/>
+<section class="section">
+  <div class="container process-page">
+    <aside class="process-aside">
+      <Icon name="people" size={42} />
+      <h2>{t.process.aside}</h2>
+      <p>{t.process.asideBody}</p>
+    </aside>
+    <Steps t={t} full />
+  </div>
+</section>
+<FAQ t={t} />
+<CTA t={t} lang={lang} />

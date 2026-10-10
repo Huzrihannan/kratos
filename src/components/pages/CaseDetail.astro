@@ -1,0 +1,57 @@
+---
+import type { Content, Locale } from '../../content';
+import { localizedPath } from '../../lib/site.mjs';
+import PageIntro from '../PageIntro.astro';
+import CTA from '../CTA.astro';
+import Icon from '../Icon.astro';
+import ScreenExplorer from '../ScreenExplorer.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+  project: 'restaurant' | 'poultry';
+}
+const { t, lang, project } = Astro.props;
+const i = project === 'restaurant' ? 0 : 1;
+---
+
+<div class="container breadcrumb">
+  <a href={localizedPath(lang, 'case-studies')}>← {t.common.back}</a>
+</div>
+<PageIntro
+  eyebrow={t.work.types[i]}
+  title={t.work.names[i]}
+  body={t.work.descriptions[i]}
+/>
+<section class="section case-detail">
+  <div class="container">
+    <ScreenExplorer t={t} project={project} />
+    <p class="editorial-note">
+      <Icon name="plus" size={16} />
+      {t.work.pending} — {t.common.note}
+    </p>
+    <div class="case-content">
+      <aside>
+        <p class="eyebrow">{t.work.types[i]}</p>
+        <ul class="case-tags">
+          {t.work.tags[i].map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      </aside>
+      <div>
+        <h2>{t.work.detailHeads[0]}</h2>
+        <p>{t.work.detailIntro[i]}</p>
+        <h2>{t.work.detailHeads[1]}</h2>
+        <p>{t.work.detailBody}</p>
+        <h2>{t.work.detailHeads[2]}</h2>
+        <ol class="workflow-line" aria-label={t.common.illustration}>
+          {t.work.artWords[i].map((word) => (
+            <li>{word}</li>
+          ))}
+        </ol>
+        <p>{t.work.descriptions[i]}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<CTA t={t} lang={lang} />

@@ -1,0 +1,24 @@
+---
+import type { Content, Locale } from '../../content';
+import PageIntro from '../PageIntro.astro';
+import Projects from '../Projects.astro';
+import CTA from '../CTA.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<PageIntro
+  eyebrow={t.work.eyebrow}
+  title={t.work.pageTitle}
+  body={t.work.pageBody}
+/>
+<section class="section">
+  <div class="container">
+    <Projects t={t} lang={lang} />
+    <p class="editorial-note">{t.common.note}</p>
+  </div>
+</section>
+<CTA t={t} lang={lang} />

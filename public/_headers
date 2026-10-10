@@ -1,15 +1,5 @@
-# Security Headers across all routes
 /*
-  X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://plausible.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-src https://challenges.cloudflare.com https://cal.com; object-src 'none'; base-uri 'self'; form-action 'self';
-
-# Cache headers for immutable static assets
-/_next/static/*
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache headers for brand assets
-/brand/*
-  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400

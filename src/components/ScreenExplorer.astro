@@ -1,0 +1,215 @@
+---
+import type { Content } from '../content';
+import { screens } from '../lib/screens.mjs';
+import Icon from './Icon.astro';
+interface Props {
+  t: Content;
+  project?: 'restaurant' | 'poultry';
+}
+const { t, project } = Astro.props;
+const shown = screens
+  .map((screen, index) => ({ ...screen, copy: t.visual.screens[index] }))
+  .filter((screen) => !project || screen.project === project);
+const prefix = project || 'all';
+---
+
+<div class="screen-explorer" data-screen-explorer>
+  <div
+    class="screen-choices"
+    role="group"
+    aria-label={t.visual.choose}
+    data-screen-choices
+    hidden
+  >
+    {shown.map((screen, i) => (
+      <button
+        type="button"
+        data-screen-select={screen.id}
+        aria-controls={`${prefix}-${screen.id}`}
+        aria-pressed={i === 0 ? 'true' : 'false'}
+      >
+        <Icon name={screen.icon} size={22} />
+        <span>{screen.copy.label}</span>
+      </button>
+    ))}
+  </div>
+  {shown.map((screen) => (
+    <figure
+      class="screen-panel"
+      id={`${prefix}-${screen.id}`}
+      data-screen-panel={screen.id}
+      aria-labelledby={`${prefix}-${screen.id}-title`}
+    >
+      <div class="screen-stage">
+        <div class="screen-heading">
+          <span>{screen.copy.kicker}</span>
+          <span class="screen-sample">{t.visual.sample}</span>
+        </div>
+        <div class="screen-image-wrap">
+          <div
+            class="screen-image-plane"
+            style={`--screen-width: ${Math.round((screen.width / screen.height) * 530)}px`}
+          >
+            <img
+              src={screen.src}
+              width={screen.width}
+              height={screen.height}
+              alt={screen.copy.alt}
+              loading="lazy"
+            />
+            {screen.copy.cues.map(([title], i) => (
+              <button
+                type="button"
+                class="screen-pin"
+                style={`left:${screen.pins[i][0]}%;top:${screen.pins[i][1]}%`}
+                data-cue-pin={i}
+                aria-label={title}
+                aria-describedby={`${prefix}-${screen.id}-cue-${i}`}
+                aria-pressed="false"
+                hidden
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div class="screen-tools">
+          <span>{t.visual.languageNote}</span>
+          <button type="button" class="text-link" data-enlarge hidden>
+            {t.visual.enlarge}
+            <Icon name="diagonal" size={18} />
+          </button>
+        </div>
+      </div>
+      <figcaption>
+        <p class="eyebrow">{screen.copy.kicker}</p>
+        <h3 id={`${prefix}-${screen.id}-title`}>{screen.copy.title}</h3>
+        <p>{screen.copy.body}</p>
+        <p class="cue-label">{t.visual.cueLabel}</p>
+        <ol class="screen-cues">
+          {screen.copy.cues.map(([title, body], i) => (
+            <li id={`${prefix}-${screen.id}-cue-${i}`} data-cue-item={i}>
+              <span class="cue-number" aria-hidden="true">
+                {i + 1}
+              </span>
+              <div>
+                <h4>{title}</h4>
+                <p>{body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </figcaption>
+    </figure>
+  ))}
+  <dialog
+    class="screen-dialog"
+    data-screen-dialog
+    aria-labelledby={`${prefix}-dialog-title`}
+  >
+    <div class="screen-dialog-head">
+      <h2 id={`${prefix}-dialog-title`} data-dialog-title></h2>
+      <button type="button" data-close-dialog>
+        {t.visual.close}
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <img data-dialog-image alt="" />
+    <p>
+      {t.visual.sample} {t.visual.languageNote}
+    </p>
+  </dialog>
+</div>
+<script>
+  document
+    .querySelectorAll<HTMLElement>('[data-screen-explorer]')
+    .forEach((explorer) => {
+      const choices = explorer.querySelector<HTMLElement>(
+        '[data-screen-choices]',
+      )!;
+      const panels = [
+        ...explorer.querySelectorAll<HTMLElement>('[data-screen-panel]'),
+      ];
+      const buttons = [
+        ...explorer.querySelectorAll<HTMLButtonElement>('[data-screen-select]'),
+      ];
+      const dialog = explorer.querySelector<HTMLDialogElement>(
+        '[data-screen-dialog]',
+      )!;
+      const dialogImage = dialog.querySelector<HTMLImageElement>(
+        '[data-dialog-image]',
+      )!;
+      const dialogTitle = dialog.querySelector<HTMLElement>(
+        '[data-dialog-title]',
+      )!;
+      let opener: HTMLButtonElement | null = null;
+      buttons.forEach((button) =>
+        button.addEventListener('click', () => {
+          panels.forEach((panel) => {
+            panel.hidden =
+              panel.dataset.screenPanel !== button.dataset.screenSelect;
+          });
+          buttons.forEach((item) =>
+            item.setAttribute('aria-pressed', String(item === button)),
+          );
+        }),
+      );
+      panels.forEach((panel) => {
+        panel
+          .querySelectorAll<HTMLButtonElement>('[data-cue-pin]')
+          .forEach((pin) => {
+            pin.addEventListener('click', () => {
+              panel
+                .querySelectorAll<HTMLElement>('[data-cue-item]')
+                .forEach((item) =>
+                  item.classList.toggle(
+                    'is-active',
+                    item.dataset.cueItem === pin.dataset.cuePin,
+                  ),
+                );
+              panel
+                .querySelectorAll<HTMLButtonElement>('[data-cue-pin]')
+                .forEach((item) =>
+                  item.setAttribute('aria-pressed', String(item === pin)),
+                );
+            });
+            pin.hidden = false;
+          });
+      });
+      explorer
+        .querySelectorAll<HTMLButtonElement>('[data-enlarge]')
+        .forEach((button) => {
+          button.addEventListener('click', () => {
+            const panel = button.closest<HTMLElement>('[data-screen-panel]')!;
+            const source = panel.querySelector<HTMLImageElement>('img')!;
+            dialogImage.src = source.src;
+            dialogImage.alt = source.alt;
+            dialogImage.width = source.naturalWidth;
+            dialogImage.height = source.naturalHeight;
+            dialogTitle.textContent = panel.querySelector('h3')!.textContent;
+            opener = button;
+            dialog.showModal();
+          });
+          button.hidden = false;
+        });
+      dialog
+        .querySelector('[data-close-dialog]')!
+        .addEventListener('click', () => dialog.close());
+      dialog.addEventListener('close', () => opener?.focus());
+      dialog.addEventListener('click', (event) => {
+        if (event.target !== dialog) return;
+        const bounds = dialog.getBoundingClientRect();
+        if (
+          event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom
+        )
+          dialog.close();
+      });
+      panels.forEach((panel, index) => {
+        panel.hidden = index !== 0;
+      });
+      choices.hidden = buttons.length <= 1;
+    });
+</script>

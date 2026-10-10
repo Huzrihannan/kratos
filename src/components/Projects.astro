@@ -1,0 +1,47 @@
+---
+import type { Content, Locale } from '../content';
+import { localizedPath } from '../lib/site.mjs';
+import Icon from './Icon.astro';
+import { screens } from '../lib/screens.mjs';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<div class="projects-grid">
+  {(['restaurant', 'poultry'] as const).map((slug, i) => (
+    <article class="project">
+      <a
+        class="project-screen"
+        href={localizedPath(lang, 'case-studies/' + slug)}
+        aria-label={t.work.names[i]}
+      >
+        <img
+          src={screens[i].src}
+          width={screens[i].width}
+          height={screens[i].height}
+          alt={t.visual.screens[i].alt}
+          loading="lazy"
+        />
+      </a>
+      <p class="eyebrow">{t.common.preview}</p>
+      <h3>
+        <a href={localizedPath(lang, 'case-studies/' + slug)}>
+          {t.work.names[i]}
+        </a>
+      </h3>
+      <p>{t.work.descriptions[i]}</p>
+      <ol class="workflow-line" aria-label={t.common.illustration}>
+        {t.work.artWords[i].map((word) => (
+          <li>{word}</li>
+        ))}
+      </ol>
+      <a class="text-link" href={localizedPath(lang, 'case-studies/' + slug)}>
+        {t.common.learn}
+        <Icon name="arrow" size={18} />
+      </a>
+    </article>
+  ))}
+</div>

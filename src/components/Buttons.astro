@@ -1,0 +1,33 @@
+---
+import type { Content, Locale } from '../content';
+import { localizedPath, whatsappUrl } from '../lib/site.mjs';
+import Icon from './Icon.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+  secondary?: boolean;
+}
+const { t, lang, secondary = true } = Astro.props;
+const wa = whatsappUrl(import.meta.env.PUBLIC_WHATSAPP_NUMBER);
+---
+
+<div class="button-row">
+  <a
+    class="button button-primary"
+    href={wa || localizedPath(lang, 'contact')}
+    target={wa ? '_blank' : undefined}
+    rel={wa ? 'noopener noreferrer' : undefined}
+  >
+    {wa && <Icon name="whatsapp" />}
+    {wa ? t.common.whatsapp : t.common.talk}
+  </a>
+  {secondary && (
+    <a
+      class="button button-outline"
+      href={localizedPath(lang, 'contact') + '#enquiry'}
+    >
+      {t.common.quote}
+      <Icon name="arrow" size={17} />
+    </a>
+  )}
+</div>

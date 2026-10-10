@@ -1,0 +1,86 @@
+---
+import type { Content, Locale } from '../../content';
+import PageIntro from '../PageIntro.astro';
+import Icon from '../Icon.astro';
+import CTA from '../CTA.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+const icons = ['sales', 'stock', 'purchase', 'people', 'staff', 'reports'];
+const categories = [1, 1, 1, 2, 2, 3];
+---
+
+<PageIntro
+  eyebrow={t.solutions.eyebrow}
+  title={t.solutions.pageTitle}
+  body={t.solutions.pageBody}
+/>
+<section class="section module-section">
+  <div class="container">
+    <div class="filter-row" role="group" aria-label={t.solutions.filterLabel}>
+      {t.solutions.filters.map((name, i) => (
+        <button
+          class="filter-button"
+          data-filter={i}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >
+          {name}
+        </button>
+      ))}
+    </div>
+    <div class="solution-detail-grid">
+      {t.solutions.modules.map(([title, sub, body], i) => (
+        <article
+          class="solution-detail"
+          id={`module-${i}`}
+          data-category={categories[i]}
+        >
+          <div class="module-head">
+            <Icon name={icons[i]} size={32} />
+            <span>0{i + 1}</span>
+          </div>
+          <h2>{title}</h2>
+          <h3>{sub}</h3>
+          <p>{body}</p>
+        </article>
+      ))}
+    </div>
+    <p class="module-note">{t.solutions.note}</p>
+  </div>
+</section>
+<section class="section fit-section">
+  <div class="container split-section">
+    <h2>{t.solutions.fitTitle}</h2>
+    <div>
+      <p class="large-body">{t.solutions.fitBody}</p>
+      <ul class="check-list">
+        {t.solutions.fitPoints.map((p) => (
+          <li>
+            <Icon name="check" />
+            {p}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+<CTA t={t} lang={lang} />
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  filters.forEach((button) =>
+    button.addEventListener('click', () => {
+      filters.forEach((b) =>
+        b.setAttribute('aria-pressed', String(b === button)),
+      );
+      document
+        .querySelectorAll<HTMLElement>('[data-category]')
+        .forEach((card) => {
+          card.hidden =
+            button.dataset.filter !== '0' &&
+            card.dataset.category !== button.dataset.filter;
+        });
+    }),
+  );
+</script>

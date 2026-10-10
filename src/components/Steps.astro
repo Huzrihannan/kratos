@@ -1,0 +1,23 @@
+---
+import type { Content } from '../content';
+interface Props {
+  t: Content;
+  full?: boolean;
+}
+const { t, full = false } = Astro.props;
+---
+
+<ol class:list={['steps', { 'steps-full': full }]}>
+  {t.process.steps.map(([title, body], i) => (
+    <li>
+      <span class="step-number">0{i + 1}</span>
+      <div>
+        <h3>{title}</h3>
+        <p>{body}</p>
+        <p class="step-outcome">
+          <span>{t.process.outcomesLabel}:</span> {t.process.outcomes[i]}
+        </p>
+      </div>
+    </li>
+  ))}
+</ol>

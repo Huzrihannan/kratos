@@ -1,0 +1,73 @@
+---
+import type { Content, Locale } from '../../content';
+import { whatsappUrl } from '../../lib/site.mjs';
+import PageIntro from '../PageIntro.astro';
+import Icon from '../Icon.astro';
+import EnquiryForm from '../EnquiryForm.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+const wa = whatsappUrl(import.meta.env.PUBLIC_WHATSAPP_NUMBER);
+const phone = import.meta.env.PUBLIC_PHONE || '';
+const email = import.meta.env.PUBLIC_EMAIL || '';
+const channels = [
+  {
+    icon: 'whatsapp',
+    label: t.contact.channels[0],
+    value: import.meta.env.PUBLIC_WHATSAPP_NUMBER || '',
+    href: wa,
+  },
+  {
+    icon: 'phone',
+    label: t.contact.channels[1],
+    value: phone,
+    href: phone ? 'tel:' + phone.replace(/[^+\d]/g, '') : null,
+  },
+  {
+    icon: 'mail',
+    label: t.contact.channels[2],
+    value: email,
+    href: email ? 'mailto:' + email : null,
+  },
+];
+---
+
+<PageIntro
+  eyebrow={t.contact.eyebrow}
+  title={t.contact.title}
+  body={t.contact.body}
+/>
+<section class="section">
+  <div class="container contact-grid">
+    <aside class="contact-aside">
+      <p class="eyebrow">{t.footer.connect}</p>
+      {channels.map((channel) => (
+        <div class="contact-channel">
+          <Icon name={channel.icon} size={24} />
+          <div>
+            <h2>{channel.label}</h2>
+            {channel.href ? (
+              <a
+                href={channel.href}
+                target={channel.icon === 'whatsapp' ? '_blank' : undefined}
+                rel="noopener noreferrer"
+              >
+                {channel.value}
+                <Icon name="diagonal" size={16} />
+              </a>
+            ) : (
+              <p>{t.contact.unavailable}</p>
+            )}
+          </div>
+        </div>
+      ))}
+      <p class="contact-local">
+        <span class="status-dot"></span>
+        {t.common.local}
+      </p>
+    </aside>
+    <EnquiryForm t={t} lang={lang} />
+  </div>
+</section>

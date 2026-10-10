@@ -1,0 +1,27 @@
+---
+import type { Content } from '../content';
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+---
+
+<section class="section faq-section">
+  <div class="container split-section">
+    <div>
+      <p class="eyebrow">{t.faq.eyebrow}</p>
+      <h2>{t.faq.title}</h2>
+    </div>
+    <div class="faq-list">
+      {t.faq.items.map(([q, a]) => (
+        <details>
+          <summary>
+            {q}
+            <span aria-hidden="true">+</span>
+          </summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

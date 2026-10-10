@@ -1,0 +1,92 @@
+---
+import type { Content, Locale } from '../content';
+import { localizedPath, whatsappUrl } from '../lib/site.mjs';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/global.css';
+import '../styles/visual-work.css';
+import '@fontsource/manrope/latin-400.css';
+import '@fontsource/manrope/latin-500.css';
+import '@fontsource/manrope/latin-600.css';
+import '@fontsource/manrope/latin-700.css';
+import '@fontsource/manrope/latin-800.css';
+import '@fontsource/noto-sans-sinhala/sinhala-400.css';
+import '@fontsource/noto-sans-sinhala/sinhala-600.css';
+import '@fontsource/noto-sans-tamil/tamil-400.css';
+import '@fontsource/noto-sans-tamil/tamil-600.css';
+interface Props {
+  t: Content;
+  lang: Locale;
+  slug?: string;
+  title?: string;
+}
+const { t, lang, slug = '', title = t.title } = Astro.props;
+const canonical = new URL(localizedPath(lang, slug), Astro.site);
+const wa = whatsappUrl(import.meta.env.PUBLIC_WHATSAPP_NUMBER);
+const approved = import.meta.env.PUBLIC_SITE_APPROVED === 'true';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title.replaceAll('\n',' ')} | KratOS</title>
+    <meta name="description" content={t.description} />
+    <meta name="theme-color" content="#f8f7f3" />
+    <meta
+      name="robots"
+      content={approved ? 'index,follow' : 'noindex,nofollow'}
+    />
+    <link rel="canonical" href={canonical} />
+    {(['en', 'si', 'ta'] as const).map((code) => (
+      <link
+        rel="alternate"
+        hreflang={code}
+        href={new URL(localizedPath(code, slug), Astro.site)}
+      />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(localizedPath('en', slug), Astro.site)}
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta
+      property="og:title"
+      content={`${title.replaceAll('\n', ' ')} | KratOS`}
+    />
+    <meta property="og:description" content={t.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta
+      property="og:locale"
+      content={{ en: 'en_LK', si: 'si_LK', ta: 'ta_LK' }[lang]}
+    />
+    <meta
+      property="og:image"
+      content={new URL('/images/brand-reference.jpg', Astro.site)}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">
+      {t.common.skip}
+    </a>
+    <Header t={t} lang={lang} slug={slug} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer t={t} lang={lang} />
+    <a
+      class="mobile-action"
+      href={wa || localizedPath(lang, 'contact')}
+      target={wa ? '_blank' : undefined}
+      rel={wa ? 'noopener noreferrer' : undefined}
+    >
+      {wa && <Icon name="whatsapp" />}
+      {wa ? t.common.whatsapp : t.common.talk}
+    </a>
+  </body>
+</html>

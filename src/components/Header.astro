@@ -1,0 +1,121 @@
+---
+import type { Content, Locale } from '../content';
+import { localizedPath, whatsappUrl } from '../lib/site.mjs';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+  slug: string;
+}
+const { t, lang, slug } = Astro.props;
+const slugs = [
+  '',
+  'solutions',
+  'case-studies',
+  'how-we-work',
+  'about',
+  'contact',
+];
+const whatsapp = whatsappUrl(import.meta.env.PUBLIC_WHATSAPP_NUMBER);
+---
+
+<header class="site-header" id="top">
+  <div class="header-inner container">
+    <a
+      href={localizedPath(lang)}
+      class="logo-link"
+      aria-label={`KratOS — ${t.nav[0]}`}
+    >
+      <Logo />
+    </a>
+    <nav class="desktop-nav" aria-label={t.footer.navigate}>
+      {t.nav.slice(0, 5).map((name, i) => (
+        <a
+          href={localizedPath(lang, slugs[i])}
+          aria-current={
+            (i === 0 ? !slug : slug.startsWith(slugs[i])) ? 'page' : undefined
+          }
+        >
+          {name}
+        </a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <nav class="languages" aria-label={t.common.language}>
+        {(['en', 'si', 'ta'] as Locale[]).map((code, i) => (
+          <a
+            href={localizedPath(code, slug)}
+            lang={code}
+            aria-label={['English', 'සිංහල', 'தமிழ்'][i]}
+            aria-current={lang === code ? 'true' : undefined}
+          >
+            {['EN', 'සිං', 'தமிழ்'][i]}
+          </a>
+        ))}
+      </nav>
+      <a
+        class="header-contact"
+        href={whatsapp || localizedPath(lang, 'contact')}
+        target={whatsapp ? '_blank' : undefined}
+        rel={whatsapp ? 'noopener noreferrer' : undefined}
+      >
+        {t.nav[5]} <Icon name="diagonal" size={16} />
+      </a>
+      <button
+        class="menu-toggle"
+        aria-label={t.common.menu}
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-open={t.common.menu}
+        data-close={t.common.close}
+      >
+        <Icon name="menu" />
+      </button>
+    </div>
+  </div>
+  <nav
+    id="mobile-nav"
+    class="mobile-nav container"
+    aria-label={t.common.menu}
+    hidden
+  >
+    {t.nav.map((name, i) => (
+      <a
+        href={localizedPath(lang, slugs[i])}
+        aria-current={slug === slugs[i] ? 'page' : undefined}
+      >
+        <span>{name}</span>
+        <Icon name="diagonal" />
+      </a>
+    ))}
+  </nav>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.getElementById('mobile-nav');
+  function setOpen(open: boolean) {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute(
+      'aria-label',
+      (open ? toggle.dataset.close : toggle.dataset.open) || '',
+    );
+    menu.hidden = !open;
+  }
+  toggle?.addEventListener('click', () =>
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true'),
+  );
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key === 'Escape' &&
+      toggle?.getAttribute('aria-expanded') === 'true'
+    ) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+  matchMedia('(min-width: 1250px)').addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>

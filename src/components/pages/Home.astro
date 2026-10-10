@@ -1,0 +1,157 @@
+---
+import type { Content, Locale } from '../../content';
+import { localizedPath } from '../../lib/site.mjs';
+import Artwork from '../Artwork.astro';
+import Buttons from '../Buttons.astro';
+import Icon from '../Icon.astro';
+import Projects from '../Projects.astro';
+import ProcessOverview from '../ProcessOverview.astro';
+import ScreenExplorer from '../ScreenExplorer.astro';
+import { dashboard } from '../../lib/screens.mjs';
+import FAQ from '../FAQ.astro';
+import CTA from '../CTA.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">{t.hero.eyebrow}</p>
+      <h1>
+        {t.hero.line1}
+        <br />
+        {t.hero.line2}
+      </h1>
+      <p class="hero-body">{t.hero.body}</p>
+      <Buttons t={t} lang={lang} />
+      <p class="hero-foot">{t.hero.foot}</p>
+    </div>
+    <figure class="hero-software">
+      <div class="hero-screen">
+        <img
+          src={dashboard.src}
+          width={dashboard.width}
+          height={dashboard.height}
+          alt={t.visual.heroCaption}
+          fetchpriority="high"
+        />
+      </div>
+      <figcaption>
+        <div class="hero-brand-mark">
+          <Artwork />
+        </div>
+        <div>
+          <strong>{t.visual.heroCaption}</strong>
+          <span>{t.visual.sample}</span>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="container hero-bottom">
+    <span>{t.common.local}</span>
+    <a href="#services">
+      {t.hero.scroll}
+      <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>
+<section class="section solution-section" id="services">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{t.solutions.eyebrow}</p>
+        <h2 class="linebreak">{t.solutions.title}</h2>
+      </div>
+      <p>{t.solutions.body}</p>
+    </div>
+    <div class="service-cues">
+      {[0, 1, 5].map((i) => (
+        <a href={localizedPath(lang, 'solutions') + '#module-' + i}>
+          <div class="service-symbol">
+            <Icon
+              name={['sales', 'stock', '', '', '', 'reports'][i]}
+              size={32}
+            />
+          </div>
+          <h3>{t.solutions.modules[i][0]}</h3>
+          <p>{t.solutions.modules[i][1]}</p>
+          <Icon name="arrow" size={18} />
+        </a>
+      ))}
+    </div>
+    <div class="section-foot">
+      <p>{t.solutions.note}</p>
+      <a class="text-link" href={localizedPath(lang, 'solutions')}>
+        {t.common.explore}
+        <Icon name="arrow" />
+      </a>
+    </div>
+  </div>
+</section>
+<section class="section software-section" id="software">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{t.visual.eyebrow}</p>
+        <h2 class="linebreak">{t.visual.title}</h2>
+      </div>
+      <p>{t.visual.body}</p>
+    </div>
+    <ScreenExplorer t={t} />
+  </div>
+</section>
+<section class="section process-section">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{t.process.eyebrow}</p>
+        <h2 class="linebreak">{t.process.title}</h2>
+      </div>
+      <div>
+        <p>{t.process.body}</p>
+        <a class="text-link" href={localizedPath(lang, 'how-we-work')}>
+          {t.nav[3]}
+          <Icon name="arrow" />
+        </a>
+      </div>
+    </div>
+    <ProcessOverview t={t} />
+  </div>
+</section>
+<section class="section examples-section">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">{t.work.eyebrow}</p>
+        <h2 class="linebreak">{t.work.title}</h2>
+      </div>
+      <p>{t.work.body}</p>
+    </div>
+    <Projects t={t} lang={lang} />
+  </div>
+</section>
+<section class="section support-section">
+  <div class="container split-section">
+    <div>
+      <p class="eyebrow">{t.support.eyebrow}</p>
+      <h2 class="linebreak">{t.support.title}</h2>
+    </div>
+    <div>
+      <p class="large-body">{t.support.body}</p>
+      <ul class="check-list">
+        {t.support.items.map((item) => (
+          <li>
+            <Icon name="check" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+<FAQ t={t} />
+<CTA t={t} lang={lang} />

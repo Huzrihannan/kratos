@@ -1,0 +1,216 @@
+---
+import type { Content, Locale } from '../content';
+import Icon from './Icon.astro';
+import { localizedPath } from '../lib/site.mjs';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+const c = t.contact;
+---
+
+<div
+  class="enquiry-panel"
+  id="enquiry"
+  data-enquiry
+  data-translations={JSON.stringify(c)}
+  data-phone={import.meta.env.PUBLIC_WHATSAPP_NUMBER || ''}
+>
+  <p class="eyebrow">{t.common.quote}</p>
+  <h2>{c.formTitle}</h2>
+  <p>{c.formBody}</p>
+  <p class="draft-notice">{c.draftNotice}</p>
+  <noscript>
+    <p class="draft-notice">{c.noJs}</p>
+  </noscript>
+  <form novalidate data-enquiry-form method="dialog">
+    <fieldset disabled data-form-fields>
+      <div class="form-grid">
+        {(['name', 'business', 'phone', 'email'] as const).map((field) => (
+          <div class="field">
+            <label for={field}>
+              {c[field]}
+              {field === 'email' ? (
+                <span> ({t.common.optional})</span>
+              ) : (
+                <span aria-hidden="true"> *</span>
+              )}
+            </label>
+            <input
+              id={field}
+              name={field}
+              type={
+                field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'
+              }
+              autocomplete={
+                {
+                  name: 'name',
+                  business: 'organization',
+                  phone: 'tel',
+                  email: 'email',
+                }[field]
+              }
+              required={field !== 'email'}
+              maxlength={field === 'email' ? 254 : field === 'phone' ? 30 : 120}
+              aria-describedby={`${field}-error`}
+            />
+            <span
+              class="field-error"
+              id={`${field}-error`}
+              aria-live="polite"
+            ></span>
+          </div>
+        ))}
+      </div>
+      <div class="field">
+        <label for="type">
+          {c.type} <span>({t.common.optional})</span>
+        </label>
+        <select id="type" name="type">
+          <option value="">{c.choose}</option>
+          {[...t.industries, c.other].map((type) => (
+            <option value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">
+          {c.message}
+          <span aria-hidden="true"> *</span>
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          minlength="10"
+          maxlength="3000"
+          placeholder={c.placeholder}
+          required
+          aria-describedby="message-error"
+        ></textarea>
+        <span class="field-error" id="message-error" aria-live="polite"></span>
+      </div>
+      <button class="button button-primary" type="submit">
+        {c.submit}
+        <Icon name="arrow" />
+      </button>
+      <p class="form-hint">
+        {c.hint} <a href={localizedPath(lang, 'privacy')}>{t.common.privacy}</a>
+      </p>
+    </fieldset>
+  </form>
+  <section class="enquiry-result" data-result hidden tabindex="-1">
+    <h3>{c.review}</h3>
+    <p class="draft-notice">{c.notSent}</p>
+    <pre data-draft></pre>
+    <div class="button-row">
+      <button type="button" class="button button-primary" data-copy>
+        {c.copy}
+      </button>
+      <button type="button" class="button button-outline" data-download>
+        {c.download}
+      </button>
+    </div>
+    <p role="status" data-status></p>
+    <a
+      class="button button-primary"
+      data-send
+      hidden
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {c.send}
+      <Icon name="diagonal" />
+    </a>
+    <p data-send-note hidden>
+      {c.sendNote}
+    </p>
+    <button type="button" class="text-link" data-edit>
+      {c.edit} ←
+    </button>
+  </section>
+</div>
+<script>
+  import { validateEnquiry } from '../lib/enquiry.mjs';
+  import { whatsappUrl } from '../lib/site.mjs';
+  import type { Content } from '../content';
+  const panel = document.querySelector<HTMLElement>('[data-enquiry]');
+  if (panel) {
+    const form = panel.querySelector<HTMLFormElement>('form')!;
+    const result = panel.querySelector<HTMLElement>('[data-result]')!;
+    const copy = panel.querySelector<HTMLButtonElement>('[data-copy]')!;
+    const status = panel.querySelector<HTMLElement>('[data-status]')!;
+    const c = JSON.parse(panel.dataset.translations!) as Content['contact'];
+    let draft = '';
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const { errors, values } = validateEnquiry(
+        Object.fromEntries(new FormData(form)),
+      );
+      form
+        .querySelectorAll<HTMLElement>('[aria-invalid]')
+        .forEach((el) => el.removeAttribute('aria-invalid'));
+      form
+        .querySelectorAll<HTMLElement>('.field-error')
+        .forEach((el) => (el.textContent = ''));
+      const entries = Object.entries(errors) as [
+        string,
+        keyof typeof c.errors,
+      ][];
+      if (entries.length) {
+        entries.forEach(([field, code]) => {
+          const input = form.elements.namedItem(field) as HTMLElement;
+          input?.setAttribute('aria-invalid', 'true');
+          const error = document.getElementById(field + '-error');
+          if (error) error.textContent = c.errors[code];
+        });
+        (form.elements.namedItem(entries[0][0]) as HTMLElement)?.focus();
+        return;
+      }
+      draft = [
+        `KratOS — ${c.formTitle}`,
+        ...(['name', 'business', 'phone', 'email', 'type', 'message'] as const)
+          .filter((key) => values[key])
+          .map((key) => `${c[key]}: ${values[key]}`),
+      ].join('\n\n');
+      panel.querySelector<HTMLElement>('[data-draft]')!.textContent = draft;
+      const url = whatsappUrl(panel.dataset.phone, draft);
+      const send = panel.querySelector<HTMLAnchorElement>('[data-send]')!;
+      send.hidden = !url;
+      if (url) send.href = url;
+      panel.querySelector<HTMLElement>('[data-send-note]')!.hidden = !url;
+      form.hidden = true;
+      result.hidden = false;
+      status.textContent = '';
+      result.focus();
+    });
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(draft);
+        status.textContent = c.copied;
+      } catch {
+        status.textContent = c.copyFailed;
+      }
+    });
+    panel.querySelector('[data-download]')?.addEventListener('click', () => {
+      const url = URL.createObjectURL(
+        new Blob([draft], { type: 'text/plain;charset=utf-8' }),
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'kratos-enquiry.txt';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    panel.querySelector('[data-edit]')?.addEventListener('click', () => {
+      result.hidden = true;
+      form.hidden = false;
+      form.querySelector<HTMLInputElement>('input')?.focus();
+    });
+    form.querySelector<HTMLFieldSetElement>('[data-form-fields]')!.disabled =
+      false;
+  }
+</script>

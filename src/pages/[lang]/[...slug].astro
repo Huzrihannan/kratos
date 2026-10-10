@@ -1,0 +1,48 @@
+---
+import { content, type Locale } from '../../content';
+import { locales, pages } from '../../lib/site.mjs';
+import Layout from '../../layouts/Layout.astro';
+import Home from '../../components/pages/Home.astro';
+import Solutions from '../../components/pages/Solutions.astro';
+import CaseStudies from '../../components/pages/CaseStudies.astro';
+import CaseDetail from '../../components/pages/CaseDetail.astro';
+import Process from '../../components/pages/Process.astro';
+import About from '../../components/pages/About.astro';
+import Contact from '../../components/pages/Contact.astro';
+import Privacy from '../../components/pages/Privacy.astro';
+export function getStaticPaths() {
+  return locales.flatMap((lang) =>
+    pages.map((slug) => ({ params: { lang, slug: slug || undefined } })),
+  );
+}
+const lang = Astro.params.lang as Locale;
+const slug = Astro.params.slug || '';
+const t = content[lang];
+const titles: Record<string, string> = {
+  '': t.title,
+  solutions: t.nav[1],
+  'case-studies': t.nav[2],
+  'case-studies/restaurant': t.work.names[0],
+  'case-studies/poultry': t.work.names[1],
+  'how-we-work': t.nav[3],
+  about: t.nav[4],
+  contact: t.nav[5],
+  privacy: t.common.privacy,
+};
+---
+
+<Layout t={t} lang={lang} slug={slug} title={titles[slug]}>
+  {slug === '' && <Home t={t} lang={lang} />}
+  {slug === 'solutions' && <Solutions t={t} lang={lang} />}
+  {slug === 'case-studies' && <CaseStudies t={t} lang={lang} />}
+  {slug === 'case-studies/restaurant' && (
+    <CaseDetail t={t} lang={lang} project="restaurant" />
+  )}
+  {slug === 'case-studies/poultry' && (
+    <CaseDetail t={t} lang={lang} project="poultry" />
+  )}
+  {slug === 'how-we-work' && <Process t={t} lang={lang} />}
+  {slug === 'about' && <About t={t} lang={lang} />}
+  {slug === 'contact' && <Contact t={t} lang={lang} />}
+  {slug === 'privacy' && <Privacy t={t} />}
+</Layout>

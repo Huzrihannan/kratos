@@ -1,0 +1,16 @@
+---
+interface Props {
+  inverse?: boolean;
+}
+const { inverse = false } = Astro.props;
+---
+
+<span class:list={['brand', { 'brand-inverse': inverse }]}>
+  <img
+    src="/images/brand-reference.jpg"
+    alt="KratOS Software Solutions"
+    width="1080"
+    height="1080"
+    fetchpriority="high"
+  />
+</span>

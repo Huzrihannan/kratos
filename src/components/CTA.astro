@@ -1,0 +1,21 @@
+---
+import type { Content, Locale } from '../content';
+import Buttons from './Buttons.astro';
+interface Props {
+  t: Content;
+  lang: Locale;
+}
+const { t, lang } = Astro.props;
+---
+
+<section class="cta-section section">
+  <div class="container cta-inner">
+    <div>
+      <p class="eyebrow">{t.cta.eyebrow}</p>
+      <h2 class="linebreak">{t.cta.title}</h2>
+      <p>{t.cta.body}</p>
+      <Buttons t={t} lang={lang} />
+      <span class="cta-foot">{t.cta.foot}</span>
+    </div>
+  </div>
+</section>

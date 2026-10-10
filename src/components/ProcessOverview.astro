@@ -1,0 +1,23 @@
+---
+import type { Content } from '../content';
+import Icon from './Icon.astro';
+interface Props {
+  t: Content;
+}
+const { t } = Astro.props;
+const icons = ['people', 'staff', 'sales'];
+---
+
+<ol class="process-overview">
+  {t.process.phases.map(([title, body, outcome], i) => (
+    <li>
+      <div class="process-picture">
+        <Icon name={icons[i]} size={40} />
+        <span>{i + 1}</span>
+      </div>
+      <h3>{title}</h3>
+      <p>{body}</p>
+      <strong class="process-output">{outcome}</strong>
+    </li>
+  ))}
+</ol>
