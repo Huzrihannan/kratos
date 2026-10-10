@@ -114,8 +114,11 @@ async function run() {
 
     // Advance to Step 2
     await evalInPage(ws, `
-      const nextBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('Next') || b.innerText.includes('Continue'));
-      if (nextBtn) nextBtn.click();
+      const nextBtn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.toLowerCase().includes('continue') && !b.innerText.toLowerCase().includes('estimate'));
+      if (nextBtn) {
+        nextBtn.scrollIntoView();
+        nextBtn.click();
+      }
     `);
     await new Promise((r) => setTimeout(r, 600));
 

@@ -2,6 +2,7 @@ export interface ProjectTypeOption {
   id: string;
   label: string;
   description: string;
+  hint?: string;
   basePriceMin: number;
   basePriceMax: number;
   baseWeeksMin: number;
@@ -13,6 +14,7 @@ export interface NeedOption {
   id: string;
   label: string;
   description: string;
+  hint?: string;
   multiplier: number;
   iconName: string;
 }
@@ -21,6 +23,7 @@ export interface TimelineOption {
   id: string;
   label: string;
   description: string;
+  hint?: string;
   multiplier: number;
   rushWeeksMultiplier: number;
 }
@@ -28,6 +31,7 @@ export interface TimelineOption {
 export interface BudgetBandOption {
   id: string;
   label: string;
+  hint?: string;
   min?: number;
   max?: number;
   isCustom?: boolean;
@@ -53,6 +57,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "website",
       label: "Marketing Website",
       description: "High-converting brand site or landing pages",
+      hint: "A fast, beautifully crafted site designed to showcase your brand and turn visitors into enquiries.",
       basePriceMin: 4500,
       basePriceMax: 8500,
       baseWeeksMin: 2,
@@ -63,6 +68,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "webapp",
       label: "Web App / SaaS",
       description: "Custom platform, dashboard, or portal with user auth",
+      hint: "Custom software that clients, teams, or customers log into directly through their web browser.",
       basePriceMin: 12000,
       basePriceMax: 24000,
       baseWeeksMin: 6,
@@ -73,6 +79,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "mobile",
       label: "Mobile App",
       description: "Native or cross-platform iOS & Android application",
+      hint: "An iOS and Android application that customers install from the App Store or Google Play.",
       basePriceMin: 15000,
       basePriceMax: 30000,
       baseWeeksMin: 8,
@@ -83,6 +90,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "ecommerce",
       label: "E-Commerce",
       description: "Storefront, payments, inventory, and custom checkout",
+      hint: "An online store with shopping carts, product catalogs, customer accounts, and secure checkout.",
       basePriceMin: 8000,
       basePriceMax: 18000,
       baseWeeksMin: 4,
@@ -93,6 +101,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "ai_automation",
       label: "AI / Smart Automation",
       description: "Internal tooling, AI workflows, API integrations",
+      hint: "Smart background workflows, automated data processing, and custom AI tools that save hours of manual work.",
       basePriceMin: 7500,
       basePriceMax: 16000,
       baseWeeksMin: 3,
@@ -103,6 +112,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "custom",
       label: "Something Else",
       description: "Specialized architectures, migrations, or custom builds",
+      hint: "Tailored software solutions for unique business workflows, migrations, or custom architectures.",
       basePriceMin: 9000,
       basePriceMax: 20000,
       baseWeeksMin: 4,
@@ -116,6 +126,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "design",
       label: "UI/UX Design",
       description: "Wireframes, high-fidelity prototypes, brand styling",
+      hint: "Wireframes, typography, layouts, and complete user-friendly visual styling before building.",
       multiplier: 1.15,
       iconName: "Palette",
     },
@@ -123,6 +134,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "dev",
       label: "Full-Stack Development",
       description: "Frontend, backend APIs, database architecture",
+      hint: "Clean, robust programming that brings your interface to life and connects to databases.",
       multiplier: 1.25,
       iconName: "Code2",
     },
@@ -130,6 +142,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "integrations",
       label: "Integrations & APIs",
       description: "Stripe, CRM, third-party services, webhooks",
+      hint: "Connecting external tools like payment gateways, email marketing, CRMs, or accounting.",
       multiplier: 1.1,
       iconName: "Workflow",
     },
@@ -137,6 +150,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "devops",
       label: "Hosting & DevOps",
       description: "CI/CD pipelines, DNS, security, serverless setup",
+      hint: "High-speed global cloud hosting, automated deployment pipelines, security, and domain setup.",
       multiplier: 1.08,
       iconName: "Cloud",
     },
@@ -144,6 +158,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "maintenance",
       label: "Maintenance & Support",
       description: "Ongoing updates, monitoring, performance tuning",
+      hint: "Post-launch updates, dependency management, security patches, and performance checks.",
       multiplier: 1.12,
       iconName: "ShieldCheck",
     },
@@ -151,6 +166,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "consulting",
       label: "Not sure yet",
       description: "Need technical guidance to define the scope",
+      hint: "Collaborative discovery sessions to clarify your technical roadmap and feature scope.",
       multiplier: 1.0,
       iconName: "HelpCircle",
     },
@@ -162,6 +178,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "design",
         label: "Brand & UI/UX Design",
         description: "Visual identity, copywriting support, animations",
+        hint: "Custom visual identity, wireframes, and responsive layouts tailored to your brand.",
         multiplier: 1.15,
         iconName: "Palette",
       },
@@ -169,6 +186,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "dev",
         label: "Responsive Development",
         description: "Next.js, Tailwind, SEO optimization, smooth scroll",
+        hint: "Lightweight, lightning-fast web engineering built with Next.js and Tailwind CSS.",
         multiplier: 1.2,
         iconName: "Code2",
       },
@@ -176,6 +194,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "cms",
         label: "CMS Integration",
         description: "Easy content updates for your marketing team",
+        hint: "An easy administrative dashboard so your team can publish blog posts and edit copy without code.",
         multiplier: 1.12,
         iconName: "FileText",
       },
@@ -183,6 +202,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "devops",
         label: "Hosting & Analytics",
         description: "Custom domain, fast CDN, privacy-friendly analytics",
+        hint: "Fast global CDN hosting, SSL certificates, privacy analytics, and custom domain setup.",
         multiplier: 1.06,
         iconName: "Cloud",
       },
@@ -190,6 +210,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "maintenance",
         label: "Ongoing Support",
         description: "Monthly maintenance and content refreshes",
+        hint: "Continuous uptime monitoring, minor copy updates, and software library patches.",
         multiplier: 1.1,
         iconName: "ShieldCheck",
       },
@@ -197,6 +218,7 @@ export const estimatorConfig: EstimatorConfig = {
         id: "consulting",
         label: "Not sure yet",
         description: "Help me figure out the right setup",
+        hint: "Strategic advice on messaging structure, site architecture, and tech choices.",
         multiplier: 1.0,
         iconName: "HelpCircle",
       },
@@ -208,6 +230,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "asap",
       label: "ASAP",
       description: "Fast-track sprint (< 1 month)",
+      hint: "High-priority dedicated development sprint targeting rapid market launch in under 4 weeks.",
       multiplier: 1.2,
       rushWeeksMultiplier: 0.65,
     },
@@ -215,6 +238,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "1_3_months",
       label: "1–3 Months",
       description: "Standard production pace",
+      hint: "Comfortable standard pace allowing thoughtful review cycles and comprehensive testing.",
       multiplier: 1.0,
       rushWeeksMultiplier: 1.0,
     },
@@ -222,6 +246,7 @@ export const estimatorConfig: EstimatorConfig = {
       id: "3_6_months",
       label: "3–6 Months",
       description: "Flexible, phased milestone launch",
+      hint: "Phased multi-milestone rollout ideal for larger platforms with extensive feature sets.",
       multiplier: 0.95,
       rushWeeksMultiplier: 1.4,
     },
@@ -229,17 +254,46 @@ export const estimatorConfig: EstimatorConfig = {
       id: "exploring",
       label: "Just Exploring",
       description: "Gathering estimates for upcoming quarter",
+      hint: "Early feasibility planning and budgeting for an upcoming quarter or investment round.",
       multiplier: 1.0,
       rushWeeksMultiplier: 1.0,
     },
   ],
 
   budgetBands: [
-    { id: "5k_10k", label: "$5,000 – $10,000", min: 5000, max: 10000 },
-    { id: "10k_25k", label: "$10,000 – $25,000", min: 10000, max: 25000 },
-    { id: "25k_50k", label: "$25,000 – $50,000", min: 25000, max: 50000 },
-    { id: "50k_plus", label: "$50,000+", min: 50000 },
-    { id: "not_sure", label: "Not sure, advise me", isCustom: true },
+    {
+      id: "5k_10k",
+      label: "$5,000 – $10,000",
+      hint: "Best suited for focused marketing websites, landing systems, or scoped interactive audits.",
+      min: 5000,
+      max: 10000,
+    },
+    {
+      id: "10k_25k",
+      label: "$10,000 – $25,000",
+      hint: "Ideal for comprehensive websites, customer portals, or initial software MVPs.",
+      min: 10000,
+      max: 25000,
+    },
+    {
+      id: "25k_50k",
+      label: "$25,000 – $50,000",
+      hint: "Designed for full-featured web applications, native mobile apps, or custom platforms.",
+      min: 25000,
+      max: 50000,
+    },
+    {
+      id: "50k_plus",
+      label: "$50,000+",
+      hint: "For multi-platform systems, enterprise workflows, or extensive custom AI platforms.",
+      min: 50000,
+    },
+    {
+      id: "not_sure",
+      label: "Not sure, advise me",
+      hint: "We will review your goals and suggest a realistic, phased milestone budget.",
+      isCustom: true,
+    },
   ],
 };
 

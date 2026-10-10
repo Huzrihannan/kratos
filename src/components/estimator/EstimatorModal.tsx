@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/themes/ThemeProvider";
 import { useLayoutModal } from "@/lib/modal-context";
 import { useMotionLevel } from "@/lib/motion/MotionContext";
 import { EstimatorWizard } from "@/components/estimator/EstimatorWizard";
@@ -10,6 +11,8 @@ export function EstimatorModal() {
   const { isEstimatorOpen, closeEstimator } = useLayoutModal();
   const { isOff } = useMotionLevel();
   const modalRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
+  const isDream = theme === "dream";
 
   // Lock body scroll and handle Escape key to close modal
   useEffect(() => {
@@ -40,8 +43,10 @@ export function EstimatorModal() {
           ref={modalRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Interactive Project Estimator Configurator"
-          className="fixed inset-0 z-50 overflow-y-auto bg-bg/95 backdrop-blur-md flex flex-col items-center justify-start sm:justify-center p-2 sm:p-4 md:p-6"
+          aria-label={isDream ? "Interactive Project Garden Builder" : "Interactive Project Estimator Configurator"}
+          className={`fixed inset-0 z-50 overflow-y-auto backdrop-blur-md flex flex-col items-center justify-start sm:justify-center p-2 sm:p-4 md:p-6 ${
+            isDream ? "bg-[#1B1E4B]/80" : "bg-bg/95"
+          }`}
         >
           {/* Backdrop click handler */}
           <div
@@ -58,7 +63,11 @@ export function EstimatorModal() {
               duration: 0.2,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="w-full my-auto max-w-6xl bg-bg border border-line rounded-[2px] shadow-2xl overflow-hidden"
+            className={`w-full my-auto max-w-6xl shadow-2xl overflow-hidden ${
+              isDream
+                ? "bg-[var(--dream-paper,#FFFAF0)] border border-[var(--dream-paper-2,#FFF1DC)] rounded-[32px]"
+                : "bg-bg border border-line rounded-[2px]"
+            }`}
           >
             <EstimatorWizard onClose={closeEstimator} isModal={true} />
           </motion.div>

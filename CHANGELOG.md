@@ -2,6 +2,38 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D10 — The Estimator Becomes a Garden Builder] - 2026-10-10
+
+### Added
+- **Plain-Language Client Hints (`src/content/estimator-config.ts`):**
+  - Added typed `hint?: string` to `ProjectTypeOption`, `NeedOption`, `TimelineOption`, and `BudgetBandOption`.
+  - Added non-technical, client-friendly explanation hints across all project architectures, capabilities, timeline pacing options, and budget investment bands.
+- **Tactile Paper Option Cards (`src/themes/dream/estimator/SeedOptionCard.tsx`):**
+  - Warm paper card with rounded pebble corners (`rounded-[24px]`), warm borders, and soft elevation shadows.
+  - Large illustrated category icons in soft circular tags, bold Fraunces titles, and plain-English client hints prefixed with a green sprout emoji (`🌱`).
+  - Full keyboard accessibility (`Enter` / `Space` activation), ARIA checkbox/radio roles, and guaranteed $\ge 52\text{px}$ touch targets.
+- **Living Garden Plot Visualization (`src/themes/dream/estimator/GardenPlot.tsx`):**
+  - Interactive garden scene that dynamically blooms and adapts as visitors answer each question:
+    1. **Project Type plants the core flower**: Marketing Website / Web App $\to$ Daisy, Mobile App $\to$ Tulip, E-Commerce $\to$ Sunflower, AI & Automation $\to$ Dandelion, Custom $\to$ Wildflower mix.
+    2. **Scope additions plant companions**: UI/UX Design $\to$ Fluttering butterflies (`VisitingCreature`), Development $\to$ Climbing wooden trellis, Integrations $\to$ Buzzing bumblebees (`VisitingCreature`), Hosting/DevOps $\to$ Glass miniature greenhouse, Maintenance $\to$ Sage green watering can, Discovery $\to$ Floating scope discovery cloud.
+    3. **Timeline pacing shifts the sky**: ASAP $\to$ Sunrise breeze with rotating sun rays, 1–3 Months $\to$ Morning blue sky, 3–6 Months $\to$ Warm golden afternoon sky, Exploring $\to$ Gentle sky with drifting clouds.
+    4. **Budget investment band scales the planter**: \$5k–\$10k $\to$ Terracotta seedling pot, \$10k–\$25k $\to$ Cedar window box, \$25k–\$50k $\to$ Hand-carved stone planter, \$50k+ $\to$ Lush open meadow plot, Not sure $\to$ Sprouting nursery pot.
+  - Screen reader polite live region (`aria-live="polite"`) announcing natural language descriptions of the garden's growth as options change.
+- **Petal Celebration Shower (`src/themes/dream/estimator/PetalCelebration.tsx`):**
+  - Lightweight HTML5 canvas burst showering colorful pastel flower petals (poppy red, cherry pink, sunflower gold, daisy white, lavender violet) on estimate completion.
+  - Safe lifecycle cleanup, auto-disabled in Calm / T1 / T0 / reduced-motion modes.
+- **Storybook Outcome Screen (`src/themes/dream/estimator/GardenResultScreen.tsx`):**
+  - Storybook paper result card greeting the client warmly (*"Your garden is ready {name}!"*).
+  - Displays dynamic ballpark price range and estimated weeks in bold Fraunces typography, or an honest *"Detailed Scope On Its Way"* notice for custom rollouts.
+  - Primary contact actions: Book a Discovery Call with poppy flower accent, WhatsApp direct chat, and Restart / Plant another garden button.
+- **Dual-Experience Wizard Orchestration (`src/components/estimator/EstimatorWizard.tsx`):**
+  - Clean `if (isDream)` bifurcation providing the warm storybook garden builder in Dream mode while preserving 100% of the mechanical monospace OS experience in Dark and Light themes.
+  - Zero modifications to calculation formulas (`calculateBallpark`), Zod validation schemas, lead submission payloads, or analytics event signatures.
+- **The Estimator Studio Workbench (`src/app/design-system/dream/estimator/page.tsx`):**
+  - Interactive laboratory featuring 1440px Desktop and 360px Mobile viewport toggles, Quality Tier switcher (T3, T2, T1, T0), and Calm Mode toggle.
+- **Comprehensive Headless Verification Suite (`scripts/verify-d10.mjs`):**
+  - 10-test automated headless Chrome test suite verifying hydration, dynamic flower growth (Mobile $\to$ Tulip, Web $\to$ Daisy, E-Com $\to$ Sunflower), companion mounting (trellis, greenhouse, watering can, butterflies, bees), timeline sky shift, budget planter scaling, polite live announcements, lead completion & outcome screen, 360px mobile zero horizontal overflow, and clean browser console with 0 errors.
+
 ## [Dream Theme: D9 — Home Sections B (Seed Shed, Stepping Stones, Dandelion FAQ, Make a Wish CTA)] - 2026-10-10
 
 ### Added

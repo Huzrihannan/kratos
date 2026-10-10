@@ -18,7 +18,10 @@ import {
   FileCode2,
   ChevronUp,
   ChevronDown,
+  ArrowLeft,
+  X,
 } from "lucide-react";
+import { useTheme } from "@/themes/ThemeProvider";
 import {
   estimatorConfig,
   calculateBallpark,
@@ -32,6 +35,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Decode } from "@/components/fx/Decode";
+import { SeedOptionCard, GardenPlot, GardenResultScreen } from "@/themes/dream/estimator";
+import { Poppy } from "@/themes/dream/art/flowers/Poppy";
 import { trackEvent } from "@/lib/analytics";
 import { getAttribution } from "@/lib/utm";
 import { cn } from "@/lib/utils";
@@ -77,6 +82,8 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
   const [result, setResult] = useState<BallparkCalculation | null>(null);
   const [honeypot, setHoneypot] = useState("");
   const [isMobileJsonOpen, setIsMobileJsonOpen] = useState(false);
+  const { theme } = useTheme();
+  const isDream = theme === "dream";
 
   // Restore state from sessionStorage on mount
   useEffect(() => {
@@ -362,6 +369,18 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
 
   if (result) {
     const selectedProj = estimatorConfig.projectTypes.find((p) => p.id === state.projectType);
+    if (isDream) {
+      return (
+        <GardenResultScreen
+          calculation={result}
+          leadName={state.name}
+          leadEmail={state.email}
+          projectTypeName={selectedProj?.label || "Custom Software"}
+          onRestart={handleRestart}
+          onClose={onClose}
+        />
+      );
+    }
     return (
       <ResultScreen
         calculation={result}
@@ -370,6 +389,376 @@ export function EstimatorWizard({ onClose, isModal = false }: EstimatorWizardPro
         projectTypeName={selectedProj?.label || "Custom Software"}
         onRestart={handleRestart}
       />
+    );
+  }
+
+  if (isDream) {
+    const selectedProj = estimatorConfig.projectTypes.find((p) => p.id === state.projectType);
+    return (
+      <div
+        data-testid="dream-estimator-wizard"
+        className={cn(
+          "w-full max-w-6xl mx-auto flex flex-col justify-between select-none bg-[var(--dream-paper,#FFFAF0)]",
+          isModal ? "p-4 sm:p-7" : "p-4 sm:p-8"
+        )}
+      >
+        {/* Top Progress Track with Back & Close buttons */}
+        <div className="mb-6 sm:mb-8 flex items-center justify-between gap-4 pb-4 border-b border-[var(--dream-paper-2,#FFF1DC)]">
+          <div className="flex items-center gap-3">
+            {currentStep > 1 && (
+              <button
+                type="button"
+                onClick={handleBack}
+                aria-label="Back to previous step"
+                className="w-9 h-9 rounded-full flex items-center justify-center bg-[var(--dream-paper-2,#FFF1DC)] text-[var(--dream-ink,#2B2A52)] hover:bg-[#EAE0CA] transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--dream-link,#3B3AA0)]"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            )}
+            <div>
+              <span className="font-serif italic text-xs font-semibold text-[var(--dream-grass-deep,#2A6B48)] block">
+                0{currentStep}/06 — {stepTitles[currentStep - 1]}
+              </span>
+              <span className="font-serif text-sm font-bold text-[var(--dream-ink,#2B2A52)]">
+                Step {currentStep} of 6
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Step Dots */}
+            <div className="hidden sm:flex items-center gap-1.5" aria-hidden="true">
+              {[1, 2, 3, 4, 5, 6].map((st) => (
+                <div
+                  key={st}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    st === currentStep
+                      ? "w-6 bg-[var(--dream-link,#3B3AA0)]"
+                      : st < currentStep
+                      ? "w-2 bg-[#6FB07A]"
+                      : "w-2 bg-[var(--dream-paper-2,#FFF1DC)]"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close estimator"
+                className="w-9 h-9 rounded-full flex items-center justify-center bg-[var(--dream-paper-2,#FFF1DC)] text-[var(--dream-ink-soft,#55537A)] hover:text-[var(--dream-ink,#2B2A52)] hover:bg-[#EAE0CA] transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--dream-link,#3B3AA0)]"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Error Banner */}
+        {errorMsg && (
+          <div
+            role="alert"
+            className="mb-6 p-4 rounded-[20px] bg-[#FD142B]/10 border border-[#FD142B]/30 text-[#C8102E] flex items-center gap-3 text-xs sm:text-sm font-sans font-medium"
+          >
+            <AlertCircle className="w-4 h-4 text-[#C8102E] shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {/* Two-Column Configurator Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* LEFT COLUMN: Question & SeedOptionCards (7 cols) */}
+          <div className="lg:col-span-7 flex flex-col justify-between min-h-[460px]">
+            <div>
+              {/* Step Question Header */}
+              <div className="mb-6">
+                <span className="font-serif italic text-xs text-[var(--dream-grass-deep,#2A6B48)] font-semibold uppercase tracking-wider block mb-1">
+                  0{currentStep}/06 — {stepTitles[currentStep - 1]}
+                </span>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[var(--dream-ink,#2B2A52)] leading-tight">
+                  {stepHeadlines[currentStep - 1]}
+                </h2>
+                <p className="font-sans text-xs sm:text-sm text-[var(--dream-ink-soft,#55537A)] mt-2">
+                  {currentStep === 1 && "Pick the software architecture that best matches your target application."}
+                  {currentStep === 2 && "Select all capabilities that apply. Options adapt to your application type."}
+                  {currentStep === 3 && "Delivery pacing directly affects sprint allocation and engineer availability."}
+                  {currentStep === 4 && "Helps us recommend appropriate technical architecture and release phasing."}
+                  {currentStep === 5 && "Optional notes or specification links to clarify your data models or workflows."}
+                  {currentStep === 6 && "Get your instant ballpark range and full milestone breakdown via email."}
+                </p>
+              </div>
+
+              {/* Step 1: Project Type */}
+              {currentStep === 1 && (
+                <div
+                  role="radiogroup"
+                  aria-label="Select Architecture Type"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                >
+                  {estimatorConfig.projectTypes.map((pt) => (
+                    <SeedOptionCard
+                      key={pt.id}
+                      id={pt.id}
+                      label={pt.label}
+                      description={pt.description}
+                      hint={pt.hint}
+                      icon={getIcon(pt.iconName)}
+                      selected={state.projectType === pt.id}
+                      onSelect={() => handleProjectTypeSelect(pt.id)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Step 2: Needs / Capabilities */}
+              {currentStep === 2 && (
+                <div
+                  role="group"
+                  aria-label="Select Capabilities"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                >
+                  {currentNeeds.map((need) => (
+                    <SeedOptionCard
+                      key={need.id}
+                      id={need.id}
+                      label={need.label}
+                      description={need.description}
+                      hint={need.hint}
+                      icon={getIcon(need.iconName)}
+                      selected={state.needs.includes(need.id)}
+                      isMulti={true}
+                      onSelect={() => handleNeedToggle(need.id)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Step 3: Timeline */}
+              {currentStep === 3 && (
+                <div
+                  role="radiogroup"
+                  aria-label="Select Delivery Pacing"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                >
+                  {estimatorConfig.timelines.map((tl) => (
+                    <SeedOptionCard
+                      key={tl.id}
+                      id={tl.id}
+                      label={tl.label}
+                      description={tl.description}
+                      hint={tl.hint}
+                      selected={state.timeline === tl.id}
+                      onSelect={() => setState((prev) => ({ ...prev, timeline: tl.id }))}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Step 4: Budget Range */}
+              {currentStep === 4 && (
+                <div
+                  role="radiogroup"
+                  aria-label="Select Target Investment"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                >
+                  {estimatorConfig.budgetBands.map((b) => (
+                    <SeedOptionCard
+                      key={b.id}
+                      id={b.id}
+                      label={b.label}
+                      description={b.isCustom ? "Phased scope rollout" : "Planned budget pool"}
+                      hint={b.hint}
+                      selected={state.budget === b.id}
+                      onSelect={() => setState((prev) => ({ ...prev, budget: b.id }))}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Step 5: Details / Notes */}
+              {currentStep === 5 && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block font-serif text-sm font-semibold text-[var(--dream-ink,#2B2A52)] mb-1.5">
+                      Project notes or problem description (optional)
+                    </label>
+                    <textarea
+                      placeholder="What core business process does this software automate?"
+                      value={state.message}
+                      onChange={(e) => setState((prev) => ({ ...prev, message: e.target.value }))}
+                      rows={4}
+                      className="w-full rounded-[20px] bg-[var(--dream-paper-2,#FFF1DC)]/50 border border-[var(--dream-paper-2,#FFF1DC)] p-4 font-sans text-sm text-[var(--dream-ink,#2B2A52)] placeholder:text-[var(--dream-ink-soft,#55537A)]/60 focus:outline-none focus:ring-3 focus:ring-[var(--dream-link,#3B3AA0)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-serif text-sm font-semibold text-[var(--dream-ink,#2B2A52)] mb-1.5">
+                      Figma or technical spec link (optional)
+                    </label>
+                    <input
+                      type="url"
+                      placeholder="https://figma.com/... or https://github.com/..."
+                      value={state.link}
+                      onChange={(e) => setState((prev) => ({ ...prev, link: e.target.value }))}
+                      className="w-full rounded-full bg-[var(--dream-paper-2,#FFF1DC)]/50 border border-[var(--dream-paper-2,#FFF1DC)] px-5 py-3 font-sans text-sm text-[var(--dream-ink,#2B2A52)] placeholder:text-[var(--dream-ink-soft,#55537A)]/60 focus:outline-none focus:ring-3 focus:ring-[var(--dream-link,#3B3AA0)]"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Step 6: Contact Info */}
+              {currentStep === 6 && (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    className="hidden"
+                    aria-hidden="true"
+                  />
+
+                  <div>
+                    <label className="block font-serif text-sm font-semibold text-[var(--dream-ink,#2B2A52)] mb-1.5">
+                      Your Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Alex Mercer"
+                      required
+                      value={state.name}
+                      onChange={(e) => setState((prev) => ({ ...prev, name: e.target.value }))}
+                      className="w-full rounded-full bg-[var(--dream-paper-2,#FFF1DC)]/50 border border-[var(--dream-paper-2,#FFF1DC)] px-5 py-3 font-sans text-sm text-[var(--dream-ink,#2B2A52)] placeholder:text-[var(--dream-ink-soft,#55537A)]/60 focus:outline-none focus:ring-3 focus:ring-[var(--dream-link,#3B3AA0)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-serif text-sm font-semibold text-[var(--dream-ink,#2B2A52)] mb-1.5">
+                      Work Email *
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="alex@company.com"
+                      required
+                      value={state.email}
+                      onChange={(e) => setState((prev) => ({ ...prev, email: e.target.value }))}
+                      className="w-full rounded-full bg-[var(--dream-paper-2,#FFF1DC)]/50 border border-[var(--dream-paper-2,#FFF1DC)] px-5 py-3 font-sans text-sm text-[var(--dream-ink,#2B2A52)] placeholder:text-[var(--dream-ink-soft,#55537A)]/60 focus:outline-none focus:ring-3 focus:ring-[var(--dream-link,#3B3AA0)]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-serif text-sm font-semibold text-[var(--dream-ink,#2B2A52)] mb-1.5">
+                      WhatsApp or Phone (optional)
+                    </label>
+                    <input
+                      type="tel"
+                      placeholder="+1 (555) 000-0000"
+                      value={state.phone}
+                      onChange={(e) => setState((prev) => ({ ...prev, phone: e.target.value }))}
+                      className="w-full rounded-full bg-[var(--dream-paper-2,#FFF1DC)]/50 border border-[var(--dream-paper-2,#FFF1DC)] px-5 py-3 font-sans text-sm text-[var(--dream-ink,#2B2A52)] placeholder:text-[var(--dream-ink-soft,#55537A)]/60 focus:outline-none focus:ring-3 focus:ring-[var(--dream-link,#3B3AA0)]"
+                    />
+                  </div>
+
+                  <label className="flex items-start gap-3 cursor-pointer pt-2 text-left">
+                    <input
+                      type="checkbox"
+                      checked={state.consent}
+                      onChange={(e) => setState((prev) => ({ ...prev, consent: e.target.checked }))}
+                      className="mt-1 w-4 h-4 rounded-full accent-[#3B3AA0]"
+                      required
+                    />
+                    <span className="text-xs text-[var(--dream-ink-soft,#55537A)] leading-relaxed font-sans">
+                      I agree to receive my ballpark roadmap and project communication from Krat.OS Software Solutions. (No spam, ever).
+                    </span>
+                  </label>
+                </form>
+              )}
+            </div>
+
+            {/* Navigation Controls Bar */}
+            <div className="pt-6 mt-6 border-t border-[var(--dream-paper-2,#FFF1DC)] flex items-center justify-between gap-4 font-sans text-xs">
+              <div>
+                {currentStep > 1 && (
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className="rounded-full px-5 py-2.5 font-semibold text-[var(--dream-ink-soft,#55537A)] hover:text-[var(--dream-ink,#2B2A52)] hover:bg-[var(--dream-paper-2,#FFF1DC)] transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--dream-link,#3B3AA0)]"
+                  >
+                    Back
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3">
+                {currentStep < 6 ? (
+                  <button
+                    type="button"
+                    data-testid="estimator-continue-btn"
+                    onClick={handleNext}
+                    className="rounded-full px-7 py-3 text-sm font-semibold flex items-center gap-2 bg-[var(--dream-ink,#2B2A52)] text-[var(--dream-paper,#FFFAF0)] hover:bg-[#38376B] transition-all shadow-xs focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--dream-link,#3B3AA0)]"
+                  >
+                    <Poppy state="bloom" size={15} />
+                    <span>Continue</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    data-testid="estimator-finish-btn"
+                    onClick={() => handleSubmit()}
+                    disabled={isSubmitting || !state.name || !state.email}
+                    className="rounded-full px-7 py-3 text-sm font-semibold flex items-center gap-2 bg-[var(--dream-ink,#2B2A52)] text-[var(--dream-paper,#FFFAF0)] hover:bg-[#38376B] disabled:opacity-50 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--dream-link,#3B3AA0)]"
+                  >
+                    <Poppy state="bloom" size={15} />
+                    <span>{isSubmitting ? "Planting garden..." : "Finish Garden Estimate"}</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Living Garden Plot (5 cols on desktop) */}
+          <div className="hidden lg:block lg:col-span-5 h-full">
+            <GardenPlot
+              projectType={state.projectType}
+              needs={state.needs}
+              timeline={state.timeline}
+              budget={state.budget}
+            />
+          </div>
+        </div>
+
+        {/* MOBILE: Collapsible Living Garden Plot Drawer */}
+        <div className="lg:hidden mt-6 pt-4 border-t border-[var(--dream-paper-2,#FFF1DC)]">
+          <button
+            type="button"
+            onClick={() => setIsMobileJsonOpen((prev) => !prev)}
+            className="w-full flex items-center justify-between p-3.5 bg-[var(--dream-paper-2,#FFF1DC)]/60 border border-[var(--dream-paper-2,#FFF1DC)] rounded-[20px] font-serif text-xs font-semibold text-[var(--dream-ink,#2B2A52)]"
+          >
+            <div className="flex items-center gap-2">
+              <span>🌱</span>
+              <span>View My Garden Plot ({selectedProj?.label || state.projectType})</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[var(--dream-ink-soft,#55537A)] text-[11px]">
+              <span>{isMobileJsonOpen ? "Hide" : "Expand"}</span>
+              {isMobileJsonOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            </div>
+          </button>
+
+          {isMobileJsonOpen && (
+            <div className="mt-3">
+              <GardenPlot
+                projectType={state.projectType}
+                needs={state.needs}
+                timeline={state.timeline}
+                budget={state.budget}
+              />
+            </div>
+          )}
+        </div>
+      </div>
     );
   }
 
