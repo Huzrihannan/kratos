@@ -10,15 +10,31 @@ import { TypeLines, TerminalLine } from "@/components/fx/TypeLines";
 import { Magnetic } from "@/components/fx/Magnetic";
 import { useLayoutModal } from "@/lib/modal-context";
 import { useInViewPlayback } from "@/lib/motion/useInViewPlayback";
+import { useTheme } from "@/themes/ThemeProvider";
+import { MakeAWishCta } from "@/themes/dream/scenes/MakeAWishCta";
 
 const TERMINAL_LINES: TerminalLine[] = [
   { prompt: ">", text: "awaiting input_", delay: 1800 },
 ];
 
 export function FinalCta() {
+  const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const isPlaying = useInViewPlayback(containerRef);
   const { openEstimator } = useLayoutModal();
+
+  const isDream = theme === "dream";
+
+  if (isDream) {
+    return (
+      <section
+        aria-label="Call to Action"
+        className="relative w-full overflow-hidden px-4 sm:px-6 lg:px-8 py-12 sm:py-20 max-w-7xl mx-auto"
+      >
+        <MakeAWishCta />
+      </section>
+    );
+  }
 
   return (
     <section

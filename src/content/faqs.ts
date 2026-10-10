@@ -7,6 +7,12 @@ export interface FaqItem {
 
 export const faqsData: FaqItem[] = [
   {
+    id: "non-technical",
+    category: "process",
+    question: "I'm not technical. Can I still work with you?",
+    answer: "Yes, absolutely. In fact, many founders and leaders we partner with come from operations, design, or business backgrounds rather than engineering. We translate technical tradeoffs into plain English, show working clickable previews every week, and never bury decisions in jargon.",
+  },
+  {
     id: "cost",
     category: "pricing",
     question: "How much does a custom software build typically cost?",

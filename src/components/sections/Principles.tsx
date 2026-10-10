@@ -6,6 +6,8 @@ import { Window } from "@/components/ui/Window";
 import { Button } from "@/components/ui/Button";
 import { Plus } from "lucide-react";
 import { useLayoutModal } from "@/lib/modal-context";
+import { useTheme } from "@/themes/ThemeProvider";
+import { SteppingStonesScene } from "@/themes/dream/scenes/SteppingStonesScene";
 import {
   ChatStreamScene,
   ScopeChecklistScene,
@@ -13,7 +15,10 @@ import {
 } from "./principles-scenes";
 
 export function Principles() {
+  const { theme } = useTheme();
   const { openEstimator } = useLayoutModal();
+
+  const isDream = theme === "dream";
 
   const principlesData = [
     {
@@ -66,88 +71,110 @@ export function Principles() {
   return (
     <Section
       id="why"
-      eyebrow="/06 — PRINCIPLES"
+      eyebrow={isDream ? "Stepping Stones" : "/06 — PRINCIPLES"}
       headline={
-        <span>
-          Why <span className="text-red-text">Krat.OS</span>
-        </span>
+        isDream ? (
+          <span className="font-serif font-semibold text-[var(--dream-ink,#2B2A52)]">
+            Principles we stand on
+          </span>
+        ) : (
+          <span>
+            Why <span className="text-red-text">Krat.OS</span>
+          </span>
+        )
       }
-      description="The traditional agency model is full of bloated overhead, junior outsourcing, and surprise billing. Here is how our engineering team operates differently."
+      description={
+        isDream
+          ? "Three mossy stones across the stream. Transparent commitments, direct communication, and lasting care."
+          : "The traditional agency model is full of bloated overhead, junior outsourcing, and surprise billing. Here is how our engineering team operates differently."
+      }
       hud={
-        <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
-          PRINCIPLES: 03_ENFORCED
-        </span>
+        isDream ? (
+          <span className="font-serif italic text-xs text-[var(--dream-ink-soft,#55537A)]">
+            Three stones in the stream
+          </span>
+        ) : (
+          <span className="font-mono text-[10px] uppercase tracking-wider text-fg-muted/80">
+            PRINCIPLES: 03_ENFORCED
+          </span>
+        )
       }
     >
-      {/* Bento Grid of 3 OS Windows */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-4 pb-12">
-        {principlesData.map((item, idx) => (
-          <div key={item.id} className={item.colSpan}>
-            <Window
-              title={item.windowTitle}
-              statusText={item.badge}
-              cornerBrackets={true}
-              className="h-full flex flex-col justify-between border-line bg-surface/90 hover:border-line-strong transition-colors"
-            >
-              <div className="space-y-5">
-                {/* Micro-animation scene container */}
-                <div className="w-full">{item.scene}</div>
+      {isDream ? (
+        <SteppingStonesScene />
+      ) : (
+        <>
+          {/* Bento Grid of 3 OS Windows */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 pt-4 pb-12">
+            {principlesData.map((item, idx) => (
+              <div key={item.id} className={item.colSpan}>
+                <Window
+                  title={item.windowTitle}
+                  statusText={item.badge}
+                  cornerBrackets={true}
+                  className="h-full flex flex-col justify-between border-line bg-surface/90 hover:border-line-strong transition-colors"
+                >
+                  <div className="space-y-5">
+                    {/* Micro-animation scene container */}
+                    <div className="w-full">{item.scene}</div>
 
-                {/* Title & Summary */}
-                <div>
-                  <h3 className="font-mono text-base sm:text-lg md:text-xl font-bold text-fg mb-2 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="font-sans text-xs sm:text-sm text-fg-muted leading-relaxed">
-                    {item.shortSummary}
-                  </p>
-                </div>
-
-                {/* 3 Bullets with '+' icon */}
-                <div className="space-y-2 pt-3 border-t border-line/50">
-                  {item.bullets.map((bullet, bIdx) => (
-                    <div
-                      key={bIdx}
-                      className="flex items-start gap-2.5 text-xs font-mono text-fg-muted leading-snug"
-                    >
-                      <Plus className="h-3.5 w-3.5 text-red-text shrink-0 mt-0.5" />
-                      <span>{bullet}</span>
+                    {/* Title & Summary */}
+                    <div>
+                      <h3 className="font-mono text-base sm:text-lg md:text-xl font-bold text-fg mb-2 leading-snug">
+                        {item.title}
+                      </h3>
+                      <p className="font-sans text-xs sm:text-sm text-fg-muted leading-relaxed">
+                        {item.shortSummary}
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Status footer inside window */}
-              <div className="pt-4 mt-6 border-t border-line/50 flex items-center justify-between font-mono text-[11px] text-fg-muted">
-                <span>SYSTEM_POLICY_0{idx + 1}</span>
-                <span className="text-ok font-bold">[ACTIVE]</span>
+                    {/* 3 Bullets with '+' icon */}
+                    <div className="space-y-2 pt-3 border-t border-line/50">
+                      {item.bullets.map((bullet, bIdx) => (
+                        <div
+                          key={bIdx}
+                          className="flex items-start gap-2.5 text-xs font-mono text-fg-muted leading-snug"
+                        >
+                          <Plus className="h-3.5 w-3.5 text-red-text shrink-0 mt-0.5" />
+                          <span>{bullet}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Status footer inside window */}
+                  <div className="pt-4 mt-6 border-t border-line/50 flex items-center justify-between font-mono text-[11px] text-fg-muted">
+                    <span>SYSTEM_POLICY_0{idx + 1}</span>
+                    <span className="text-ok font-bold">[ACTIVE]</span>
+                  </div>
+                </Window>
               </div>
-            </Window>
+            ))}
           </div>
-        ))}
-      </div>
 
-      {/* Estimator Bridge Banner */}
-      <div className="p-4 sm:p-5 border border-line bg-surface/50 rounded-[2px] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-ok shrink-0 shadow-[0_0_6px_var(--ok)]" />
-          <span className="font-mono text-xs sm:text-sm text-fg-muted">
-            Ready to plan your roadmap directly with senior engineers?
-          </span>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.preventDefault();
-            openEstimator();
-          }}
-          withArrow
-          className="w-full sm:w-auto text-xs font-mono border-line hover:border-line-strong hover:bg-surface"
-        >
-          Open project estimator
-        </Button>
-      </div>
+          {/* Estimator Bridge Banner */}
+          <div className="p-4 sm:p-5 border border-line bg-surface/50 rounded-[2px] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-ok shrink-0 shadow-[0_0_6px_var(--ok)]" />
+              <span className="font-mono text-xs sm:text-sm text-fg-muted">
+                Ready to plan your roadmap directly with senior engineers?
+              </span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                openEstimator();
+              }}
+              withArrow
+              className="w-full sm:w-auto text-xs font-mono border-line hover:border-line-strong hover:bg-surface"
+            >
+              Open project estimator
+            </Button>
+          </div>
+        </>
+      )}
     </Section>
   );
 }

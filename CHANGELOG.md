@@ -2,6 +2,38 @@
 
 All notable changes to the Krat.OS website project will be documented in this file.
 
+## [Dream Theme: D9 — Home Sections B (Seed Shed, Stepping Stones, Dandelion FAQ, Make a Wish CTA)] - 2026-10-10
+
+### Added
+- **The Seed Shed (`StackMarquee.tsx` & `SeedShedScene.tsx`):**
+  - Wooden pegboard wall container (`#FFFAF0` paper with dot-grid texture, wooden hanging rails, and dual category shelves).
+  - 20 botanically crafted seed packets (`SeedPacket.tsx`) for all tech stack items with category seed artwork (sprouts, leafy shoots, seedlings, blooming pods).
+  - 3D-flipping interaction: flips on hover, tap, or keyboard focus (`Enter` / `Space`) to disclose a plain-English, client-centric benefit (`clientBenefit`).
+  - Added typed `clientBenefit: string` to all 20 entries in `src/content/stack.ts` explaining tangible outcomes (e.g., instant navigation, native mobile performance, 99.9% uptime).
+- **Stepping Stones (`Principles.tsx` & `SteppingStonesScene.tsx`):**
+  - Three mossy stone paper cards across a gentle blue riverbed stream (`#8EC5FC` / `#E0C3FC` ripples).
+  - Living SVG micro-animations on each stone:
+    1. Direct Talk $\to$ Animated speech clouds trading questions and instant deployment replies.
+    2. Clear Commitments $\to$ Blooming checklist flowers with zero surprise invoices.
+    3. Long-Term Care $\to$ Gentle rain shower nourishing a sprouting plant under a radiant pastel rainbow with 30-day warranty.
+  - Reassuring guarantee bullet points with emerald sprout markers (`#3E8C5A`).
+  - Integrated Estimator Bridge Banner guiding visitors across the stream with primary action button.
+- **Dandelion FAQ (`Faq.tsx` & `DandelionFaq.tsx`):**
+  - Dandelion seed-head accordion structure with soft paper card styling and status indicators.
+  - Interactive expanding mechanism releasing drifting seed parachutes on open.
+  - Cloud-scroll answer container unrolling with organic easing.
+  - Prepended honest first question for non-technical clients: *"I'm not technical. Can I still work with you?"*
+  - Preserved strict `FAQPage` JSON-LD schema for search engine rich snippets.
+- **Make a Wish Final CTA (`FinalCta.tsx` & `MakeAWishCta.tsx`):**
+  - Deep twilight starlit dusk atmosphere (`#1B1E4B` / `#2B2A52`) with twinkling SVG stars.
+  - Giant interactive dandelion seed head (`dandelion-stem`, `dandelion-center`, and fluffy seed heads).
+  - Interactive blow/wish interaction: clicking or dragging the dandelion bursts flying seed parachutes across the sky.
+  - Prominent primary action button (`"Estimate my project"`) with poppy flower accent, plus secondary booking and WhatsApp channels.
+- **Home Sections B Studio Workbench (`src/app/design-system/dream/home-b/page.tsx`):**
+  - Interactive testing laboratory featuring Sky preset selector (Dawn, Day, Golden, Dusk, Night), Quality Tier switcher (T3, T2, T1, T0), Calm switch, and 1440px / 360px viewport frames.
+- **Automated Verification Suite (`scripts/verify-d9.mjs`):**
+  - 10-test automated headless Chrome test suite confirming all 20 seed packets, 3D flip client benefits, 3 stepping stones, dandelion FAQ accordion, Make a Wish dandelion burst, 1440px & 360px zero horizontal overflow, Dark/Light OS parity, and clean zero console errors.
+
 ## [Dream Theme: D8 — Home Sections A (Garden, Path, Postcards, Golden Hour)] - 2026-10-09
 
 ### Added
